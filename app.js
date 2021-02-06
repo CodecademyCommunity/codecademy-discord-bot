@@ -254,84 +254,84 @@ client.on('message', msg => {
           }
         }
       });
-    }
+//     }
   // CHAPTER COMMAND
 
   // STEP 0
-  } else if (splitMessage[0] === '!start') { //If the message contained the command
-    const exampleEmbed = new Discord.MessageEmbed()
-      .setColor('#0099ff')
-      .addFields(
-        { name: 'Creating a Chapter', value: 'Reply with the name of your chapter \n This will be used to create the new channel and the role.' },
-      )
-      .setTimestamp()
+//   } else if (splitMessage[0] === '!start') { //If the message contained the command
+//     const exampleEmbed = new Discord.MessageEmbed()
+//       .setColor('#0099ff')
+//       .addFields(
+//         { name: 'Creating a Chapter', value: 'Reply with the name of your chapter \n This will be used to create the new channel and the role.' },
+//       )
+//       .setTimestamp()
 
-    msg.reply(exampleEmbed);
+//     msg.reply(exampleEmbed);
 
-    chapter.started = true
-    chapter.userid = msg.author.id
+//     chapter.started = true
+//     chapter.userid = msg.author.id
   
-  // STEP 1
-  }else if(chapter.started == true) {
-    console.log("Started")
-    params = msg.content.substr(msg.content.indexOf(" ") + 1);
-    clientId = params.split(" ");
+//   // STEP 1
+//   }else if(chapter.started == true) {
+//     console.log("Started")
+//     params = msg.content.substr(msg.content.indexOf(" ") + 1);
+//     clientId = params.split(" ");
 
     
-    if(msg.author.id != chapter.userid) {
-      return true
-    }
+//     if(msg.author.id != chapter.userid) {
+//       return true
+//     }
 
-    const leaderRole = guild.roles.cache.find(role => role.name === "Chapter Leader");
-    const modRole = guild.roles.cache.find(role => role.name === "Moderator");
+//     const leaderRole = guild.roles.cache.find(role => role.name === "Chapter Leader");
+//     const modRole = guild.roles.cache.find(role => role.name === "Moderator");
 
-    msg.guild.channels.create(`${msg.content}`, { //Create a channel
-        type: 'text', //Make sure the channel is a text channel
-        permissionOverwrites: [{ //Set permission overwrites
-            id: msg.guild.id,
-            deny: ['VIEW_CHANNEL'],
-        },
-        {
-          id: leaderRole.id,
-          allow: ['VIEW_CHANNEL'],
-        },
-        {
-          id: modRole.id,
-          allow: ['VIEW_CHANNEL'],
-        }
-      ]
-    });
+//     msg.guild.channels.create(`${msg.content}`, { //Create a channel
+//         type: 'text', //Make sure the channel is a text channel
+//         permissionOverwrites: [{ //Set permission overwrites
+//             id: msg.guild.id,
+//             deny: ['VIEW_CHANNEL'],
+//         },
+//         {
+//           id: leaderRole.id,
+//           allow: ['VIEW_CHANNEL'],
+//         },
+//         {
+//           id: modRole.id,
+//           allow: ['VIEW_CHANNEL'],
+//         }
+//       ]
+//     });
 
-    msg.guild.roles.create({
-      data: {
-        name: msg.content + " Chapter",
-        color: '#84eb0d',
-      },
-      reason: `New role for chapter ${msg.content}`
-    })
-      .catch(console.error);
+//     msg.guild.roles.create({
+//       data: {
+//         name: msg.content + " Chapter",
+//         color: '#84eb0d',
+//       },
+//       reason: `New role for chapter ${msg.content}`
+//     })
+//       .catch(console.error);
 
-    console.log("Channel and Role Created!");
+//     console.log("Channel and Role Created!");
     
 
-    chapter.started == false;
-    chapter.step1 == true;
+//     chapter.started == false;
+//     chapter.step1 == true;
 
-    const exampleEmbed = new Discord.MessageEmbed()
-      .setColor('#0099ff')
-      .addFields(
-        { name: 'Creating a Chapter', value: "Channel and role created! \n Next, reply with the emoji you'd like to use for the reaction role." },
-      )
-      .setTimestamp()
+//     const exampleEmbed = new Discord.MessageEmbed()
+//       .setColor('#0099ff')
+//       .addFields(
+//         { name: 'Creating a Chapter', value: "Channel and role created! \n Next, reply with the emoji you'd like to use for the reaction role." },
+//       )
+//       .setTimestamp()
 
-    msg.reply(exampleEmbed);
+//     msg.reply(exampleEmbed);
   
-  // STEP 2
-  }else if(chapter.step1 == true) {
+//   // STEP 2
+//   }else if(chapter.step1 == true) {
 
-    if(msg.author.id != chapter.userid) {
-      return true
-    }
+//     if(msg.author.id != chapter.userid) {
+//       return true
+//     }
 
   // STEP 3
 
