@@ -6,7 +6,7 @@ const mysql = require('mysql');
 const { v4: uuidv4 } = require('uuid');
 
 const sgMail = require('@sendgrid/mail');
-const client = new Discord.Client();
+const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 
 sgMail.setApiKey('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');
 
@@ -351,6 +351,24 @@ client.on('message', msg => {
 
 *Admin Only`);
   }
+});
+
+client.on("messageDelete", function(message){
+  let channel = message.guild.channels.cache.find(channel => channel.name === 'audit-logs')
+  console.log(`message is deleted -> ${message}`);
+  // channel.send(`${message.author.username} deleted: ${message.content}`)
+  console.log(message.author.avatar_url)
+  const exampleEmbed = new Discord.MessageEmbed()
+    .setColor('#0099ff')
+    .setTitle(`${message.author.username} deleted:`)
+    // .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+    .setDescription(`${message.content}`)
+    .setThumbnail(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+    .setTimestamp()
+    .setFooter(`${message.guild.name}`);
+
+  channel.send(exampleEmbed);
+
 });
 
 
