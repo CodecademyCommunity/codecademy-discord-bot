@@ -254,7 +254,7 @@ client.on('message', msg => {
           }
         }
       });
-//     }
+    }
   // CHAPTER COMMAND
 
   // STEP 0
