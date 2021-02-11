@@ -353,14 +353,37 @@ client.on('message', msg => {
   }
 });
 
-client.on("messageDelete", function(message){
+client.on("messageDelete", async function(message){
+    // Stolen from StackOverFlow: https://stackoverflow.com/questions/53328061/finding-who-deleted-the-message
+    // Add latency as audit logs aren't instantly updated, adding a higher latency will result in slower logs, but higher accuracy.
+    await Discord.Util.delayFor(900);
+
+    // Fetch a couple audit logs than just one as new entries could've been added right after this event was emitted.
+    const fetchedLogs = await message.guild.fetchAuditLogs({
+      limit: 6,
+      type: 'MESSAGE_DELETE'
+    }).catch(() => ({
+      entries: []
+    }));
+
+    const auditEntry = fetchedLogs.entries.find(a =>
+      // Small filter function to make use of the little discord provides to narrow down the correct audit entry.
+      a.target.id === message.author.id &&
+      a.extra.channel.id === message.channel.id &&
+      // Ignore entries that are older than 20 seconds to reduce false positives.
+      Date.now() - a.createdTimestamp < 20000
+    );
+
+    // If entry exists, grab the user that deleted the message and display username + tag, if none, display 'Unknown'. 
+    const executor = auditEntry ? auditEntry.executor.tag : message.author.tag;
+
+
   let channel = message.guild.channels.cache.find(channel => channel.name === 'audit-logs')
   console.log(`message is deleted -> ${message}`);
   // channel.send(`${message.author.username} deleted: ${message.content}`)
-  console.log(message.author.avatar_url)
   const exampleEmbed = new Discord.MessageEmbed()
     .setColor('#0099ff')
-    .setTitle(`${message.author.username} deleted:`)
+    .setTitle(`${message.author.tag} message was deleted by ${executor}:`)
     // .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
     .setDescription(`${message.content}`)
     .setThumbnail(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
