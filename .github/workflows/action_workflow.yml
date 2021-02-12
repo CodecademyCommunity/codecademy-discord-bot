@@ -1,0 +1,22 @@
+name: Deployment Workflow
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  job_one:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: testing server ssh connection
+      uses: appleboy/ssh-action@master
+      with: 
+        host: http://159.89.94.61/
+        username: nodejs
+        key: ${{ secrets.SECRET_SSH_KEY }}
+        port: 22
+        script: |
+          cd codecademy-discord-bot
+          git pull origin master
+          git status
+          

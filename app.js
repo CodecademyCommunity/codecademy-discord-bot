@@ -354,6 +354,7 @@ client.on('message', msg => {
 });
 
 client.on("messageDelete", async function(message){
+  if (!message.partial) {
     // Stolen from StackOverFlow: https://stackoverflow.com/questions/53328061/finding-who-deleted-the-message
     // Add latency as audit logs aren't instantly updated, adding a higher latency will result in slower logs, but higher accuracy.
     await Discord.Util.delayFor(900);
@@ -378,20 +379,20 @@ client.on("messageDelete", async function(message){
     const executor = auditEntry ? auditEntry.executor.tag : message.author.tag;
 
 
-  let channel = message.guild.channels.cache.find(channel => channel.name === 'audit-logs')
-  console.log(`message is deleted -> ${message}`);
-  // channel.send(`${message.author.username} deleted: ${message.content}`)
-  const exampleEmbed = new Discord.MessageEmbed()
-    .setColor('#0099ff')
-    .setTitle(`${message.author.tag} message was deleted by ${executor}:`)
-    // .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
-    .setDescription(`${message.content}`)
-    .setThumbnail(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
-    .setTimestamp()
-    .setFooter(`${message.guild.name}`);
+    let channel = message.guild.channels.cache.find(channel => channel.name === 'audit-logs')
+    console.log(`message is deleted -> ${message}`);
+    // channel.send(`${message.author.username} deleted: ${message.content}`)
+    const exampleEmbed = new Discord.MessageEmbed()
+      .setColor('#0099ff')
+      .setTitle(`${message.author.tag} message was deleted by ${executor}:`)
+      // .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+      .setDescription(`${message.content}`)
+      .setThumbnail(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+      .setTimestamp()
+      .setFooter(`${message.guild.name}`);
 
-  channel.send(exampleEmbed);
-
+    channel.send(exampleEmbed);
+  }
 });
 
 
