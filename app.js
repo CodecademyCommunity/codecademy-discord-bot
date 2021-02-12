@@ -14,10 +14,10 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 const con = mysql.createConnection({
-  user: process.env.DB_user,
-  host: process.env.DB_host,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
   database: "s640_mainverify",
-  password: process.env.DB_password
+  password: process.env.DB_PASSWORD
 });
 
 
