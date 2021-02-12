@@ -8,14 +8,16 @@ const { v4: uuidv4 } = require('uuid');
 const sgMail = require('@sendgrid/mail');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 
-sgMail.setApiKey('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');
+require('dotenv').config()
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 const con = mysql.createConnection({
-  user: "u640_6pAOmF4DNa",
-  host: "mysql.discordbothosting.com",
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
   database: "s640_mainverify",
-  password: "afy0UyF61GBU6g+Z7^Pc=5C9"
+  password: process.env.DB_PASSWORD
 });
 
 
@@ -67,7 +69,7 @@ client.on('message', msg => {
         const response = await fetch("https://discuss.codecademy.com/admin/badges.json", {
           method: 'get',
           headers: {
-            'Api-Key': '56e03e9fc5073e283e85692f27ea7ef3e69d426d52bde408dcd837c0d257e97f',
+            'Api-Key': process.env.DISCOURSE_API_KEY,
             'Api-Username': 'vic-st',
             'Content-Type': 'application/json'
           }
@@ -107,7 +109,7 @@ client.on('message', msg => {
         const response = await fetch("https://discuss.codecademy.com/admin/badges.json", {
           method: 'get',
           headers: {
-            'Api-Key': '56e03e9fc5073e283e85692f27ea7ef3e69d426d52bde408dcd837c0d257e97f',
+            'Api-Key': process.env.DISCOURSE_API_KEY,
             'Api-Username': 'vic-st',
             'Content-Type': 'application/json'
           }
@@ -146,7 +148,7 @@ client.on('message', msg => {
         const response = await fetch(`https://discuss.codecademy.com/users/${clientUsername[0]}/emails.json`, {
           method: 'get',
           headers: {
-            'Api-Key': '56e03e9fc5073e283e85692f27ea7ef3e69d426d52bde408dcd837c0d257e97f',
+            'Api-Key': process.env.DISCOURSE_API_KEY,
             'Api-Username': 'vic-st',
             'Content-Type': 'application/json'
           }
@@ -223,7 +225,7 @@ client.on('message', msg => {
                 const response = await fetch(`https://discuss.codecademy.com/user-badges/${result[0].username}.json`, {
                   method: 'get',
                   headers: {
-                    'Api-Key': '56e03e9fc5073e283e85692f27ea7ef3e69d426d52bde408dcd837c0d257e97f',
+                    'Api-Key': process.env.DISCOURSE_API_KEY,
                     'Api-Username': 'vic-st',
                     'Content-Type': 'application/json'
                   }
@@ -396,4 +398,4 @@ client.on("messageDelete", async function(message){
 });
 
 
-client.login('Nzc5MTE0ODcxMzY2NzQ2MjAz.X7b1RA.PJReExk6hUZxLE_stg7GuPuQQuM');
+client.login(process.env.DISCORD_SECRET_KEY);
