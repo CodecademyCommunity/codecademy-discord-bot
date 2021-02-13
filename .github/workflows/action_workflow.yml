@@ -19,3 +19,5 @@ jobs:
           cd codecademy-discord-bot
           git pull origin master
           git status
+          npm install
+          npm start
