@@ -289,7 +289,7 @@ const print_help = (msg) => {
 
 
 
-const text_command = (msg) => {
+const command_parser = (msg) => {
   splitMessage = msg.content.split(" ")
   const guild = msg.guild;
 
@@ -313,6 +313,14 @@ const text_command = (msg) => {
     case '!help':
       print_help(msg);
       break;
+      
+    case '!info':
+      print_help(msg);
+      break;
+     
+    case '!information':
+      print_help(msg);
+      break;
 
     default:
       msg.reply("That is not a command. Try !help for information.");
@@ -326,7 +334,7 @@ client.on('message', msg => {
   //const guild = msg.guild;
 
   if (msg.content[0] === '!' && !(msg.member == client)) {
-    text_command(msg);
+    command_parser(msg);
   }
   
   
