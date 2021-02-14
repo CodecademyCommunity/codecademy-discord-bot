@@ -2,13 +2,19 @@
 
 All input welcomed! Below are some of the basic steps to contribute to this project. Please read all of it to make sure you stay consistent with everybody else.
 
+Please review the *issues* tab and self-assign one if you want to try to help in those. This keeps the efforts tidy and we know who is working on what.
+
 ## Initial setup
 
 (coming soon...)
 
 ## Report Issues
 
-Please use Github's Issues. Report a bug or request a feature there!
+Please use Github's Issues. Report a bug or request a feature there. Please do:
+- Use an appropriate label for the issue. If you think the current labels don't apply, create a new one
+- Don't forget to add your issue to the project Kanban board
+- If it is a bug: describe the bug and how to reproduce it
+- If it is a feature request: explain the idea, how you think it could be done and what need it is addressing
 
 ## Typical git workflow
 
@@ -57,16 +63,18 @@ $ git push origin NameOfYourNewBranch
 
 1. Once your commits are pushed to origin (the repo hosted on GitHub), you will see a new message on the site, something like "[branch name] has recent pushes" and a green button with "Compare & Pull Request". Click it.
 2. On the right side you should see a menu with an option to add reviewers. Invite others to review your work! (Vic-ST and probably aedwardg)
-3. Congrats on your contribution! Reviewers might either approve the PR and merge it, or post comments with feedback.
+3. Don't forget to add a meaningful commment to your PR. It should be brief and explain why your changes should be merged into the DEV branch. 
+4. You can also use keywords to automatically link your PR to an open issue. [Read all about it here](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue).
+5. Congrats on your contribution! Reviewers might either approve the PR and merge it, or post comments with feedback.
 
 ### Clean up
 
-1. Typically, we want to use one branch per issue. That means that once your PR is complete, you should delete the branch (and create a new one if there is another issue you want to work on)
+1. Typically, we want to use one branch per issue. That means that once your PR is merged into the `dev` branch, you should delete the branch (and create a new one if there is another issue you want to work on)
 2. Delete the branch on remote with:
 ```
 $ git push origin --delete NameOfTheBranch
 ```
-3. Now delete the branch *locally* (remember, you cloned the remote repo to your machine. That means there are effectively different):
+3. Now delete the branch *locally* (remember, you cloned the remote repo to your machine. That means they are effectively different):
 ```
 $ git branch -d NameOfTheBranch
 ```
