@@ -66,7 +66,7 @@ $ git push origin NameOfYourNewBranch
 ```
 $ git push origin --delete NameOfTheBranch
 ```
-3. Now delete the branch *locally* (remember, you cloned the remote repo to your machine. That means there are effectively different):
+3. Now delete the branch *locally* (remember, you cloned the remote repo to your machine. That means they are effectively different):
 ```
 $ git branch -d NameOfTheBranch
 ```
