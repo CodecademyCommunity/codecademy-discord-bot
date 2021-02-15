@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
 
-const { Pool, Client } = require("pg");
 const mysql = require('mysql');
 const { v4: uuidv4 } = require('uuid');
 
@@ -16,7 +15,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const con = mysql.createConnection({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
-  database: "s640_mainverify",
+  database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD
 });
 
