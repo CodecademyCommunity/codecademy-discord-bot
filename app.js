@@ -54,7 +54,7 @@ let chapter = {
 
 
 
-const create_roles = (msg) => {
+const createRoles = (msg) => {
   if(!msg.member.hasPermission('ADMINISTRATOR')) {
     return msg.reply('You need administrator perms to run this command');
   }else{
@@ -98,7 +98,7 @@ const create_roles = (msg) => {
 
 
 
-const delete_roles = (msg) => {
+const deleteRoles = (msg) => {
 
   if(!msg.member.hasPermission('ADMINISTRATOR')) {
     return msg.reply('You need administrator perms to run this command');
@@ -139,7 +139,7 @@ const delete_roles = (msg) => {
 
 
 
-const send_code = (msg) => {
+const sendCode = (msg) => {
 
   params = msg.content.substr(msg.content.indexOf(" ") + 1);
 
@@ -205,7 +205,7 @@ const send_code = (msg) => {
 
 
 
-const verify_code = (msg) => {
+const verifyCode = (msg) => {
 
   params = msg.content.substr(msg.content.indexOf(" ") + 1);
   clientId = params.split(" ");
@@ -272,7 +272,7 @@ const verify_code = (msg) => {
 
 
 
-const print_help = (msg) => {
+const printHelp = (msg) => {
   let member = msg.mentions.members.first() || msg.member 
           user = member.user;
           channel = msg.channel.id;
@@ -289,37 +289,30 @@ const print_help = (msg) => {
 
 
 
-const command_parser = (msg) => {
-  splitMessage = msg.content.split(" ")
-  const guild = msg.guild;
+const commandParser = (msg) => {
+  splitMessage = msg.content.split(" ")[0];
 
-  switch(splitMessage[0]) {
+  switch(splitMessage) {
     case '!createroles':
-      create_roles(msg);
+      createRoles(msg);
       break;
     
     case '!deleteroles':
-      delete_roles(msg);
+      deleteRoles(msg);
       break;
 
     case '!sendcode':
-      send_code(msg);
+      sendCode(msg);
       break;
 
     case '!verify':
-      verify_code(msg);
+      verifyCode(msg);
       break;
 
     case '!help':
-      print_help(msg);
-      break;
-      
     case '!info':
-      print_help(msg);
-      break;
-     
     case '!information':
-      print_help(msg);
+      printHelp(msg);
       break;
 
     default:
@@ -333,8 +326,8 @@ client.on('message', msg => {
   //splitMessage = msg.content.split(" ")
   //const guild = msg.guild;
 
-  if (msg.content[0] === '!' && !(msg.member == client)) {
-    command_parser(msg);
+  if (msg.content[0] === '!' && !(msg.member === client)) {
+    commandParser(msg);
   }
   
   
