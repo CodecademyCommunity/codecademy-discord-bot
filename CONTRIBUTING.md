@@ -91,12 +91,16 @@ $ git push origin NameOfYourNewBranch
 
 ### Clean Up
 
-1. Typically, we want to use one branch per issue. That means that once your PR is merged into the `dev` branch, you should delete the branch (and create a new one if there is another issue you want to work on)
-2. Delete the branch on remote with:
+1. Typically, we want to use one branch per issue. That means that once your PR is merged into the `dev` branch, you should delete the branch (and create a new one if there is another issue you want to work on).
+2. As you cannot delete the branch you are currently on, navigate to another branch. For example, the following command will switch your current branch to `dev`:
+```
+$ git checkout dev
+```
+3. Delete the branch on remote with:
 ```
 $ git push origin --delete NameOfTheBranch
 ```
-3. Now delete the branch *locally* (remember, you cloned the remote repo to your machine. That means they are effectively different):
+4. Now delete the branch *locally* (remember, you cloned the remote repo to your machine. That means they are effectively different):
 ```
 $ git branch -d NameOfTheBranch
 ```
