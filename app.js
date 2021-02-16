@@ -53,209 +53,284 @@ let chapter = {
 
 
 
-client.on('message', msg => {
-  splitMessage = msg.content.split(" ")
-  const guild = msg.guild;
-  if (splitMessage[0] === '!createroles') {
-    if(!msg.member.hasPermission('ADMINISTRATOR')) {
-      return msg.reply('You need administrator perms to run this command');
-    }else{
-      msg.reply("Creating roles...");
+const createRoles = (msg) => {
+  if(!msg.member.hasPermission('ADMINISTRATOR')) {
+    return msg.reply('You need administrator perms to run this command');
+  }else{
+    msg.reply("Creating roles...");
 
-      let counter = 0;
+    let counter = 0;
 
-      (async () => {
-        const response = await fetch("https://discuss.codecademy.com/admin/badges.json", {
-          method: 'get',
-          headers: {
-            'Api-Key': process.env.DISCOURSE_API_KEY,
-            'Api-Username': 'vic-st',
-            'Content-Type': 'application/json'
-          }
-        });
-        const badges = await response.json();
-        
-        for(let i = 0; i < badges.badges.length; i++) {
-          let role = msg.guild.roles.cache.find(({name}) => name === badges.badges[i].name)
-
-          if(role === undefined) {
-            msg.guild.roles.create({
-              data: {
-                name: badges.badges[i].name,
-                color: colors[i],
-              },
-              reason: badges.badges[i].description
-            })
-              .catch(console.error);
-            counter+= 1;
-          }
-        }
-
-      msg.reply(`${counter} roles created`);
-
-      })();
-
-    }
-  }else if(splitMessage[0] === '!deleteroles') {    
-    if(!msg.member.hasPermission('ADMINISTRATOR')) {
-      return msg.reply('You need administrator perms to run this command');
-    }else{
-      msg.reply("Deleting roles...");
-
-      let counter = 0;
-
-      (async () => {
-        const response = await fetch("https://discuss.codecademy.com/admin/badges.json", {
-          method: 'get',
-          headers: {
-            'Api-Key': process.env.DISCOURSE_API_KEY,
-            'Api-Username': 'vic-st',
-            'Content-Type': 'application/json'
-          }
-        });
-
-        const badges = await response.json();
-
-        
-        for(let i = 0; i < badges.badges.length; i++) {
-
-          let role = msg.guild.roles.cache.find(({name}) => name === badges.badges[i].name)
-
-          if(role !== undefined) {
-            role.delete('Deleting all roles pulled from by bot')
-              .then(deleted => console.log(`Deleted role ${deleted.name}`))
-              .catch(console.error);
-            counter+=1
-          }
-        }
-        msg.reply(`${counter} roles deleted`)
-      })();
-    }
-  }else if(splitMessage[0] === '!sendcode') {
-
-    params = msg.content.substr(msg.content.indexOf(" ") + 1);
-
-    clientUsername = params.split(" ");
-    
-    const uuid = uuidv4();
-    
-    if(clientUsername == '!sendcode'){
-      msg.reply("Please include your Codecademy Discuss username");
-    }else{
-      (async () => {
-
-        const response = await fetch(`https://discuss.codecademy.com/users/${clientUsername[0]}/emails.json`, {
-          method: 'get',
-          headers: {
-            'Api-Key': process.env.DISCOURSE_API_KEY,
-            'Api-Username': 'vic-st',
-            'Content-Type': 'application/json'
-          }
-        });
-        jsonres = await response.json();
-
-        const email = jsonres.email
-
-        console.log(email)
-        if(email === undefined) {
-          msg.reply("The account name you entered does not exist");
-        }else{
-          const date = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
-
-          console.log(date)
-          
-          var sql = `INSERT INTO verifications (username, id, expiration) VALUES ('${clientUsername[0]}', '${uuid}', '${date}')`;
-          con.query(sql, function (err, result) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("1 record inserted");
-
-              const mail = {
-                to: email, // Change to your recipient
-                from: 'community@codecademy.com', // Change to your verified sender
-                subject: `Your Codecademy Discord Verification`,
-                text: `Hi @${clientUsername[0]}! Your Codecademy Discord Verification ID is ${uuid}. Paste this message into the channel #verification with the format: !verify ${uuid}.`,
-                html: `<p>Hi @${clientUsername[0]}!</p><p>Your Codecademy Discord Verification ID is <strong>${uuid}</strong></p><p>Paste this message into the channel #verification with the format: !verify ${uuid}</p>`,
-              }
-              sgMail
-                .send(mail)
-                .then(() => {
-                  console.log('Email sent')
-                })
-                .catch((error) => {
-                  console.error(error)
-                })
-
-              msg.reply("Verification ID sent!")
-            }
-          });
-        }
-      })();
-    }
-
-  }else if(splitMessage[0] == "!verify") {
-    params = msg.content.substr(msg.content.indexOf(" ") + 1);
-    clientId = params.split(" ");
-
-    if(clientId == "!verify"){
-      msg.reply("Please include your verification code");
-    }else{
-      let member = msg.mentions.members.first() || msg.member 
-          user = member.user;
-
-      var sql = `SELECT * FROM verifications WHERE id = '${clientId[0]}'`;
-      con.query(sql, function (err, result) {
-        if (err) {
-          console.log(err);
-        }else{
-          if(result.length === 0) {
-            msg.reply("The ID you entered is invalid")
-          }else{
-            console.log(result[0].username);
-
-            const currentDay = new Date();
-
-            const expirationDate = new Date(result[0].expiration);
-            if(currentDay.getTime() > expirationDate.getTime()) {
-              msg.reply("This ID has expired, try generating a new one.")
-            }else{
-              (async () => {
-                const response = await fetch(`https://discuss.codecademy.com/user-badges/${result[0].username}.json`, {
-                  method: 'get',
-                  headers: {
-                    'Api-Key': process.env.DISCOURSE_API_KEY,
-                    'Api-Username': 'vic-st',
-                    'Content-Type': 'application/json'
-                  }
-                });
-                jsonres = await response.json();
-
-                let roleTest = msg.guild.roles.cache.find(({name}) => name === jsonres.badges[0].name)
-
-                if(roleTest === undefined) {
-                    msg.reply("The admin hasn't pulled the roles from Discourse using !createroles");
-                  }else{
-                    for(var i = 0; i < jsonres.badges.length; i++) {
-                      console.log(jsonres.badges[i].name)
-
-                      let role = msg.guild.roles.cache.find(({name}) => name === jsonres.badges[i].name)
-
-                      setTimeout(addUser, 500);
-
-                      function addUser() {
-                        member.roles.add(role)
-                      }
-                    }
-                    msg.reply("Your roles have been assigned!");
-                  }
-                
-              })();
-            }
-          }
+    (async () => {
+      const response = await fetch("https://discuss.codecademy.com/admin/badges.json", {
+        method: 'get',
+        headers: {
+          'Api-Key': process.env.DISCOURSE_API_KEY,
+          'Api-Username': 'vic-st',
+          'Content-Type': 'application/json'
         }
       });
-    }
+      const badges = await response.json();
+      
+      for(let i = 0; i < badges.badges.length; i++) {
+        let role = msg.guild.roles.cache.find(({name}) => name === badges.badges[i].name)
+
+        if(role === undefined) {
+          msg.guild.roles.create({
+            data: {
+              name: badges.badges[i].name,
+              color: colors[i],
+            },
+            reason: badges.badges[i].description
+          })
+            .catch(console.error);
+          counter+= 1;
+        }
+      }
+
+    msg.reply(`${counter} roles created`);
+
+    })();
+
+  }
+}
+
+
+
+const deleteRoles = (msg) => {
+
+  if(!msg.member.hasPermission('ADMINISTRATOR')) {
+    return msg.reply('You need administrator perms to run this command');
+  }else{
+    msg.reply("Deleting roles...");
+
+    let counter = 0;
+
+    (async () => {
+      const response = await fetch("https://discuss.codecademy.com/admin/badges.json", {
+        method: 'get',
+        headers: {
+          'Api-Key': process.env.DISCOURSE_API_KEY,
+          'Api-Username': 'vic-st',
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const badges = await response.json();
+
+      
+      for(let i = 0; i < badges.badges.length; i++) {
+
+        let role = msg.guild.roles.cache.find(({name}) => name === badges.badges[i].name)
+
+        if(role !== undefined) {
+          role.delete('Deleting all roles pulled from by bot')
+            .then(deleted => console.log(`Deleted role ${deleted.name}`))
+            .catch(console.error);
+          counter+=1
+        }
+      }
+      msg.reply(`${counter} roles deleted`)
+    })();
+  }
+
+}
+
+
+
+const sendCode = (msg) => {
+
+  params = msg.content.substr(msg.content.indexOf(" ") + 1);
+
+  clientUsername = params.split(" ");
+  
+  const uuid = uuidv4();
+  
+  if(clientUsername == '!sendcode'){
+    msg.reply("Please include your Codecademy Discuss username");
+  }else{
+    (async () => {
+
+      const response = await fetch(`https://discuss.codecademy.com/users/${clientUsername[0]}/emails.json`, {
+        method: 'get',
+        headers: {
+          'Api-Key': process.env.DISCOURSE_API_KEY,
+          'Api-Username': 'vic-st',
+          'Content-Type': 'application/json'
+        }
+      });
+      jsonres = await response.json();
+
+      const email = jsonres.email
+
+      console.log(email)
+      if(email === undefined) {
+        msg.reply("The account name you entered does not exist");
+      }else{
+        const date = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
+
+        console.log(date)
+        
+        var sql = `INSERT INTO verifications (username, id, expiration) VALUES ('${clientUsername[0]}', '${uuid}', '${date}')`;
+        con.query(sql, function (err, result) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("1 record inserted");
+
+            const mail = {
+              to: email, // Change to your recipient
+              from: 'community@codecademy.com', // Change to your verified sender
+              subject: `Your Codecademy Discord Verification`,
+              text: `Hi @${clientUsername[0]}! Your Codecademy Discord Verification ID is ${uuid}. Paste this message into the channel #verification with the format: !verify ${uuid}.`,
+              html: `<p>Hi @${clientUsername[0]}!</p><p>Your Codecademy Discord Verification ID is <strong>${uuid}</strong></p><p>Paste this message into the channel #verification with the format: !verify ${uuid}</p>`,
+            }
+            sgMail
+              .send(mail)
+              .then(() => {
+                console.log('Email sent')
+              })
+              .catch((error) => {
+                console.error(error)
+              })
+
+            msg.reply("Verification ID sent!")
+          }
+        });
+      }
+    })();
+  }
+}
+
+
+
+const verifyCode = (msg) => {
+
+  params = msg.content.substr(msg.content.indexOf(" ") + 1);
+  clientId = params.split(" ");
+
+  if(clientId == "!verify"){
+    msg.reply("Please include your verification code");
+  }else{
+    let member = msg.mentions.members.first() || msg.member 
+        user = member.user;
+
+    var sql = `SELECT * FROM verifications WHERE id = '${clientId[0]}'`;
+    con.query(sql, function (err, result) {
+      if (err) {
+        console.log(err);
+      }else{
+        if(result.length === 0) {
+          msg.reply("The ID you entered is invalid")
+        }else{
+          console.log(result[0].username);
+
+          const currentDay = new Date();
+
+          const expirationDate = new Date(result[0].expiration);
+          if(currentDay.getTime() > expirationDate.getTime()) {
+            msg.reply("This ID has expired, try generating a new one.")
+          }else{
+            (async () => {
+              const response = await fetch(`https://discuss.codecademy.com/user-badges/${result[0].username}.json`, {
+                method: 'get',
+                headers: {
+                  'Api-Key': process.env.DISCOURSE_API_KEY,
+                  'Api-Username': 'vic-st',
+                  'Content-Type': 'application/json'
+                }
+              });
+              jsonres = await response.json();
+
+              let roleTest = msg.guild.roles.cache.find(({name}) => name === jsonres.badges[0].name)
+
+              if(roleTest === undefined) {
+                  msg.reply("The admin hasn't pulled the roles from Discourse using !createroles");
+                }else{
+                  for(var i = 0; i < jsonres.badges.length; i++) {
+                    console.log(jsonres.badges[i].name)
+
+                    let role = msg.guild.roles.cache.find(({name}) => name === jsonres.badges[i].name)
+
+                    setTimeout(addUser, 500);
+
+                    function addUser() {
+                      member.roles.add(role)
+                    }
+                  }
+                  msg.reply("Your roles have been assigned!");
+                }
+              
+            })();
+          }
+        }
+      }
+    });
+  }
+}
+
+
+
+const printHelp = (msg) => {
+  let member = msg.mentions.members.first() || msg.member 
+          user = member.user;
+          channel = msg.channel.id;
+
+      msg.channel.send(`**Commands**
+  !createroles* - Pulls all badges from Codecademy Discuss and creates a role for each one.
+  !deleteroles* - Deletes all the roles added from Codecademy Discuss.
+                      
+  !sendcode [username] - Sends a verification code to your Codecademy Discuss email.
+  !verify [code] - Verifies that the code entered is valid and gives you a role for every badge you have on Discourse.
+  !help - Displays this page.
+  *Admin Only`);
+}
+
+
+
+const commandParser = (msg) => {
+  splitMessage = msg.content.split(" ")[0];
+
+  switch(splitMessage) {
+    case '!createroles':
+      createRoles(msg);
+      break;
+    
+    case '!deleteroles':
+      deleteRoles(msg);
+      break;
+
+    case '!sendcode':
+      sendCode(msg);
+      break;
+
+    case '!verify':
+      verifyCode(msg);
+      break;
+
+    case '!help':
+    case '!info':
+    case '!information':
+      printHelp(msg);
+      break;
+
+    default:
+      msg.reply("That is not a command. Try !help for information.");
+  }
+}
+
+
+client.on('message', msg => {
+
+  //splitMessage = msg.content.split(" ")
+  //const guild = msg.guild;
+
+  if (msg.content[0] === '!' && !(msg.member === client)) {
+    commandParser(msg);
+  }
+  
+  
+    
   // CHAPTER COMMAND
 
   // STEP 0
@@ -337,21 +412,6 @@ client.on('message', msg => {
   // STEP 3
 
   // CHAPTER COMMAND END
-  }else if(splitMessage[0] === '!info' || splitMessage[0] === '!information' || splitMessage[0] === '!help') {
-
-    let member = msg.mentions.members.first() || msg.member 
-        user = member.user;
-        channel = msg.channel.id;
-
-    msg.channel.send(`**Commands**
-!createroles* - Pulls all badges from Codecademy Discuss and creates a role for each one.
-!deleteroles* - Deletes all the roles added from Codecademy Discuss.
-                    
-!sendcode [username] - Sends a verification code to your Codecademy Discuss email.
-!verify [code] - Verifies that the code entered is valid and gives you a role for every badge you have on Discourse.
-
-*Admin Only`);
-  }
 });
 
 client.on("messageDelete", async function(message){
