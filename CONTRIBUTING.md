@@ -4,32 +4,54 @@ All input welcomed! Below are some of the basic steps to contribute to this proj
 
 Please review the *issues* tab and self-assign one if you want to try to help in those. This keeps the efforts tidy and we know who is working on what.
 
-## Initial setup
+## Table of contents
+
+* [Initial Setup](#initial-setup)
+* [Typical Git Workflow](#typical-git-workflow)
+* [Run the Bot](#run-the-bot)
+* [Report Issues](#report-issues)
+
+## Initial Setup
+
+### Node.js
+
+1. Install Node.js; it can be downloaded from [here](https://nodejs.org/en/).
+
+### dotenv
+
+1. Use the following command to install the `dotenv` package:
+```
+npm install dotenv
+```
+2. Create a `.env` file in the same folder as your cloned repo (see *Clone this repo* under **Typical git workflow** below).
+
+### Create a Discord Application and Bot
+
+1. Head to the **Applications** section of the [Discord Developer Portal](https://discord.com/developers/applications) and create a new application.
+2. Navigate to the **Bot** section and click "Add Bot". You can add an icon and name for your bot.
+3. Copy the bot token and paste it into the `DISCORD_SECRET_KEY` field in your `.env` file.
+4. Navigate to the **OAuth2** section, check the *bot* checkbox under *Scopes*, and grant your bot the desired permissions under *Bot Permissions*.
+5. Copy the URL under *Scopes*, paste it into your browser, and add your bot into your desired server.
+6. You should now be able to see the bot in your server (it will appear Offline).
+
+### Set Up Database
 
 (coming soon...)
 
-## Report Issues
+## Typical Git Workflow
 
-Please use Github's Issues. Report a bug or request a feature there. Please do:
-- Use an appropriate label for the issue. If you think the current labels don't apply, create a new one
-- Don't forget to add your issue to the project Kanban board
-- If it is a bug: describe the bug and how to reproduce it
-- If it is a feature request: explain the idea, how you think it could be done and what need it is addressing
+If you don't already, install/setup Git on your machine.
 
-## Typical git workflow
-
-If you don't already, install/setup Git in your machine.
-
-### Clone this repo
+### Clone This Repo
 
 1. In the main page of the repo, notice the big green button that says "Code". Click it.
 2. Using the HTTPS option, copy the URL
-3. Navegate to the folder you want this repo to be in your machine and use:
+3. Navigate to the folder you want this repo to be in your machine and use:
 ```
 $ git clone pasteURLYouJustCopied
 ```
 
-### Create a new branch
+### Create a New Branch
 
 1. We are treating branch "dev" as our main. You'll want to create a new branch for the issue you are contributing to.
 2. Use the following to create a new branch:
@@ -41,7 +63,7 @@ $ git checkout -b NameOfYourNewBranch
 $ git push origin NameOfYourNewBranch
 ```
 
-### Working with your branch
+### Work With Your Branch
 
 1. Edit, create, and delete as you see fit. Git will keep track of the changes as long as you are in the folder where you cloned the repo.
 2. You want to **add** the files you want to keep track of to the *staging area* of git. You do so with:
@@ -67,7 +89,7 @@ $ git push origin NameOfYourNewBranch
 4. You can also use keywords to automatically link your PR to an open issue. [Read all about it here](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue).
 5. Congrats on your contribution! Reviewers might either approve the PR and merge it, or post comments with feedback.
 
-### Clean up
+### Clean Up
 
 1. Typically, we want to use one branch per issue. That means that once your PR is merged into the `dev` branch, you should delete the branch (and create a new one if there is another issue you want to work on)
 2. Delete the branch on remote with:
@@ -78,3 +100,19 @@ $ git push origin --delete NameOfTheBranch
 ```
 $ git branch -d NameOfTheBranch
 ```
+
+## Run the Bot
+
+1. Navigate to your local repo and enter the following command into your terminal:
+```
+node app.js
+```
+2. Your bot should now appear Online in your server.
+
+## Report Issues
+
+Please use Github's Issues. Report a bug or request a feature there. Please do:
+* Use an appropriate label for the issue. If you think the current labels don't apply, create a new one
+* Don't forget to add your issue to the project Kanban board
+* If it is a bug: describe the bug and how to reproduce it
+* If it is a feature request: explain the idea, how you think it could be done and what need it is addressing
