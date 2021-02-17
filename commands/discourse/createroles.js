@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'createroles',
 	description: 'Creates all the roles based off of the discourse badges',
-	execute(msg, args, fetch) {
+	execute(msg, fetch, colors) {
         if(!msg.member.hasPermission('ADMINISTRATOR')) {
             return msg.reply('You need administrator perms to run this command');
         }else{
