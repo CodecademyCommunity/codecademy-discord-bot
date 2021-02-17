@@ -17,11 +17,12 @@ If you don't have it already, install/setup Git on your machine.
 ### Clone This Repo
 
 1. In the main page of the repo, notice the big green button that says "Code". Click it.
-2. Using the HTTPS option, copy the URL.
-3. Using Git Bash/Terminal/Bash, navigate to the folder where you want this repo to be located in your machine and use:
+2. Using the HTTPS or SSH option, copy the URL.
+3. If you are using HTTPS, using Git Bash/Terminal/Bash, navigate to the folder where you want this repo to be located in your machine and use:
 ```
 $ git clone pasteURLYouJustCopied
 ```
+4. If you are using SSH, follow this [GitHub tutorial](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh).
 
 ### Node.js and npm
 
@@ -32,33 +33,38 @@ $ git clone pasteURLYouJustCopied
 $ npm install
 ```
 
-### Create a Discord Application and Bot
+### Add Secret Keys
 
-1. Head to the **Applications** section of the [Discord Developer Portal](https://discord.com/developers/applications) and create a new application.
-2. Navigate to the **Bot** section and click "Add Bot". You can add an icon and name for your bot.
-3. Copy the bot token and paste it into the `DISCORD_SECRET_KEY` field in your `.env` file (see below).
-4. Navigate to the **OAuth2** section, check the *bot* checkbox under *Scopes*, and grant your bot the desired permissions under *Bot Permissions*.
-5. Copy the URL under *Scopes*, paste it into your browser, and add your bot into your desired server.
-6. You should now be able to see the bot in your server (it will appear Offline).
-
-### dotenv
-
-1. In the cloned repo, create a `.env` file. This will store environment variables you may want to keep secret.
-2. Create a variable named `DISCORD_SECRET_KEY` and give it the value of the bot token you copied earlier.
+1. In the cloned repo, create a file named `.env`. This will store environment variables you may want to keep secret.
+2. Create a variable named `DISCORD_SECRET_KEY` (you will assign this a value later on).
 
 ### Set Up Database
 
 (coming soon...)
 
+### Create a Discord Application and Bot
+
+1. Head to the **Applications** section of the [Discord Developer Portal](https://discord.com/developers/applications) and create a new application.
+2. Navigate to the **Bot** section and click "Add Bot". You can add an icon and name for your bot.
+3. Copy the bot token and paste it into the `DISCORD_SECRET_KEY` field in your `.env` file.
+4. Navigate to the **OAuth2** section, check the *bot* checkbox under *Scopes*, and grant your bot the desired permissions under *Bot Permissions*.
+5. Copy the URL under *Scopes*, paste it into your browser, and add your bot into your desired server.
+6. You should now be able to see the bot in your server (it will appear Offline).
+
 ### Run the Bot
 
 1. Navigate to your local repo and enter the following command into your terminal:
 ```
-node app.js
+$ npm start
 ```
 2. Your bot should now appear Online in your server.
 
 ## Typical Git Workflow
+
+Navigate to your local repo and use the following command to pull the most recent version of the repo:
+```
+$ git pull
+```
 
 ### Create a New Branch
 
@@ -97,6 +103,11 @@ $ git push origin NameOfYourNewBranch
 3. Don't forget to add a meaningful commment to your PR. It should be brief and explain why your changes should be merged into the DEV branch. 
 4. You can also use keywords to automatically link your PR to an open issue. [Read all about it here](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue).
 5. Congrats on your contribution! Reviewers might either approve the PR and merge it, or post comments with feedback.
+
+Remember to check out the **dev** and **master** branches to ensure you have the most recent version of the code. You can get the latest version by using the following command:
+```
+$ git pull origin
+```
 
 ### Clean Up
 
