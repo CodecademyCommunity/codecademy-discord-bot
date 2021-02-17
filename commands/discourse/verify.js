@@ -1,7 +1,7 @@
 module.exports = {
     name: 'verify',
     description: 'Verifies any the user ID you provided',
-    execute(msg, args) {
+    execute(msg, args, con, fetch) {
         params = msg.content.substr(msg.content.indexOf(" ") + 1);
         clientId = params.split(" ");
 

@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'sendcode',
 	description: 'Sends the user a code based on their discourse email',
-	execute(msg, args, userid) {
+	execute(msg, args, userid, fetch, con, sgMail) {
         params = msg.content.substr(msg.content.indexOf(" ") + 1);
 
         clientUsername = params.split(" ");

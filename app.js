@@ -80,11 +80,11 @@ const commandParser = (msg) => {
       break;
 
     case 'sendcode':
-      client.commands.get('sendcode').execute(msg, args, uuidv4);
+      client.commands.get('sendcode').execute(msg, args, uuidv4(), fetch, con, sgMail);
       break;
 
     case 'verify':
-      client.commands.get('verify').execute(msg, args);
+      client.commands.get('verify').execute(msg, args, con, fetch);
       break;
     case 'ping':
       client.commands.get('ping').execute(msg, args);
