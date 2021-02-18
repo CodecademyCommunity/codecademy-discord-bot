@@ -277,12 +277,12 @@ const printHelp = (msg) => {
           channel = msg.channel.id;
 
       msg.channel.send(`**Commands**
-  !createroles* - Pulls all badges from Codecademy Discuss and creates a role for each one.
-  !deleteroles* - Deletes all the roles added from Codecademy Discuss.
+  cc!createroles* - Pulls all badges from Codecademy Discuss and creates a role for each one.
+  cc!deleteroles* - Deletes all the roles added from Codecademy Discuss.
                       
-  !sendcode [username] - Sends a verification code to your Codecademy Discuss email.
-  !verify [code] - Verifies that the code entered is valid and gives you a role for every badge you have on Discourse.
-  !help - Displays this page.
+  cc!sendcode [username] - Sends a verification code to your Codecademy Discuss email.
+  cc!verify [code] - Verifies that the code entered is valid and gives you a role for every badge you have on Discourse.
+  cc!help - Displays this page.
   *Admin Only`);
 }
 
@@ -292,30 +292,30 @@ const commandParser = (msg) => {
   splitMessage = msg.content.split(" ")[0];
 
   switch(splitMessage) {
-    case '!createroles':
+    case 'cc!createroles':
       createRoles(msg);
       break;
     
-    case '!deleteroles':
+    case 'cc!deleteroles':
       deleteRoles(msg);
       break;
 
-    case '!sendcode':
+    case 'cc!sendcode':
       sendCode(msg);
       break;
 
-    case '!verify':
+    case 'cc!verify':
       verifyCode(msg);
       break;
 
-    case '!help':
-    case '!info':
-    case '!information':
+    case 'cc!help':
+    case 'cc!info':
+    case 'cc!information':
       printHelp(msg);
       break;
 
     default:
-      msg.reply("That is not a command. Try !help for information.");
+      msg.reply("That is not a command. Try cc!help for information.");
   }
 }
 
@@ -325,7 +325,7 @@ client.on('message', msg => {
   //splitMessage = msg.content.split(" ")
   //const guild = msg.guild;
 
-  if (msg.content[0] === '!' && !(msg.member === client)) {
+  if (msg.content.substring(0, 3) === 'cc!' && !(msg.member === client)) {
     commandParser(msg);
   }
   
