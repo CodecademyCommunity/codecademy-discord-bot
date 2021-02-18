@@ -38,7 +38,7 @@ client.on('ready', () => {
 });
 
 const commandParser = (msg) => {
-	const args = msg.content.slice("!".length).trim().split(/ +/);
+	const args = msg.content.slice('cc!'.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
 
   switch(command) {
@@ -69,18 +69,18 @@ const commandParser = (msg) => {
       break;
 
     default:
-      msg.reply("That is not a command. Try !help for information.");
+      msg.reply('That is not a command. Try cc!help for information.');
   }
 }
 
 
 client.on('message', msg => {
-  if (msg.content[0] === '!' && !(msg.member === client)) {
+  if (msg.content.substring(0, 3) === 'cc!' && !(msg.member === client)) {
     commandParser(msg);
   }
 });
 
-client.on("messageDelete", async function(message){
+client.on('messageDelete', async function(message){
   if (!message.partial) {
     // Stolen from StackOverFlow: https://stackoverflow.com/questions/53328061/finding-who-deleted-the-message
     // Add latency as audit logs aren't instantly updated, adding a higher latency will result in slower logs, but higher accuracy.
