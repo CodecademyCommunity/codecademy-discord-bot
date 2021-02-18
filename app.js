@@ -38,8 +38,6 @@ client.on('ready', () => {
 });
 
 const commandParser = (msg) => {
-  splitMessage = msg.content.split(" ")[0];
-  
 	const args = msg.content.slice("!".length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
 

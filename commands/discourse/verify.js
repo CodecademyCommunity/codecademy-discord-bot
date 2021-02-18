@@ -1,6 +1,6 @@
 module.exports = {
     name: 'verify',
-    description: 'Verifies any the user ID you provided',
+    description: 'Verifies the user ID you provided',
     execute(msg, con, fetch) {
         params = msg.content.substr(msg.content.indexOf(" ") + 1);
         clientId = params.split(" ");
