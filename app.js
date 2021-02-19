@@ -53,6 +53,10 @@ const commandParser = (msg) => {
     case 'sendcode':
       client.commands.get('sendcode').execute(msg, uuidv4(), fetch, con, sgMail);
       break;
+    
+    case 'stats':
+      client.commands.get('stats').execute(msg, Discord);
+      break;
 
     case 'verify':
       client.commands.get('verify').execute(msg, con, fetch);
