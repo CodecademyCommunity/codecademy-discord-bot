@@ -13,14 +13,7 @@ module.exports = {
                 return msg.reply("Please provide a user to unmute.");
             }
 
-            // Provides reacting and message sending permissions in all channels for user.
-            msg.guild.channels.cache.forEach(channel => {
-                channel.overwritePermissions([{
-                    id: toUnmute.id,
-                    allow: ['ADD_REACTIONS', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES']
-                }])
-            });
-            // Removes Muted role to user.
+            // Removes Muted role from user.
             toUnmute.roles.remove(msg.guild.roles.cache.find(role => role.name === "Muted"));
 
             return msg.reply(`@${toUnmute.displayName} was successfully unmuted.`);

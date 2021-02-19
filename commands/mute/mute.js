@@ -9,22 +9,15 @@ module.exports = {
 
         } else {
             const toMute = msg.mentions.members.first();
-            const reason = msg.content.substr(msg.content.indexOf("@") + toMute.displayName.length + 2);
-
             if (!toMute) {
                 return msg.reply("Please provide a user to mute.");
             }
+
+            const reason = msg.content.substr(msg.content.indexOf(">") + 2);
             if (reason === "") {
                 return msg.reply("Please provide a reason for muting.");
             }
 
-            // Denies reacting and message sending permissions in all channels for user.
-            msg.guild.channels.cache.forEach(channel => {
-                channel.overwritePermissions([{
-                    id: toMute.id,
-                    deny: ['ADD_REACTIONS', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES']
-                }])
-            });
             // Adds Muted role to user.
             toMute.roles.add(msg.guild.roles.cache.find(role => role.name === "Muted"));
 

@@ -49,6 +49,16 @@ client.on('guildCreate', guild => {
     .catch(console.error);
 })
 
+// Denies reacting and message sending permissions in all channels for user.
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+  newMember.guild.channels.cache.forEach(channel => {
+    channel.overwritePermissions([{
+        id: newMember.guild.roles.cache.find(role => role.name === "Muted"),
+        deny: ['ADD_REACTIONS', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES']
+    }])
+});
+})
+
 const commandParser = (msg) => {
 	const args = msg.content.slice('cc!'.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
