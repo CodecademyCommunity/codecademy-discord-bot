@@ -21,7 +21,7 @@ module.exports = {
                 }])
             });
             // Removes Muted role to user.
-            toUnmute.roles.remove(msg.guild.roles.find(role => role.name === "Muted"));
+            toUnmute.roles.remove(msg.guild.roles.cache.find(role => role.name === "Muted"));
 
             return msg.reply(`@${toUnmute.displayName} was successfully unmuted.`);
         }

@@ -26,7 +26,7 @@ module.exports = {
                 }])
             });
             // Adds Muted role to user.
-            toMute.roles.add(msg.guild.roles.find(role => role.name === "Muted"));
+            toMute.roles.add(msg.guild.roles.cache.find(role => role.name === "Muted"));
 
             return msg.channel.send(`@${toMute.displayName} was muted by @${msg.member.displayName}.\nReason: ${reason}`);
         }
