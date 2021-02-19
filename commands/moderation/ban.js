@@ -1,8 +1,46 @@
+const Discord = require('discord.js');
+
 module.exports = {
     name: "ban",
     description: "Ban a user",
     
     execute(msg) {
-        
+        if (!msg.member.roles.cache.some(
+            role => role.name === "Admin")) {
+                return msg.reply("You must be an Admin to use this command.");
+        }else{
+            const toBan = msg.mentions.members.first();
+            if (!toBan) {
+                return msg.reply("Please provide a user to ban.");
+            }
+
+            if(toBan.hasPermission('BAN_MEMBERS')) {
+                return msg.reply("This user also has ban privileges.")
+            }
+
+            const reason = msg.content.substr(msg.content.indexOf(">") + 2);
+            if (reason === "") {
+                return msg.reply("Please provide a reason for banning.");
+            }
+
+            // Sends Audit Log Embed
+            let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
+
+            const banEmbed = new Discord.MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(`${toBan.user.username}#${toBan.user.discriminator} was banned by ${msg.author.tag}:`)
+            .setDescription(reason)
+            .setThumbnail(`https://cdn.discordapp.com/avatars/${toBan.user.id}/${toBan.user.avatar}.png`)
+            .setTimestamp()
+            .setFooter(`${msg.guild.name}`);
+
+            channel.send(banEmbed);
+
+            // Banning member and sending him a DM with a form to refute the ban and the reason
+            toBan.send("You've been banned for the following reason: ```" + reason + " ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform")
+            toBan.ban({ reason })
+            
+            msg.reply(`${toBan} was banned.`)
+        }
     }
 }
