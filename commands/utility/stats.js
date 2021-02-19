@@ -1,12 +1,14 @@
 module.exports = {
 	name: 'stats',
 	description: 'Basic server stats',
-	execute(msg,Discord) {
+	async execute(msg,Discord) {
         const Embed = new Discord.MessageEmbed();
         Embed.setTitle(`Server Stats`)
-        // Using Collection.filter() to separate the online members from the offline members.
-        Embed.addField("Online Members", msg.guild.members.cache.filter(member => member.presence.status !== "offline").size);
-        Embed.addField("Offline Members", msg.guild.members.cache.filter(member => member.presence.status == "offline").size);
+        const fetchedMembers = await msg.guild.members.fetch();
+        const totalOnline = fetchedMembers.filter(member => member.presence.status !== "offline").size;
+        const totalOffline = fetchedMembers.filter(member => member.presence.status == "offline").size;
+        Embed.addField("Online Members", totalOnline);
+        Embed.addField("Offline Members", totalOffline);
         Embed.addField("Total Members", msg.guild.memberCount);
         msg.channel.send(Embed);
 	},
