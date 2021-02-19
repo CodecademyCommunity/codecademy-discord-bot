@@ -37,6 +37,18 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
+client.on('guildCreate', guild => {
+  guild.roles.create({
+    data: {
+      name: 'Muted',
+      color: 'DARK_BUT_NOT_BLACK',
+      permissions: []
+    }
+  })
+    .then(console.log)
+    .catch(console.error);
+})
+
 const commandParser = (msg) => {
 	const args = msg.content.slice('cc!'.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
@@ -70,6 +82,18 @@ const commandParser = (msg) => {
     case 'info':
     case 'information':
       client.commands.get('help').execute(msg);
+      break;
+
+    case 'mute':
+      client.commands.get('mute').execute(msg);
+      break;
+
+    case 'unmute':
+      client.commands.get('unmute').execute(msg);
+      break;
+
+    case 'tempmute':
+      client.commands.get('tempmute').execute(msg);
       break;
 
     default:
