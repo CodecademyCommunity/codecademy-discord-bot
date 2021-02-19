@@ -11,6 +11,11 @@ module.exports = {
             const toMute = msg.mentions.members.first();
             if (!toMute) {
                 return msg.reply("Please provide a user to mute.");
+            } else if (toMute === msg.member) {
+                return msg.reply("You cannot mute yourself.");
+            } else if (toMute.roles.cache.some(
+            role => role.name === "Moderator" || role.name === "Admin")) {
+                return msg.reply("You cannot mute a moderator or admin.");
             }
 
             const reason = msg.content.substr(msg.content.indexOf(">") + 2);
