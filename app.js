@@ -49,9 +49,10 @@ client.on('guildCreate', guild => {
     .catch(console.error);
 })
 
-// Denies reacting and message sending permissions in all channels for user.
+// Denies reacting and message sending permissions for users with Muted role.
 client.on('guildMemberUpdate', (oldMember, newMember) => {
   newMember.guild.channels.cache.forEach(channel => {
+    if (channel.type === "text" && newMember === channel.members.find(newMember.id))
     channel.overwritePermissions([{
         id: newMember.guild.roles.cache.find(role => role.name === "Muted"),
         deny: ['ADD_REACTIONS', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES']
