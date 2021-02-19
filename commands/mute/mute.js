@@ -9,7 +9,7 @@ module.exports = {
 
         } else {
             const toMute = msg.mentions.members.first();
-            reason = msg.content.substr(msg.content.indexOf("@") + toMute.displayName.length + 2);
+            const reason = msg.content.substr(msg.content.indexOf("@") + toMute.displayName.length + 2);
 
             if (!toMute) {
                 return msg.reply("Please provide a user to mute.");
