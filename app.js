@@ -61,6 +61,13 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   });
 })
 
+client.on('channelCreate', channel => {
+  channel.overwritePermissions([{
+    id: channel.guild.roles.cache.find(role => role.name === "Muted"),
+    deny: ['ADD_REACTIONS', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES']
+  }])
+})
+
 const commandParser = (msg) => {
 	const args = msg.content.slice('cc!'.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
