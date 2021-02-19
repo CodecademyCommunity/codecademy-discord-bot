@@ -65,6 +65,14 @@ const commandParser = (msg) => {
     case 'ping':
       client.commands.get('ping').execute(msg);
       break;
+    
+    case 'ban':
+      client.commands.get('ban').execute(msg)
+      break;
+    
+    case 'unban':
+      client.commands.get('unban').execute(msg)
+      break;
 
     case 'help':
     case 'info':
