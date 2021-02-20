@@ -48,7 +48,9 @@ module.exports = {
         channel.send(muteEmbed);
 
         // Add record to infractions table.
-        const timestamp = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
+        let now = new Date();
+        let timestamp = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+
         var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, invalid, moderator) 
         VALUES ('${timestamp}', '${toMute}', 'cc!mute', 'N/A', '${reason}', true, '${msg.member.displayName}')`;
 
