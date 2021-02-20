@@ -1,10 +1,11 @@
 const Discord = require('discord.js');
+var dateFormat = require('dateformat');
 
 module.exports = {
     name: "kick",
     description: "Kick a user",
     
-    execute(msg) {
+    execute(msg, con) {
         if (!msg.member.roles.cache.some(
             role => role.name === "Admin" || role.name === "Moderator" || role.name === "Super User")) {
                 return msg.reply("You must be an Admin, Moderator, or Super User to use this command.");
@@ -26,6 +27,19 @@ module.exports = {
                 return msg.reply("Please provide a reason for kicking.");
             }
 
+            let now = new Date();
+            let date = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+
+            // Inserts row into database
+            var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) VALUES ('${date}', '${toKick}', 'cc!kick', 'N/A', '${reason}', true, '${msg.author.tag}')`;
+            con.query(sql, function (err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("1 record inserted");
+                }
+            });
+
             // Sends Audit Log Embed
             let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
 
@@ -39,7 +53,7 @@ module.exports = {
 
             channel.send(kickEmbed);
 
-            // Actual Ban
+            // Actual Kick
             toKick.send("You've been kicked for the following reason: ```" + reason + " ```")
             toKick.kick({ reason })
             

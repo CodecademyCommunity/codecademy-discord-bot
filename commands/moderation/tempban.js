@@ -31,6 +31,16 @@ module.exports = {
             if (reason === "") {
                 return msg.reply("Please provide a reason for temporarily banning this user.");
             }
+
+            // Inserts row into database
+            var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) VALUES ('${date}', '${toTempBan}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.tag}')`;
+            con.query(sql, function (err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("1 record inserted");
+                }
+            });
             
             // Sends Audit Log Embed
             let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')

@@ -23,6 +23,16 @@ module.exports = {
                 return msg.reply("Please provide a reason for banning.");
             }
 
+            // Inserts row into database
+            var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) VALUES ('${date}', '${toBan}', 'cc!ban', 'N/A', '${reason}', true, '${msg.author.tag}')`;
+            con.query(sql, function (err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("1 record inserted");
+                }
+            });
+
             // Sends Audit Log Embed
             let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
 
