@@ -49,7 +49,7 @@ module.exports = {
 
         // Add record to infractions table.
         let now = new Date();
-        let timestamp = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+        let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
         var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, invalid, moderator) 
         VALUES ('${timestamp}', '${toMute}', 'cc!mute', 'N/A', '${reason}', true, '${msg.member.displayName}')`;
