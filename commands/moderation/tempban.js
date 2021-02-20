@@ -1,11 +1,12 @@
 const Discord = require('discord.js');
 const ms = require('ms');
+var dateFormat = require('dateformat');
 
 module.exports = {
     name: "tempban",
     description: "Temporarily ban a user",
     
-    execute(msg, args) {
+    execute(msg, args, con) {
         if (!msg.member.roles.cache.some(
             role => role.name === "Admin" || role.name === "Moderator")) {
                 return msg.reply("You must be an Admin to use this command.");
@@ -31,6 +32,9 @@ module.exports = {
             if (reason === "") {
                 return msg.reply("Please provide a reason for temporarily banning this user.");
             }
+
+            let now = new Date();
+            let date = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
 
             // Inserts row into database
             var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) VALUES ('${date}', '${toTempBan}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.tag}')`;
