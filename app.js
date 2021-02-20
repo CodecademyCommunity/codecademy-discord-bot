@@ -104,15 +104,15 @@ const commandParser = (msg) => {
       break;
 
     case 'mute':
-      client.commands.get('mute').execute(msg);
+      client.commands.get('mute').execute(msg, con);
       break;
 
     case 'unmute':
-      client.commands.get('unmute').execute(msg);
+      client.commands.get('unmute').execute(msg, con);
       break;
 
     case 'tempmute':
-      client.commands.get('tempmute').execute(msg);
+      client.commands.get('tempmute').execute(msg, con);
       break;
 
     default:
