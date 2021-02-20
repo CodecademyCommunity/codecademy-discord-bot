@@ -3,8 +3,9 @@ module.exports = {
     description: 'Mute a user',
 
     execute(msg, con) {
-        var toMuteDisplay = undefined;
-        var reason = undefined;
+        let toMute = undefined;
+        let reason = undefined;
+        let reason = undefined;
         var invalid = false;
 
         if (!msg.member.roles.cache.some(
@@ -12,7 +13,7 @@ module.exports = {
             msg.reply("You must be a moderator or admin to use this command.");
             invalid = true;
         } else {
-            const toMute = msg.mentions.members.first();
+            toMute = msg.mentions.members.first();
             if (!toMute) {
                 msg.reply("Please provide a user to mute.");
                 invalid = true;
@@ -24,9 +25,7 @@ module.exports = {
                 msg.reply("You cannot mute a moderator or admin.");
                 invalid = true;
             } else {
-                toMuteDisplay = toMute.displayName;
-
-                const reason = msg.content.substr(msg.content.indexOf(">") + 2);
+                reason = msg.content.substr(msg.content.indexOf(">") + 2);
                 if (reason === "") {
                     msg.reply("Please provide a reason for muting.");
                     invalid = true;
@@ -43,7 +42,7 @@ module.exports = {
         // Add record to infractions table.
         const timestamp = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
         var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, invalid, moderator) 
-        VALUES ('${timestamp}', '${toMuteDisplay}', 'cc!mute', 'N/A', '${reason}', '${invalid}', '${msg.member.displayName}')`;
+        VALUES ('${timestamp}', '${toMute}', 'cc!mute', 'N/A', '${reason}', '${invalid}', '${msg.member.displayName}')`;
 
         con.query(sql, function (err, result) {
             if (err) {
@@ -52,6 +51,5 @@ module.exports = {
             console.log("1 record inserted.");
             }
         });
-
     },
 };
