@@ -28,7 +28,9 @@ module.exports = {
             }
 
             let now = new Date();
-            let date = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+            let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+
+            console.log(date)
 
             // Inserts row into database
             var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) VALUES ('${date}', '${toKick}', 'cc!kick', 'N/A', '${reason}', true, '${msg.author.tag}')`;
@@ -55,7 +57,7 @@ module.exports = {
 
             // Actual Kick
             toKick.send("You've been kicked for the following reason: ```" + reason + " ```")
-            toKick.kick({ reason })
+            // toKick.kick({ reason })
             
             msg.reply(`${toKick} was kicked.`)
         }

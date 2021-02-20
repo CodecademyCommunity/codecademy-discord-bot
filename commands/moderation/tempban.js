@@ -34,7 +34,7 @@ module.exports = {
             }
 
             let now = new Date();
-            let date = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+            let date = dateFormat(now, "YYYY-MM-DD hh:mm:ss");
 
             // Inserts row into database
             var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) VALUES ('${date}', '${toTempBan}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.tag}')`;
