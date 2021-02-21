@@ -32,7 +32,7 @@ const sql = `
     action varchar(255),
     length_of_time varchar(255),
     reason varchar(255),
-    invalid boolean,
+    valid boolean,
     moderator varchar(255)
   );
   
