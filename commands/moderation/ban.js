@@ -5,7 +5,7 @@ module.exports = {
     name: "ban",
     description: "Ban a user",
     
-    execute(msg, con) {
+    execute(msg, con, args) {
         if (!msg.member.roles.cache.some(
             role => role.name === "Admin")) {
                 return msg.reply("You must be an Admin to use this command.");
@@ -25,10 +25,16 @@ module.exports = {
             }
             
             let now = new Date();
-            let date = dateFormat(now, "YYYY-MM-DD hh:mm:ss");
+            let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
+            const action = "cc!ban " + args.join(" ")
+
+            console.log(action)
             // Inserts row into database
-            var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, invalid, moderator) VALUES ('${date}', '${toBan}', 'cc!ban', 'N/A', '${reason}', true, '${msg.author.tag}')`;
+            var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
+            ('${date}', '${toBan}', 'cc!ban', 'N/A', '${reason}', true, '${msg.author.tag}');
+            INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
+            ('${date}', '${msg.author.tag}', '${action}', 'N/A', '${reason}')`;
             con.query(sql, function (err, result) {
                 if (err) {
                     console.log(err);

@@ -12,6 +12,20 @@ module.exports = {
         }else{
             const toUnban = args[0];
 
+            const action = "cc!unban " + args.join(" ")
+            let now = new Date();
+            let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+            // Inserts row into database
+            var sql = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
+                        ('${date}', '${msg.author.tag}', '${action}', 'N/A', 'N/A')`;
+            con.query(sql, function (err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("1 record inserted");
+                }
+            });
+
             // Sends Audit Log Embed
             let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
 

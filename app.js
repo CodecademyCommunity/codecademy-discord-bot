@@ -29,7 +29,8 @@ const con = mysql.createConnection({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD
+  password: process.env.DB_PASSWORD,
+  multipleStatements: true
 });
 
 
@@ -67,7 +68,7 @@ const commandParser = (msg) => {
       break;
     
     case 'ban':
-      client.commands.get('ban').execute(msg, con)
+      client.commands.get('ban').execute(msg, con, args)
       break;
     
     case 'unban':
@@ -79,7 +80,7 @@ const commandParser = (msg) => {
       break;
 
     case 'kick':
-      client.commands.get('kick').execute(msg, con)
+      client.commands.get('kick').execute(msg, con, args)
       break;
 
     case 'help':
