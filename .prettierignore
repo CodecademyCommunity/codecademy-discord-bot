@@ -1,0 +1,8 @@
+# Directories to ignore
+/node_modules
+.vscode
+
+# Individual files to ignore
+.env
+package.json
+package-lock.json
