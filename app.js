@@ -37,6 +37,35 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
+client.on('guildCreate', guild => {
+  guild.roles.create({
+    data: {
+      name: 'Muted',
+      color: 'DARK_BUT_NOT_BLACK',
+      permissions: []
+    }
+  })
+    .then(console.log)
+    .catch(console.error);
+})
+
+// Denies reacting and message sending permissions for users with Muted role.
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+  const muted = newMember.guild.roles.cache.find(role => role.name === "Muted")
+  newMember.guild.channels.cache.forEach(channel => {
+    if (channel.type === "text" && newMember === channel.members.find(member => member.id === newMember.id)) {0
+      channel.updateOverwrite(muted.id,
+        { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
+    }
+  });
+})
+
+client.on('channelCreate', channel => {
+  const muted = channel.guild.roles.cache.find(role => role.name === "Muted")
+  channel.updateOverwrite(muted.id,
+    { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
+})
+
 const commandParser = (msg) => {
 	const args = msg.content.slice('cc!'.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
@@ -70,6 +99,18 @@ const commandParser = (msg) => {
     case 'info':
     case 'information':
       client.commands.get('help').execute(msg);
+      break;
+
+    case 'mute':
+      client.commands.get('mute').execute(msg, con);
+      break;
+
+    case 'unmute':
+      client.commands.get('unmute').execute(msg, con);
+      break;
+
+    case 'tempmute':
+      client.commands.get('tempmute').execute(msg, con);
       break;
 
     default:
