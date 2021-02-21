@@ -99,7 +99,7 @@ const commandParser = (msg) => {
       break;
     
     case 'ban':
-      client.commands.get('ban').execute(msg, con)
+      client.commands.get('ban').execute(msg, con, args)
       break;
     
     case 'unban':
@@ -111,7 +111,7 @@ const commandParser = (msg) => {
       break;
 
     case 'kick':
-      client.commands.get('kick').execute(msg, con)
+      client.commands.get('kick').execute(msg, con, args)
       break;
 
     case 'help':

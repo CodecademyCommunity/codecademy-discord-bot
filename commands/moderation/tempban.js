@@ -34,10 +34,13 @@ module.exports = {
             }
 
             let now = new Date();
-            let date = dateFormat(now, "YYYY-MM-DD hh:mm:ss");
-
+            let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+            const action = "cc!tempban " + args.join(" ")
             // Inserts row into database
-            var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${date}', '${toTempBan}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.tag}')`;
+            var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES
+            ('${date}', '${toTempBan}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.tag}');
+            INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
+            ('${date}', '${msg.author.tag}', '${action}', '${timeLength}', '${reason}');`;
             con.query(sql, function (err, result) {
                 if (err) {
                     console.log(err);
