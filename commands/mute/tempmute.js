@@ -103,7 +103,7 @@ module.exports = {
         VALUES ('${timestamp}', '${toTempMute}', 'cc!unmute', 'N/A', 'tempmute expired', true, 'automatic')`;
 
         var sqlModLog2 = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
-        VALUES ('${timestamp}', 'automatic', 'cc!unmute', 'N/A', 'N/A')`;
+        VALUES ('${timestamp}', 'automatic', 'cc!unmute', 'N/A', 'tempmute expired')`;
 
         setTimeout(() => {
             unmute(msg)
