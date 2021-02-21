@@ -44,7 +44,7 @@ module.exports = {
 
         const muteEmbed = new Discord.MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(`${toMute.user.username}#${toMute.user.discriminator} was unmuted by ${msg.author.tag}:`)
+            .setTitle(`${toMute.user.username}#${toMute.user.discriminator} was muted by ${msg.author.tag}:`)
             .setDescription(reason)
             .setThumbnail(`https://cdn.discordapp.com/avatars/${toMute.user.id}/${toMute.user.avatar}.png`)
             .setTimestamp()
@@ -56,14 +56,25 @@ module.exports = {
         let now = new Date();
         let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-        var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
+        var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
         VALUES ('${timestamp}', '${toMute}', 'cc!mute', 'N/A', '${reason}', true, '${msg.author.tag}')`;
 
-        con.query(sql, function (err, result) {
+        con.query(sqlInfractions, function (err, result) {
             if (err) {
             console.log(err);
             } else {
-            console.log("1 record inserted.");
+            console.log("1 record inserted into infractions.");
+            }
+        });
+
+        var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
+        VALUES ('${timestamp}', '${msg.author.tag}', '${msg}', 'N/A', '${reason}')`;
+
+        con.query(sqlModLog, function (err, result) {
+            if (err) {
+            console.log(err);
+            } else {
+            console.log("1 record inserted into mod_log.");
             }
         });
     },
