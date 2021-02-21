@@ -51,8 +51,8 @@ module.exports = {
         let now = new Date();
         let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-        var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, invalid, moderator) 
-        VALUES ('${timestamp}', '${toMute}', 'cc!mute', 'N/A', '${reason}', true, '${msg.member.displayName}')`;
+        var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
+        VALUES ('${timestamp}', '${toMute}', 'cc!mute', 'N/A', '${reason}', true, '${msg.author.tag}')`;
 
         con.query(sql, function (err, result) {
             if (err) {
