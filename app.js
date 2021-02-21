@@ -112,7 +112,7 @@ const commandParser = (msg) => {
       break;
 
     case 'tempmute':
-      client.commands.get('tempmute').execute(msg, con);
+      client.commands.get('tempmute').execute(msg, args, con);
       break;
 
     default:
