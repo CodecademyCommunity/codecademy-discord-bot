@@ -69,7 +69,7 @@ const commandParser = (msg) => {
     case 'help':
     case 'info':
     case 'information':
-      client.commands.get('help').execute(msg);
+      client.commands.get('help').execute(msg, args);
       break;
 
     default:
@@ -128,3 +128,4 @@ client.on('messageDelete', async function(message){
 
 
 client.login(process.env.DISCORD_SECRET_KEY);
+
