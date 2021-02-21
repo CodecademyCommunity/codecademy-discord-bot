@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
+    "dateformat": "^4.5.1",
     "discord.js": "^12.4.1",
     "dotenv": "^8.2.0",
     "ms": "^2.1.3",
