@@ -19,7 +19,7 @@ cc!deleteroles
 ---
 
 ```
-cc!verifycode [username]
+cc!sendcode [username]
 ```
 Sends a verification code to your Codecademy Discuss email.
 
