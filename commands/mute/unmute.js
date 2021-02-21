@@ -29,14 +29,14 @@ module.exports = {
         // Outputs a message to the audit-logs channel
         let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
         
-        const banEmbed = new Discord.MessageEmbed()
+        const unMuteEmbed = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle(`${toUnmute.user.username}#${toUnmute.user.discriminator} was unmuted by ${msg.author.tag}:`)
             .setThumbnail(`https://cdn.discordapp.com/avatars/${toUnmute.user.id}/${toUnmute.user.avatar}.png`)
             .setTimestamp()
             .setFooter(`${msg.guild.name}`);
 
-        channel.send(banEmbed);
+        channel.send(unmuteEmbed);
 
         // Add record to infractions table.
         let now = new Date();

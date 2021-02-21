@@ -51,21 +51,19 @@ client.on('guildCreate', guild => {
 
 // Denies reacting and message sending permissions for users with Muted role.
 client.on('guildMemberUpdate', (oldMember, newMember) => {
+  const muted = newMember.guild.roles.cache.find(role => role.name === "Muted")
   newMember.guild.channels.cache.forEach(channel => {
-    if (channel.type === "text" && newMember === channel.members.find(member => member.id === newMember.id)) {
-      channel.overwritePermissions([{
-        id: newMember.guild.roles.cache.find(role => role.name === "Muted"),
-        deny: ['ADD_REACTIONS', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES'] 
-      }])
+    if (channel.type === "text" && newMember === channel.members.find(member => member.id === newMember.id)) {0
+      channel.updateOverwrite(muted.id,
+        { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
     }
   });
 })
 
 client.on('channelCreate', channel => {
-  channel.overwritePermissions([{
-    id: channel.guild.roles.cache.find(role => role.name === "Muted"),
-    deny: ['ADD_REACTIONS', 'SEND_MESSAGES', 'SEND_TTS_MESSAGES']
-  }])
+  const muted = channel.guild.roles.cache.find(role => role.name === "Muted")
+  channel.updateOverwrite(muted.id,
+    { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
 })
 
 const commandParser = (msg) => {
