@@ -1,13 +1,11 @@
 module.exports = {
 	name: 'help',
 	description: 'Send help message',
-	execute(msg) {
+	execute(msg, args) {
 
-    const arg = msg.content.slice('cc!'.length).trim().split(/ +/)[1];
-
-    if (arg) {
+    if (args[0]) {
       
-      switch(arg) {
+      switch(args[0]) {
         case "cc!createroles":
         case "createroles":
           msg.channel.send("Pulls all badges from Codecademy Discuss and create a roll for each one. *Admin priviliges required");
