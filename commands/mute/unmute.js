@@ -36,14 +36,14 @@ module.exports = {
             .setTimestamp()
             .setFooter(`${msg.guild.name}`);
 
-        channel.send(unmuteEmbed);
+        channel.send(unMuteEmbed);
 
         // Add record to infractions table.
         let now = new Date();
         let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-        var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, invalid, moderator) 
-        VALUES ('${timestamp}', '${toUnmute}', 'cc!unmute', 'N/A', 'N/A', true, '${msg.member.tag}')`;
+        var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) 
+        VALUES ('${timestamp}', '${toUnmute}', 'cc!unmute', 'N/A', 'N/A', true, '${msg.author.tag}')`;
 
         con.query(sql, function (err, result) {
             if (err) {
