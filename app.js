@@ -61,9 +61,11 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
 })
 
 client.on('channelCreate', channel => {
-  const muted = channel.guild.roles.cache.find(role => role.name === "Muted")
-  channel.updateOverwrite(muted.id,
-    { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
+  if (channel.guild != null) {
+    const muted = channel.guild.roles.cache.find(role => role.name === "Muted")
+    channel.updateOverwrite(muted.id,
+      { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
+  }
 })
 
 const commandParser = (msg) => {

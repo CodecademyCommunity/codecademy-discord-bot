@@ -21,6 +21,8 @@ module.exports = {
             } else if (toMute.roles.cache.some(
             role => role.name === "Moderator" || role.name === "Admin")) {
                 return msg.reply("You cannot mute a moderator or admin.");
+            } else if (toMute.roles.cache.some(role => role.name === "Muted")) {
+                return msg.reply("This user is already muted.");
             } else {
                 reason = msg.content.substr(msg.content.indexOf(">") + 2);
                 if (reason === "") {
@@ -31,6 +33,9 @@ module.exports = {
             // Adds Muted role to user.
             toMute.roles.add(msg.guild.roles.cache.find(role => role.name === "Muted"));
             msg.channel.send(`${toMute} was muted by ${msg.member}.\nReason: ${reason}`);
+
+            // Sends user a DM notifying them of their muted status.
+            toMute.send("You've been muted for the following reason: ```" + reason + " ```");
         }
 
         // Outputs a message to the audit-logs channel

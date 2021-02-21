@@ -16,15 +16,18 @@ module.exports = {
         const toUnmute = msg.mentions.members.first();
         if (!toUnmute) {
             return msg.reply("Please provide a user to unmute.");
+        } else if (!toUnmute.roles.cache.some(role => role.name === "Muted")) {
+            return msg.reply("This user is already unmuted.");
         } else {
             toUnmuteDisplay = toUnmute.displayName;
         }
 
-        // Invalid is only used to specifiy whether the infraction has been "removed" or not.
-
         // Removes Muted role from user.
         toUnmute.roles.remove(msg.guild.roles.cache.find(role => role.name === "Muted"));
         msg.channel.send(`${toUnmute} was unmuted.`);
+
+        // Sends user a DM notifying them of their unmuted status.
+        toUnmute.send("You've been unmuted.");
 
         // Outputs a message to the audit-logs channel
         let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
