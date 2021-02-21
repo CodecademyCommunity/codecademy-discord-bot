@@ -33,7 +33,7 @@ module.exports = {
             console.log(date)
 
             // Inserts row into database
-            var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) VALUES ('${date}', '${toKick}', 'cc!kick', 'N/A', '${reason}', true, '${msg.author.tag}')`;
+            var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${date}', '${toKick}', 'cc!kick', 'N/A', '${reason}', true, '${msg.author.tag}')`;
             con.query(sql, function (err, result) {
                 if (err) {
                     console.log(err);

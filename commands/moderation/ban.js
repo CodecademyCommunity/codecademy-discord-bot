@@ -28,7 +28,7 @@ module.exports = {
             let date = dateFormat(now, "YYYY-MM-DD hh:mm:ss");
 
             // Inserts row into database
-            var sql = `INSERT INTO infractions (timestamp, user, action, lengthOfTime, reason, invalid, moderator) VALUES ('${date}', '${toBan}', 'cc!ban', 'N/A', '${reason}', true, '${msg.author.tag}')`;
+            var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, invalid, moderator) VALUES ('${date}', '${toBan}', 'cc!ban', 'N/A', '${reason}', true, '${msg.author.tag}')`;
             con.query(sql, function (err, result) {
                 if (err) {
                     console.log(err);
