@@ -7,16 +7,18 @@ module.exports = {
     description: "Temporarily ban a user",
     
     execute(msg, args, con) {
+        const user_information = /(\<@!?\d+\>)\s(\d+[yhwdms])\s(.+)$/
+
         if (!msg.member.roles.cache.some(
             role => role.name === "Admin" || role.name === "Moderator")) {
                 return msg.reply("You must be an Admin to use this command.");
         }else{
 
-            if(!args.join(" ").match(/(\<@!?\d+\>)\s(\d+[yhwdms])\s(.+)$/)) {
+            if(!args.join(" ").match(user_information)) {
                 return msg.reply("The command you sent isn't in a valid format")
             }
 
-            const [, id, timeLength, reason] = args.join(" ").match(/(\<@!?\d+\>)\s(\d+[yhwdms])\s(.+)$/) ?? []
+            const [, id, timeLength, reason] = args.join(" ").match(user_information) ?? []
 
             const toTempBan = msg.mentions.members.first();
             if (!toTempBan) {
@@ -78,6 +80,19 @@ module.exports = {
             setTimeout(() => {
                 msg.guild.members.unban(toTempBan)
                 channel.send(tempUnBanEmbed);
+
+                date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+
+                var mod_log_tempban = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
+                VALUES ('${date}', 'automatic', 'cc!unban', 'N/A', 'tempban expired')`;
+
+                con.query(mod_log_tempban, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("1 record inserted into mod_log.");
+                    }
+                });
             }, ms(timeLength));
         }
     }
