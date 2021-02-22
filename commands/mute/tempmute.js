@@ -97,17 +97,19 @@ module.exports = {
             toUnmute.send("You've been unmuted.");
         }
 
-        timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
-
-        var sqlInfractions2 = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
-        VALUES ('${timestamp}', '${toTempMute}', 'cc!unmute', 'N/A', 'tempmute expired', true, 'automatic')`;
-
-        var sqlModLog2 = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
-        VALUES ('${timestamp}', 'automatic', 'cc!unmute', 'N/A', 'tempmute expired')`;
-
         setTimeout(() => {
             unmute(msg)
             channel.send(tempUnMuteEmbed)
+
+            now = new Date()
+            timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss")
+
+            var sqlInfractions2 = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
+            VALUES ('${timestamp}', '${toTempMute}', 'cc!unmute', 'N/A', 'tempmute expired', true, 'automatic')`;
+
+            var sqlModLog2 = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
+            VALUES ('${timestamp}', 'automatic', 'cc!unmute', 'N/A', 'tempmute expired')`;
+
             con.query(sqlInfractions2, function (err, result) {
                 if (err) {
                 console.log(err);
