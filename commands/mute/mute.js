@@ -59,22 +59,14 @@ module.exports = {
         var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
         VALUES ('${timestamp}', '${toMute}', 'cc!mute', 'N/A', '${reason}', true, '${msg.author.tag}')`;
 
-        con.query(sqlInfractions, function (err, result) {
-            if (err) {
-            console.log(err);
-            } else {
-            console.log("1 record inserted into infractions.");
-            }
-        });
-
         var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
         VALUES ('${timestamp}', '${msg.author.tag}', '${msg}', 'N/A', '${reason}')`;
 
-        con.query(sqlModLog, function (err, result) {
+        con.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
             if (err) {
             console.log(err);
             } else {
-            console.log("1 record inserted into mod_log.");
+            console.log("1 record inserted into infractions, 1 record inserted into mod_log.");
             }
         });
     },
