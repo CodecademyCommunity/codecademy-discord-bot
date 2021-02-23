@@ -47,9 +47,9 @@ module.exports = {
       		let now = new Date();
 			let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-			var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser}', 'cc!warn', 'N/A', '${warningReason}', true, '${msg.author}')`;
+			var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser.id}', 'cc!warn', 'N/A', '${warningReason}', true, '${msg.author.id}')`;
 
-			var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author}', '${msg}', 'N/A', '${warningReason}')`;
+			var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author.id}', '${msg}', 'N/A', '${warningReason}')`;
 
 			con.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
 				if (err) {
