@@ -66,6 +66,10 @@ const commandParser = (msg) => {
       client.commands.get('ping').execute(msg);
       break;
 
+    case 'warn':
+      client.commands.get('warn').execute(msg,con,args);
+      break;
+
     case 'help':
     case 'info':
     case 'information':
