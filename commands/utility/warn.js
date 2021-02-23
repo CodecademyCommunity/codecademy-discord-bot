@@ -42,6 +42,22 @@ module.exports = {
 				.setTimestamp()
 				.setFooter(`${msg.guild.name}`);
 			offendingUser.send(Embed);
-		  }
+
+			// Add the infraction to the database
+      		let now = new Date();
+			let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+
+			var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser}', 'cc!warn', 'N/A', '${warningReason}', true, '${msg.author}')`;
+
+			var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author}', '${msg}', 'N/A', '${warningReason}')`;
+
+			con.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
+				if (err) {
+				console.log(err);
+				} else {
+				console.log("1 record inserted into infractßions, 1 record inserted into mod_log.");
+				}
+			});
+		}
 	},
 };
