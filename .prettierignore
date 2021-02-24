@@ -5,5 +5,7 @@
 
 # Individual files to ignore
 .env
+.eslintrc.json
 package.json
 package-lock.json
+.prettierrc.json
