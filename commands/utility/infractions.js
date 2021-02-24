@@ -44,10 +44,9 @@ async function infractionsInDB(msg,con,targetUser){
 			msg.channel.send(`I couldn't read ${targetUser}'s infractions from the db!`);
 		} else {
 			console.log("Found infraction records.");
-			console.log(`this is what I found: ${result[0].reason}`);
+			return result;
 		}
 	});
-	console.log(`result outside: ${infractions}`);
 	return infractions;
 }
 
