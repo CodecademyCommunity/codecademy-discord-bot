@@ -12,13 +12,21 @@ module.exports = {
         }else{
             let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
 
+            const userMention = msg.mentions.members.first();
+            if (userMention) {
+                return msg.reply("You can't ban users by mentioning them, please include a user ID");
+            }
+
             const toUnban = args[0];
 
             if(!toUnban) {
                 return msg.reply("Please include a user ID to unban.")
             }
 
-            if(msg.client.users.fetch(toUnban) == msg.author) {
+            const fetchUser = msg.client.users.fetch(toUnban)
+
+            const userID = await fetchUser.then(result => result.id)
+            if(userID == msg.author.id) {
                 return msg.reply("You can't unban yourself!")
             }
 
@@ -27,6 +35,10 @@ module.exports = {
             } catch (error) {
                 if(error.code == 10026) {
                     return msg.reply("This user is not banned.")
+                }
+                
+                if(error.code == 50035) {
+                    return msg.reply("Please incalud a valid user ID")
                 }
             }
 

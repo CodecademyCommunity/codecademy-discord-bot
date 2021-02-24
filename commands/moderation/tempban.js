@@ -25,7 +25,7 @@ module.exports = {
                 return msg.reply("Please provide a user to temporarily ban.");
             }
 
-            if(toTempBan == msg.author) {
+            if(toTempBan.id == msg.author.id) {
                 return msg.reply("You can't temporarily ban yourself!")
             }
 

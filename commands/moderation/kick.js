@@ -30,32 +30,33 @@ function validKick(msg) {
 
     if (!msg.member.roles.cache.some(
         role => role.name === "Admin" || role.name === "Moderator" || role.name === "Super User")) {
-            return msg.reply("You must be an Admin, Moderator, or Super User to use this command.");
+        data.err = msg.reply("You must be an Admin, Moderator, or Super User to use this command.");
+        return data;
     }
 
     // Grabs the user and makes sure that one was provided
     data.toKick = msg.mentions.members.first();
     if (!data.toKick) {
-        data.err = msg.reply("Please provide a user to kick.");
+        data.err = "Please provide a user to kick.";
         return data;
     }
     
     // Prevents you from kicking yourself
-    if(data.toKick == msg.author) {
-        data.err = msg.reply("You can't kick yourself!")
+    if(data.toKick.id == msg.author.id) {
+        data.err = "You can't kick yourself!";
         return data;
     }
 
     // Checks that the person who is getting kicked doesn't have kick privileges
     if(data.toKick.hasPermission('KICK_MEMBERS')) {
-        data.err = msg.reply("This user also has kick privileges.");
+        data.err = "This user also has kick privileges.";
         return data;
     }
 
     // Checks that a reason was included
     data.reason = msg.content.substr(msg.content.indexOf(">") + 2);
     if (data.reason === "") {
-        data.err = msg.reply("Please provide a reason for kicking.");
+        data.err = "Please provide a reason for kicking.";
         return data;
     }
 
