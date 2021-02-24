@@ -3,14 +3,14 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'infractions',
 	description: 'finds user infraction record in db and returns it to channel',
-	execute(msg,con) {
+	async execute(msg,con) {
 		// Make sure only SU, Mods and Admin can run the command
 		const targetUser = msg.mentions.members.first();
 		if (canWarn(msg)){
 			if (hasUserTarget(msg,targetUser)) {
 				// Find all infraction records in database
-				const infractions = infractionsInDB(msg,con,targetUser);
-				console.log(infractions);
+				const infractions = await infractionsInDB(msg,con,targetUser);
+				console.log(`this is back in the main thread: ${infractions}`);
 
 				// Send list of infractions back to channel
 				infractionLog(msg,targetUser,infractions);
@@ -33,21 +33,22 @@ function infractionLog(msg,targetUser,infractions) {
 	msg.channel.send(infractionsEmbed);
 }
 
-function infractionsInDB(msg,con,targetUser){
+async function infractionsInDB(msg,con,targetUser){
 	// Find infractions in database
-
 	const sqlInfractions = `SELECT reason FROM infractions WHERE user = '${targetUser.id}';`;
 
-	con.query(`${sqlInfractions}`, function (err, result) {
+	const infractions = await con.query(`${sqlInfractions}`, function (err, result) {
 		if (err) {
 			console.log(err);
 			// Include a warning in case something goes wrong writing to the db
 			msg.channel.send(`I couldn't read ${targetUser}'s infractions from the db!`);
 		} else {
 			console.log("Found infraction records.");
-			return result;
+			console.log(`this is what I found: ${result[0].reason}`);
 		}
 	});
+	console.log(`result outside: ${infractions}`);
+	return infractions;
 }
 
 function canWarn(msg) {
