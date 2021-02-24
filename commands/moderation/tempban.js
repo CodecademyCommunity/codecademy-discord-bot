@@ -25,6 +25,10 @@ module.exports = {
                 return msg.reply("Please provide a user to temporarily ban.");
             }
 
+            if(msg.mentions.members.first() == msg.author) {
+                return msg.reply("You can't temporarily ban yourself!")
+            }
+
             if(toTempBan.hasPermission('BAN_MEMBERS')) {
                 return msg.reply("This user also has ban privileges.")
             }            

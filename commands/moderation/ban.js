@@ -5,7 +5,7 @@ module.exports = {
     name: "ban",
     description: "Ban a user",
     
-    execute(msg, con, args) {
+    execute(msg, con, args) {        
         if (!msg.member.roles.cache.some(
             role => role.name === "Admin")) {
                 return msg.reply("You must be an Admin to use this command.");
@@ -13,6 +13,10 @@ module.exports = {
             const toBan = msg.mentions.members.first();
             if (!toBan) {
                 return msg.reply("Please provide a user to ban.");
+            }
+
+            if(msg.mentions.members.first() == msg.author) {
+                return msg.reply("You can't ban yourself!")
             }
 
             if(toBan.hasPermission('BAN_MEMBERS')) {

@@ -5,12 +5,30 @@ module.exports = {
     name: "unban",
     description: "Unban a user",
     
-    execute(msg, args, con) {
+    async execute(msg, args, con) {
         if (!msg.member.roles.cache.some(
             role => role.name === "Admin")) {
                 return msg.reply("You must be an Admin to use this command.");
         }else{
+            let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
+
             const toUnban = args[0];
+
+            if(!toUnban) {
+                return msg.reply("Please include a user ID to unban.")
+            }
+
+            if(msg.client.users.fetch(toUnban) == msg.author) {
+                return msg.reply("You can't unban yourself!")
+            }
+
+            try {
+                await msg.guild.members.unban(toUnban)
+            } catch (error) {
+                if(error.code == 10026) {
+                    return msg.reply("This user is not banned.")
+                }
+            }
 
             const action = "cc!unban " + args.join(" ")
             let now = new Date();
@@ -27,7 +45,6 @@ module.exports = {
             });
 
             // Sends Audit Log Embed
-            let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
 
             const unbanEmbed = new Discord.MessageEmbed()
             .setColor('#0099ff')
@@ -37,7 +54,7 @@ module.exports = {
 
             channel.send(unbanEmbed);
 
-            msg.guild.members.unban(toUnban)
+
             msg.reply(`${toUnban} was unbanned.`)
         }
     }
