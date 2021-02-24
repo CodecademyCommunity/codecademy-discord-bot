@@ -40,9 +40,9 @@ module.exports = {
             const action = "cc!tempban " + args.join(" ")
             // Inserts row into database
             var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES
-            ('${date}', '${toTempBan}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.tag}');
+            ('${date}', '${toTempBan.id}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.id}');
             INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-            ('${date}', '${msg.author.tag}', '${action}', '${timeLength}', '${reason}');`;
+            ('${date}', '${msg.author.id}', '${action}', '${timeLength}', '${reason}');`;
             con.query(sql, function (err, result) {
                 if (err) {
                     console.log(err);
