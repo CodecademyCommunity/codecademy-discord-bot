@@ -3,51 +3,50 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'infractions',
 	description: 'finds user infraction record in db and returns it to channel',
-	async execute(msg,con) {
+	execute(msg,con) {
 		// Make sure only SU, Mods and Admin can run the command
 		const targetUser = msg.mentions.members.first();
 		if (canWarn(msg)){
 			if (hasUserTarget(msg,targetUser)) {
 				// Find all infraction records in database
-				const infractions = await infractionsInDB(msg,con,targetUser);
-				console.log(`this is back in the main thread: ${infractions}`);
+				infractionsInDB(msg,con,targetUser);
 
-				// Send list of infractions back to channel
-				infractionLog(msg,targetUser,infractions);
 			}
 		}
 	},
 };
 
 
-function infractionLog(msg,targetUser,infractions) {
-
-	const infractionsEmbed = new Discord.MessageEmbed()
-		.setColor('#2e294e')
-		.setTitle(`${targetUser.user.username}#${targetUser.user.discriminator} has the following infractions`)
-		.setDescription(infractions)
-		.setThumbnail(`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
-		.setTimestamp()
-		.setFooter(`${msg.guild.name}`);
-
-	msg.channel.send(infractionsEmbed);
-}
-
-async function infractionsInDB(msg,con,targetUser){
+function infractionsInDB(msg,con,targetUser){
 	// Find infractions in database
 	const sqlInfractions = `SELECT reason FROM infractions WHERE user = '${targetUser.id}';`;
 
-	const infractions = await con.query(`${sqlInfractions}`, function (err, result) {
+	con.query(`${sqlInfractions}`, function (err, result) {
 		if (err) {
 			console.log(err);
 			// Include a warning in case something goes wrong writing to the db
 			msg.channel.send(`I couldn't read ${targetUser}'s infractions from the db!`);
 		} else {
 			console.log("Found infraction records.");
-			return result;
+			infractionLog(msg,targetUser,result);
 		}
 	});
-	return infractions;
+}
+
+function infractionLog(msg,targetUser,infractions) {
+
+	const infractionsEmbed = new Discord.MessageEmbed()
+		.setColor('#2e294e')
+		.setTitle(`${targetUser.user.username}#${targetUser.user.discriminator} has the following infractions`)
+		.setThumbnail(`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
+		.setTimestamp()
+		.setFooter(`${msg.guild.name}`);
+		infractions.forEach(infraction => {
+			console.log(infraction.reason);
+			infractionsEmbed.addField('Infraction: ',infraction.reason);
+		  });
+
+	msg.channel.send(infractionsEmbed);
 }
 
 function canWarn(msg) {
