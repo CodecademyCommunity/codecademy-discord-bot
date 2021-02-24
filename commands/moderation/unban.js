@@ -22,7 +22,6 @@ module.exports = {
 
             channel.send(unbanEmbed);
 
-
             msg.guild.members.unban(toUnban)
             msg.reply(`${toUnban} was unbanned.`)
         }

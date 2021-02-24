@@ -111,7 +111,7 @@ const commandParser = (msg) => {
       break;
 
     case 'kick':
-      client.commands.get('kick').execute(msg)
+      client.commands.get('kick').execute(msg, con)
       break;
 
     case 'help':
