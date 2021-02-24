@@ -38,8 +38,13 @@ module.exports = {
 			  "Forgot the target user. Wanna try again?",
 			  "Please tell you *do* know who to warn? You forgot the user"
 			  ];
+			
+			// Make sure a target user is chosen, and that it isn't a SU, Mod, or Admin
 			if (!offendingUser){
 			  return msg.reply(failAttemptReply[Math.floor(Math.random() * failAttemptReply.length)]);
+			} else if (offendingUser.roles.cache.some(
+				role => role.name === "Super User" || role.name === "Moderator" || role.name === "Admin")) {
+					return msg.reply("You cannot warn a super user, moderator or admin.");
 			}
 
 			// Prevent mod from self-warning
