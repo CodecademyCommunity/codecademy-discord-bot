@@ -35,7 +35,7 @@ module.exports = {
             let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
             // Inserts row into database
             var sql = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-                        ('${date}', '${msg.author.id}', '${action}', 'N/A', 'N/A')`;
+                        ('${date}', '${msg.author.id}', '${action}', NULL, NULL)`;
             con.query(sql, function (err, result) {
                 if (err) {
                     console.log(err);

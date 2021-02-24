@@ -39,9 +39,9 @@ module.exports = {
 
             // Inserts row into database
             var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
-            ('${date}', '${toKick.id}', 'cc!kick', 'N/A', '${reason}', true, '${msg.author.id}');
+            ('${date}', '${toKick.id}', 'cc!kick', NULL, '${reason}', true, '${msg.author.id}');
             INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-            ('${date}', '${msg.author.id}', '${action}', 'N/A', '${reason}')`;
+            ('${date}', '${msg.author.id}', '${action}', NULL, '${reason}')`;
             con.query(sql, function (err, result) {
                 if (err) {
                     console.log(err);

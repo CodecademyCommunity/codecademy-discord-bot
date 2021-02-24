@@ -25,7 +25,7 @@ module.exports = {
                 return msg.reply("Please provide a user to temporarily ban.");
             }
 
-            if(msg.mentions.members.first() == msg.author) {
+            if(toTempBan == msg.author) {
                 return msg.reply("You can't temporarily ban yourself!")
             }
 
@@ -85,15 +85,12 @@ module.exports = {
                 msg.guild.members.unban(toTempBan)
                 channel.send(tempUnBanEmbed);
 
-<<<<<<< HEAD
                 toTempBan.send(`You have been unbanned from the Codecademy Community after ${timeLength}`);
 
-=======
->>>>>>> 57922792b7d64410c43f5df1b07363ee20be2651
                 date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
                 var mod_log_tempban = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
-                VALUES ('${date}', 'automatic', 'cc!unban', 'N/A', 'tempban expired')`;
+                VALUES ('${date}', 'automatic', 'cc!unban', NULL, 'tempban expired')`;
 
                 con.query(mod_log_tempban, function (err, result) {
                     if (err) {
