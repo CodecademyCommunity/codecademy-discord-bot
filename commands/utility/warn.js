@@ -26,6 +26,9 @@ module.exports = {
 			if (!offendingUser){
 			  return msg.reply(failAttemptReply[Math.floor(Math.random() * failAttemptReply.length)]);
 			}
+
+			// Prevent mod from self-warning
+			if (offendingUser.id == msg.author.id) return msg.reply('Did you just try to warn yourself?');
 	  
 			// Parse the reason for the warning
 			// if no reason provided, return so the bot doesn't go boom
