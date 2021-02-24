@@ -65,7 +65,7 @@ module.exports = {
 
             // Actual Kick
             toKick.send("You've been kicked for the following reason: ```" + reason + " ```")
-            // toKick.kick({ reason })
+            toKick.kick({ reason })
             
             msg.reply(`${toKick} was kicked.`)
         }
