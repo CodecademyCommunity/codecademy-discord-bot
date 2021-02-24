@@ -15,6 +15,11 @@ module.exports = {
             if (!toKick) {
                 return msg.reply("Please provide a user to kick.");
             }
+            
+            // Prevents you from kicking yourself
+            if(msg.mentions.members.first() == msg.author) {
+                return msg.reply("You can't kick yourself!")
+            }
 
             // Checks that the person who is getting kicked doesn't have kick privileges
             if(toKick.hasPermission('KICK_MEMBERS')) {
