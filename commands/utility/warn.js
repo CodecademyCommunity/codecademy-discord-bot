@@ -70,19 +70,22 @@ module.exports = {
       		let now = new Date();
 			let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-			var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser.id}', 'cc!warn', 'N/A', '${warningReason}', true, '${msg.author.id}')`;
+			const sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser.id}', 'cc!warn', 'N/A', '${warningReason}', true, '${msg.author.id}')`;
+			const sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author.id}', '${msg}', 'N/A', '${warningReason}')`;
+			
+			// Register call in the Audit-log channel
+			auditLog(msg,offendingUser,warningReason);
 
-			var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author.id}', '${msg}', 'N/A', '${warningReason}')`;
+			// Give SU, Mod, Admin feedback on their call
+			msg.channel.send(`${msg.author} just warned ${offendingUser}`);
+
 
 			con.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
 				if (err) {
 				console.log(err);
 				msg.channel.send(`I warned ${offendingUser} but writing to the db failed!`);
 				} else {
-				console.log("1 record inserted into infractßions, 1 record inserted into mod_log.");
-				// if everything worked, send a reply to channel and to auditlog
-				msg.channel.send(`${msg.author} just warned ${offendingUser}`);
-				auditLog(msg,offendingUser,warningReason)
+				console.log("1 record inserted into infractions, 1 record inserted into mod_log.");
 				}
 			});
 		}
