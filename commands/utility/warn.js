@@ -1,6 +1,21 @@
 const Discord = require('discord.js');
 let dateFormat = require('dateformat');
 
+function auditLog(message,targetUser,reason) {
+	// Outputs a message to the audit-logs channel.
+	let channel = message.guild.channels.cache.find(channel => channel.name === 'audit-logs')
+
+	const warnEmbed = new Discord.MessageEmbed()
+		.setColor('#f1d302')
+		.setTitle(`${targetUser.user.username}#${targetUser.user.discriminator} was warned by ${message.author.tag}:`)
+		.setDescription(reason)
+		.setThumbnail(`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
+		.setTimestamp()
+		.setFooter(`${message.guild.name}`);
+
+	channel.send(warnEmbed);
+}
+
 module.exports = {
 	name: 'warn',
 	description: 'warns a user of an infraction and logs infraction in db',
@@ -57,8 +72,12 @@ module.exports = {
 			con.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
 				if (err) {
 				console.log(err);
+				msg.channel.send(`I warned ${offendingUser} but writing to the db failed!`);
 				} else {
 				console.log("1 record inserted into infractßions, 1 record inserted into mod_log.");
+				// if everything worked, send a reply to channel and to auditlog
+				msg.channel.send(`${msg.author} just warned ${offendingUser}`);
+				auditLog(msg,offendingUser,warningReason)
 				}
 			});
 		}
