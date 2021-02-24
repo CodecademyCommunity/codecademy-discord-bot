@@ -31,8 +31,8 @@ module.exports = {
 
             if(toTempBan.hasPermission('BAN_MEMBERS')) {
                 return msg.reply("This user also has ban privileges.")
-            }
-
+            }            
+            
             // const reason = args.slice(args.indexOf(timeLength[0]) + 1).join(" ")
             console.log(reason)
             if (reason === "") {
@@ -85,8 +85,11 @@ module.exports = {
                 msg.guild.members.unban(toTempBan)
                 channel.send(tempUnBanEmbed);
 
+<<<<<<< HEAD
                 toTempBan.send(`You have been unbanned from the Codecademy Community after ${timeLength}`);
 
+=======
+>>>>>>> 57922792b7d64410c43f5df1b07363ee20be2651
                 date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
                 var mod_log_tempban = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
