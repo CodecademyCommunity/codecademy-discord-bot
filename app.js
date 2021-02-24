@@ -159,7 +159,7 @@ client.on('messageDelete', async function(message){
     // channel.send(`${message.author.username} deleted: ${message.content}`)
     const exampleEmbed = new Discord.MessageEmbed()
       .setColor('#0099ff')
-      .setTitle(`${message.author.tag} message was deleted by ${executor}:`)
+      .setTitle(`${message.author.tag} message was deleted by ${executor} from #${message.channel.name}:`)
       // .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
       .setDescription(`${message.content}`)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
