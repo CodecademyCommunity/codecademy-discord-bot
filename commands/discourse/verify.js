@@ -5,7 +5,7 @@ module.exports = {
         params = msg.content.substr(msg.content.indexOf(" ") + 1);
         clientId = params.split(" ");
 
-        if(clientId == "!verify"){
+        if(clientId == "cc!verify"){
             msg.reply("Please include your verification code");
         }else{
             let member = msg.mentions.members.first() || msg.member 

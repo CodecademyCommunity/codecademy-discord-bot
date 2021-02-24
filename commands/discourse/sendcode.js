@@ -10,7 +10,7 @@ module.exports = {
 
         const uuid = userid;
 
-        if(clientUsername == '!sendcode'){
+        if(clientUsername == 'cc!sendcode'){
         msg.reply("Please include your Codecademy Discuss username");
         }else{
         (async () => {

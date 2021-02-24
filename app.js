@@ -38,6 +38,37 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
+client.on('guildCreate', guild => {
+  guild.roles.create({
+    data: {
+      name: 'Muted',
+      color: 'DARK_BUT_NOT_BLACK',
+      permissions: []
+    }
+  })
+    .then(console.log)
+    .catch(console.error);
+})
+
+// Denies reacting and message sending permissions for users with Muted role.
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+  const muted = newMember.guild.roles.cache.find(role => role.name === "Muted")
+  newMember.guild.channels.cache.forEach(channel => {
+    if (channel.type === "text" && newMember === channel.members.find(member => member.id === newMember.id)) {
+      channel.updateOverwrite(muted.id,
+        { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
+    }
+  });
+})
+
+client.on('channelCreate', channel => {
+  if (channel.guild != null) {
+    const muted = channel.guild.roles.cache.find(role => role.name === "Muted")
+    channel.updateOverwrite(muted.id,
+      { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
+  }
+})
+
 const commandParser = (msg) => {
 	const args = msg.content.slice('cc!'.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
@@ -75,6 +106,18 @@ const commandParser = (msg) => {
     case 'info':
     case 'information':
       client.commands.get('help').execute(msg, args);
+      break;
+
+    case 'mute':
+      client.commands.get('mute').execute(msg, con);
+      break;
+
+    case 'unmute':
+      client.commands.get('unmute').execute(msg, con);
+      break;
+
+    case 'tempmute':
+      client.commands.get('tempmute').execute(msg, args, con);
       break;
 
     default:
@@ -120,7 +163,7 @@ client.on('messageDelete', async function(message){
     // channel.send(`${message.author.username} deleted: ${message.content}`)
     const exampleEmbed = new Discord.MessageEmbed()
       .setColor('#0099ff')
-      .setTitle(`${message.author.tag} message was deleted by ${executor}:`)
+      .setTitle(`${message.author.tag} message was deleted by ${executor} from #${message.channel.name}:`)
       // .setAuthor(`${message.author.username}`, `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
       .setDescription(`${message.content}`)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
