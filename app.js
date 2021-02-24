@@ -29,13 +29,45 @@ const con = mysql.createConnection({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD
+  password: process.env.DB_PASSWORD,
+  multipleStatements: true
 });
 
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
+
+client.on('guildCreate', guild => {
+  guild.roles.create({
+    data: {
+      name: 'Muted',
+      color: 'DARK_BUT_NOT_BLACK',
+      permissions: []
+    }
+  })
+    .then(console.log)
+    .catch(console.error);
+})
+
+// Denies reacting and message sending permissions for users with Muted role.
+client.on('guildMemberUpdate', (newMember) => {
+  const muted = newMember.guild.roles.cache.find(role => role.name === "Muted")
+  newMember.guild.channels.cache.forEach(channel => {
+    if (channel.type === "text" && newMember === channel.members.find(member => member.id === newMember.id)) {
+      channel.updateOverwrite(muted.id,
+        { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
+    }
+  });
+})
+
+client.on('channelCreate', channel => {
+  if (channel.guild != null) {
+    const muted = channel.guild.roles.cache.find(role => role.name === "Muted")
+    channel.updateOverwrite(muted.id,
+      { ADD_REACTIONS: false, SEND_MESSAGES: false, SEND_TTS_MESSAGES:false })
+  }
+})
 
 const commandParser = (msg) => {
 	const args = msg.content.slice('cc!'.length).trim().split(/ +/);
@@ -69,7 +101,19 @@ const commandParser = (msg) => {
     case 'help':
     case 'info':
     case 'information':
-      client.commands.get('help').execute(msg);
+      client.commands.get('help').execute(msg, args);
+      break;
+
+    case 'mute':
+      client.commands.get('mute').execute(msg, con);
+      break;
+
+    case 'unmute':
+      client.commands.get('unmute').execute(msg, con);
+      break;
+
+    case 'tempmute':
+      client.commands.get('tempmute').execute(msg, args, con);
       break;
 
     default:
@@ -128,3 +172,4 @@ client.on('messageDelete', async function(message){
 
 
 client.login(process.env.DISCORD_SECRET_KEY);
+

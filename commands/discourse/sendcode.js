@@ -1,3 +1,5 @@
+var dateFormat = require("dateformat");
+
 module.exports = {
 	name: 'sendcode',
 	description: 'Sends the user a code based on their discourse email',
@@ -8,7 +10,7 @@ module.exports = {
 
         const uuid = userid;
 
-        if(clientUsername == '!sendcode'){
+        if(clientUsername == 'cc!sendcode'){
         msg.reply("Please include your Codecademy Discuss username");
         }else{
         (async () => {
@@ -29,12 +31,13 @@ module.exports = {
             if(email === undefined) {
                 msg.reply("The account name you entered does not exist");
             }else{
-                const date = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
+                const expDate = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
+                const expDateFormatted = dateFormat(expDate, "yyyy-mm-dd HH:MM:ss");
 
-                console.log(date)
+                console.log(expDateFormatted)
                 
-                var sql = `INSERT INTO verifications (username, id, expiration) VALUES ('${clientUsername[0]}', '${uuid}', '${date}')`;
-                con.query(sql, function (err, result) {
+                var sql = `INSERT INTO verifications (username, verify_id, expiration) VALUES ('${clientUsername[0]}', '${uuid}', '${expDateFormatted}')`;
+                con.query(sql, function (err) {
                     if (err) {
                     console.log(err);
                     } else {
