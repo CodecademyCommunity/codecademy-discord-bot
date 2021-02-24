@@ -4,7 +4,7 @@ let dateFormat = require('dateformat');
 module.exports = {
 	name: 'infractions',
 	description: 'finds user infraction record in db and returns it to channel',
-	execute(msg,con,args) {
+	execute(msg,con) {
 		// Make sure only SU, Mods and Admin can run the command
 		const targetUser = msg.mentions.members.first();
 		if (canWarn(msg)){
