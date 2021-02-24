@@ -51,7 +51,7 @@ client.on('guildCreate', guild => {
 })
 
 // Denies reacting and message sending permissions for users with Muted role.
-client.on('guildMemberUpdate', (newMember) => {
+client.on('guildMemberUpdate', (oldMember, newMember) => {
   const muted = newMember.guild.roles.cache.find(role => role.name === "Muted")
   newMember.guild.channels.cache.forEach(channel => {
     if (channel.type === "text" && newMember === channel.members.find(member => member.id === newMember.id)) {
