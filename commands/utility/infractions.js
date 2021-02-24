@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-let dateFormat = require('dateformat');
 
 module.exports = {
 	name: 'infractions',
@@ -11,6 +10,7 @@ module.exports = {
 			if (hasUserTarget(msg,targetUser)) {
 				// Find all infraction records in database
 				const infractions = infractionsInDB(msg,con,targetUser);
+				console.log(infractions);
 
 				// Send list of infractions back to channel
 				infractionLog(msg,targetUser,infractions);
@@ -36,7 +36,7 @@ function infractionLog(msg,targetUser,infractions) {
 function infractionsInDB(msg,con,targetUser){
 	// Find infractions in database
 
-	const sqlInfractions = `SELECT reason FROM infractions WHERE user = '${targetUser.id};`;
+	const sqlInfractions = `SELECT reason FROM infractions WHERE user = '${targetUser.id}';`;
 
 	con.query(`${sqlInfractions}`, function (err, result) {
 		if (err) {

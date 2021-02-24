@@ -84,6 +84,7 @@ const commandParser = (msg) => {
 
     case 'infractions':
       client.commands.get('infractions').execute(msg,con);
+      break;
 
     case 'sendcode':
       client.commands.get('sendcode').execute(msg, uuidv4(), fetch, con, sgMail);
