@@ -70,8 +70,8 @@ module.exports = {
       		let now = new Date();
 			let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-			const sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser.id}', 'cc!warn', 'N/A', '${warningReason}', true, '${msg.author.id}')`;
-			const sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author.id}', '${msg}', 'N/A', '${warningReason}')`;
+			const sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser.id}', 'cc!warn', NULL, '${warningReason}', true, '${msg.author.id}')`;
+			const sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author.id}', '${msg}', NULL, '${warningReason}')`;
 			
 			// Register call in the Audit-log channel
 			auditLog(msg,offendingUser,warningReason);
