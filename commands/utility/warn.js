@@ -1,6 +1,36 @@
 const Discord = require('discord.js');
 let dateFormat = require('dateformat');
 
+module.exports = {
+	name: 'warn',
+	description: 'warns a user of an infraction and logs infraction in db',
+	execute(msg,con,args) {
+		// Make sure only SU, Mods and Admin can run the command
+		const offendingUser = msg.mentions.members.first();
+		if (canWarn(msg)){
+			if (hasUserTarget(msg,offendingUser) && notHighRoller(msg,offendingUser) && notSelf(msg,offendingUser)) {
+				// Parse the reason for the warning
+				// if no reason provided, return so the bot doesn't go boom
+				const warningReason = args.slice(1).join(" ");
+				if (!warningReason) return msg.reply('You need to provide a reason');
+		
+				// Create an embed, craft it, and DM the user
+				dmTheUser(msg,offendingUser,warningReason);
+
+				// Register call in the Audit-log channel
+				auditLog(msg,offendingUser,warningReason);
+
+				// Give SU, Mod, Admin feedback on their call
+				msg.channel.send(`${msg.author} just warned ${offendingUser}`);
+
+				// Add the infraction to the database
+				recordInDB(msg,con,offendingUser,warningReason);
+			}
+		}
+	},
+};
+
+
 function auditLog(message,targetUser,reason) {
 	// Outputs a message to the audit-logs channel.
 	let channel = message.guild.channels.cache.find(channel => channel.name === 'audit-logs')
@@ -32,8 +62,8 @@ function recordInDB(msg,con,offendingUser,warningReason){
 	let now = new Date();
 	let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-	const sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser.id}', 'cc!warn', NULL, '${warningReason}', true, '${msg.author.id}')`;
-	const sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author.id}', '${msg}', NULL, '${warningReason}')`;
+	const sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser.id}', 'cc!warn', 'NULL', '${warningReason}', true, '${msg.author.id}')`;
+	const sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author.id}', '${msg}', 'NULL', '${warningReason}')`;
 
 	con.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
 		if (err) {
@@ -56,7 +86,7 @@ function canWarn(msg) {
 	}
 }
 
-function hasUserTarget(msg) {
+function hasUserTarget(msg,offendingUser) {
 	// Asortment of answers to make the bot more fun
 	const failAttemptReply = [
 		"Ok there bud, who are you trying to warn again?",
@@ -68,7 +98,6 @@ function hasUserTarget(msg) {
 		"Please tell you *do* know who to warn? You forgot the user"
 		];
 
-	const offendingUser = msg.mentions.members.first();
 	if (offendingUser){
 		return true;
 	} else {
@@ -77,8 +106,7 @@ function hasUserTarget(msg) {
 	}
 }
 
-function notHighRoller (msg){
-	const offendingUser = msg.mentions.members.first();
+function notHighRoller (msg,offendingUser){
 	if (offendingUser.roles.cache.some(
 		role => role.name === "Super User" || role.name === "Moderator" || role.name === "Admin")) {
 			msg.reply("You cannot warn a super user, moderator or admin.");
@@ -88,8 +116,7 @@ function notHighRoller (msg){
 	}
 }
 
-function notSelf(msg) {
-	const offendingUser = msg.mentions.members.first();
+function notSelf(msg,offendingUser) {
 	if (offendingUser.id == msg.author.id){
 		msg.reply('Did you just try to warn yourself?');
 		return false;
@@ -98,30 +125,3 @@ function notSelf(msg) {
 	}
 }
 
-module.exports = {
-	name: 'warn',
-	description: 'warns a user of an infraction and logs infraction in db',
-	execute(msg,con,args) {
-		// Make sure only SU, Mods and Admin can run the command
-		if (canWarn(msg)){
-			if (hasUserTarget(msg) && notHighRoller(msg) && notSelf(msg)) {
-				// Parse the reason for the warning
-				// if no reason provided, return so the bot doesn't go boom
-				const warningReason = args.slice(1).join(" ");
-				if (!warningReason) return msg.reply('You need to provide a reason');
-		
-				// Create an embed, craft it, and DM the user
-				dmTheUser(msg,offendingUser,warningReason);
-
-				// Register call in the Audit-log channel
-				auditLog(msg,offendingUser,warningReason);
-
-				// Give SU, Mod, Admin feedback on their call
-				msg.channel.send(`${msg.author} just warned ${offendingUser}`);
-
-				// Add the infraction to the database
-				recordInDB(msg,con,offendingUser,warningReason);
-			}
-		}
-	},
-};
