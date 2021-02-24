@@ -106,6 +106,10 @@ const commandParser = (msg) => {
       client.commands.get('unban').execute(msg, args)
       break;
 
+    case 'tempban':
+      client.commands.get('tempban').execute(msg, args)
+      break;
+
     case 'kick':
       client.commands.get('kick').execute(msg)
       break;
