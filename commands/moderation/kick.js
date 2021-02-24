@@ -30,15 +30,13 @@ module.exports = {
             let now = new Date();
             let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-            console.log(date)
-            
             const action = "cc!kick " + args.join(" ")
 
             // Inserts row into database
             var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
-            ('${date}', '${toKick}', 'cc!kick', 'N/A', '${reason}', true, '${msg.author.tag}');
+            ('${date}', '${toKick.id}', 'cc!kick', 'N/A', '${reason}', true, '${msg.author.id}');
             INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-            ('${date}', '${msg.author.tag}', '${action}', 'N/A', '${reason}')`;
+            ('${date}', '${msg.author.id}', '${action}', 'N/A', '${reason}')`;
             con.query(sql, function (err, result) {
                 if (err) {
                     console.log(err);
@@ -62,7 +60,7 @@ module.exports = {
 
             // Actual Kick
             toKick.send("You've been kicked for the following reason: ```" + reason + " ```")
-            toKick.kick({ reason })
+            // toKick.kick({ reason })
             
             msg.reply(`${toKick} was kicked.`)
         }
