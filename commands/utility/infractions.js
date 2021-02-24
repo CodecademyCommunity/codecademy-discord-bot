@@ -20,7 +20,7 @@ module.exports = {
 };
 
 
-function infractionLog(message,targetUser,infractions) {
+function infractionLog(msg,targetUser,infractions) {
 
 	const infractionsEmbed = new Discord.MessageEmbed()
 		.setColor('#2e294e')
@@ -28,7 +28,7 @@ function infractionLog(message,targetUser,infractions) {
 		.setDescription(infractions)
 		.setThumbnail(`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
 		.setTimestamp()
-		.setFooter(`${message.guild.name}`);
+		.setFooter(`${msg.guild.name}`);
 
 	msg.channel.send(infractionsEmbed);
 }
