@@ -8,7 +8,7 @@ module.exports = {
 		// Make sure only SU, Mods and Admin can run the command
 		const offendingUser = msg.mentions.members.first();
 		if (canWarn(msg)){
-			if (hasUserTarget(msg,offendingUser) && notHighRoller(msg,offendingUser) && notSelf(msg,offendingUser)) {
+			if (hasUserTarget(msg,offendingUser) && notSelf(msg,offendingUser) && notHighRoller(msg,offendingUser)) {
 				// Parse the reason for the warning
 				// if no reason provided, return so the bot doesn't go boom
 				const warningReason = args.slice(1).join(" ");
