@@ -19,7 +19,7 @@ module.exports = {
 
 
 function infractionsInDB(msg,con,targetUser){
-	// Find infractions in database
+	// Find inractions in database
 	const sqlInfractions = `SELECT reason FROM infractions WHERE user = '${targetUser.id}';`;
 
 	con.query(`${sqlInfractions}`, function (err, result) {
@@ -69,13 +69,13 @@ function canCheckInfractions(msg) {
 function hasUserTarget(msg,targetUser) {
 	// Asortment of answers to make the bot more fun
 	const failAttemptReply = [
-		"Ok there bud, who are you trying to warn again?",
+		"Ok there bud, whose infractions are you trying to check again?",
 		"You definitely missed the targer user there...",
-		"shoot first ask later? You forgot the targer user",
-		"Not judging, but you didn't set a user to warn",
-		"Without a target user I can't warn anyone but you",
+		"what? You want ALL the infractions from everyone? You forgot the targer user",
+		"Not judging, but you didn't set a user to read infractions from...",
+		"You forgot the targer user, so maybe YOU should have an infraction",
 		"Forgot the target user. Wanna try again?",
-		"Please tell you *do* know who to warn? You forgot the user"
+		"Here I was thinking this command was easy enough. You forgot the target user"
 		];
 
 	if (targetUser){
