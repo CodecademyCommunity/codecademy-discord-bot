@@ -6,68 +6,99 @@ module.exports = {
     description: "Unban a user",
     
     async execute(msg, args, con) {
-        if (!msg.member.roles.cache.some(
-            role => role.name === "Admin")) {
-                return msg.reply("You must be an Admin to use this command.");
-        }else{
-            let channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
 
-            const userMention = msg.mentions.members.first();
-            if (userMention) {
-                return msg.reply("You can't ban users by mentioning them, please include a user ID");
-            }
+        const { status, err, toUnban, reason } = await validUnban(msg, args);
+        if (!status) {
+            return msg.reply(err);
+        }
 
-            const toUnban = args[0];
+        const channel = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs')
+        
+        unbanSQL(msg, con, args);
+        unbanEmbed(msg, toUnban, channel);
+        unbanUser(msg, toUnban);
+    }
+}
 
-            if(!toUnban) {
-                return msg.reply("Please include a user ID to unban.")
-            }
+async function validUnban(msg, args) {
+    const data = {
+        status: false,
+        err: null,
+        toUnban: null,
+        reason: null,
+    };
 
-            const fetchUser = msg.client.users.fetch(toUnban)
+    if (!msg.member.roles.cache.some(
+        role => role.name === "Admin")) {
+        data.err = "You must be an Admin to use this command.";
+        return data;
+    }
 
-            const userID = await fetchUser.then(result => result.id)
-            if(userID == msg.author.id) {
-                return msg.reply("You can't unban yourself!")
-            }
+    const userMention = msg.mentions.members.first();
+    if (userMention) {
+        data.err = "You can't ban users by mentioning them, please include a user ID";
+        return data;
+    }
 
-            try {
-                await msg.guild.members.unban(toUnban)
-            } catch (error) {
-                if(error.code == 10026) {
-                    return msg.reply("This user is not banned.")
-                }
-                
-                if(error.code == 50035) {
-                    return msg.reply("Please incalud a valid user ID")
-                }
-            }
+    
+    data.toUnban = args[0];
+    if(!data.toUnban) {
+        data.err = "Please include a user ID to unban.";
+        return data;
+    }
 
-            const action = "cc!unban " + args.join(" ")
-            let now = new Date();
-            let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
-            // Inserts row into database
-            var sql = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-                        ('${date}', '${msg.author.id}', '${action}', NULL, NULL)`;
-            con.query(sql, function (err, result) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("1 record inserted");
-                }
-            });
+    const fetchUser = msg.client.users.fetch(data.toUnban)
 
-            // Sends Audit Log Embed
+    const userID = await fetchUser.then(result => result.id)
+    if(userID == msg.author.id) {
+        data.err = "You can't unban yourself!";
+        return data;
+    }
+    
+    data.status = true;
+    return data;
+}
 
-            const unbanEmbed = new Discord.MessageEmbed()
-            .setColor('#0099ff')
-            .setTitle(`${toUnban} was unbanned by ${msg.author.tag}:`)
-            .setTimestamp()
-            .setFooter(`${msg.guild.name}`);
+function unbanSQL(msg, con, args) {
+    const action = "cc!unban " + args.join(" ")
+    let now = new Date();
+    let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+    // Inserts row into database
+    var sql = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
+                ('${date}', '${msg.author.id}', '${action}', NULL, NULL)`;
+    con.query(sql, function (err, result) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("1 record inserted");
+        }
+    });
+}
 
-            channel.send(unbanEmbed);
+function unbanEmbed(msg, toUnban, channel) {
+    // Sends Audit Log Embed
+
+    const unbanEmbed = new Discord.MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle(`${toUnban} was unbanned by ${msg.author.tag}:`)
+        .setTimestamp()
+        .setFooter(`${msg.guild.name}`);
+
+    channel.send(unbanEmbed);
+}
 
 
-            msg.reply(`${toUnban} was unbanned.`)
+async function unbanUser(msg, toUnban) {
+    try {
+        await msg.guild.members.unban(toUnban)
+    } catch (error) {
+        if(error.code == 10026) {
+            return msg.reply("This user is not banned.")
+        }
+        
+        if(error.code == 50035) {
+            return msg.reply("Please incalud a valid user ID")
         }
     }
+    msg.reply(`${toUnban} was unbanned.`)
 }

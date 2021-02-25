@@ -29,7 +29,7 @@ function validTempBan(msg, args) {
         toKick: null,
         reason: null,
         timeLength: null,
-    };    
+    };
 
     if (!msg.member.roles.cache.some(
         role => role.name === "Admin" || role.name === "Moderator")) {
