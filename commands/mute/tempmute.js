@@ -20,7 +20,7 @@ module.exports = {
         setTimeout(() => {
             unmuteUser(msg, toTempMute);
             auditLogUnmute(msg, toTempMute, lengthOfTime);
-            recordUnmuteInDB(toTempMute, con);  
+            recordUnmuteInDB(con);  
         }, ms(lengthOfTime));
     },
 };
@@ -133,21 +133,18 @@ function recordMuteInDB(message, toTempMute, lengthOfTime, reason, connection) {
     });
 }
 
-function recordUnmuteInDB(toTempMute, connection) {
+function recordUnmuteInDB(connection) {
     let now = new Date()
     let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss")
 
-    var sqlInfractions2 = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
-    VALUES ('${timestamp}', '${toTempMute.id}', 'cc!tempmute', NULL, 'tempmute expired', true, 'automatic')`;
-
     var sqlModLog2 = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
-    VALUES ('${timestamp}', 'automatic', 'cc!tempmute', NULL, 'tempmute expired')`;
+    VALUES ('${timestamp}', 'automatic', 'cc!unmute', NULL, 'tempmute expired')`;
 
-    connection.query(`${sqlInfractions2}; ${sqlModLog2}`, function (err, result) {
+    connection.query(`${sqlModLog2}`, function (err, result) {
         if (err) {
         console.log(err);
         } else {
-        console.log("1 record inserted into infractions, 1 record inserted into mod_log.");
+        console.log("1 record inserted into mod_log.");
         }
     });
 }
