@@ -20,7 +20,7 @@ module.exports = {
         setTimeout(() => {
             unmuteUser(msg, toTempMute);
             auditLogUnmute(msg, toTempMute, lengthOfTime);
-            recordUnmuteInDB(con);  
+            recordUnmuteInDB(toTempMute, con);  
         }, ms(lengthOfTime));
     },
 };
@@ -133,12 +133,12 @@ function recordMuteInDB(message, toTempMute, lengthOfTime, reason, connection) {
     });
 }
 
-function recordUnmuteInDB(connection) {
+function recordUnmuteInDB(toTempMute, connection) {
     let now = new Date()
     let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss")
 
     var sqlModLog2 = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
-    VALUES ('${timestamp}', 'automatic', 'cc!unmute', NULL, 'tempmute expired')`;
+    VALUES ('${timestamp}', 'automatic', 'cc!unmute ${toTempMute}', NULL, 'tempmute expired')`;
 
     connection.query(`${sqlModLog2}`, function (err, result) {
         if (err) {
