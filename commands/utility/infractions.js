@@ -9,6 +9,7 @@ module.exports = {
 		if (canWarn(msg)){
 			if (hasUserTarget(msg,targetUser)) {
 				// Find all infraction records in database
+				// Because of async, call infractionLog from infractionsInDB
 				infractionsInDB(msg,con,targetUser);
 
 			}
@@ -41,10 +42,16 @@ function infractionLog(msg,targetUser,infractions) {
 		.setThumbnail(`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
 		.setTimestamp()
 		.setFooter(`${msg.guild.name}`);
-		infractions.forEach(infraction => {
-			console.log(infraction.reason);
-			infractionsEmbed.addField('Infraction: ',infraction.reason);
+		if (infractions.length){
+			let counter = 1;
+			infractions.forEach(infraction => {
+			infractionsEmbed.addField(`Infraction: ${counter}`,infraction.reason);
+			counter++;
 		  });
+		} else {
+			infractionsEmbed.setDescription(`${targetUser.user.username}#${targetUser.user.discriminator} doesn't appear to have infractions.`);
+		}
+		
 
 	msg.channel.send(infractionsEmbed);
 }
