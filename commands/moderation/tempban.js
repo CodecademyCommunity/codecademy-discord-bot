@@ -70,7 +70,7 @@ module.exports = {
 
             const tempUnBanEmbed = new Discord.MessageEmbed()
             .setColor('#0099ff')
-            .setTitle(`${toTempBan.user.username}#${toTempBan.user.discriminator} was unbanned by after ${timeLength}:`)
+            .setTitle(`${toTempBan.user.username}#${toTempBan.user.discriminator} was unbanned after ${timeLength}:`)
             .setThumbnail(`https://cdn.discordapp.com/avatars/${toTempBan.user.id}/${toTempBan.user.avatar}.png`)
             .setTimestamp()
             .setFooter(`${msg.guild.name}`);
