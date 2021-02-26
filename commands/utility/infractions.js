@@ -40,9 +40,8 @@ function infractionLog(msg,targetUser,infractions) {
 
 	// Get properties from the list
 	const totalInfractions = listOfInfractions.length;
-	const hasMoreThan5 = listOfInfractions.length > 5;
-
-	const infractionsEmbed = new Discord.MessageEmbed()
+	if (totalInfractions){
+		const infractionsEmbed = new Discord.MessageEmbed()
 		.setAuthor(`${targetUser.user.username}#${targetUser.user.discriminator}'s infractions`,
 			`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
 		.setColor('#c5d86d')
@@ -54,6 +53,10 @@ function infractionLog(msg,targetUser,infractions) {
 		.setFooter(`${msg.guild.name}`);
 
 	msg.channel.send(infractionsEmbed);
+	} else {
+		msg.reply(`${targetUser.user.username}#${targetUser.user.discriminator} doesn't have any infractions`);
+	}
+	
 
 
 }
