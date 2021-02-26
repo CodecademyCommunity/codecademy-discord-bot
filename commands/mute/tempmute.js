@@ -118,13 +118,15 @@ function recordMuteInDB(message, toTempMute, lengthOfTime, reason, connection) {
     let now = new Date();
     let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-    var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
-    VALUES ('${timestamp}', '${toTempMute.id}', 'cc!tempmute', '${lengthOfTime}', '${reason}', true, '${message.author.id}')`;
+    const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
+    VALUES (?, ?, 'cc!tempmute', ?, ?, true, ?);
+    INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
+    VALUES (?, ?, ?, ?, ?);`;
 
-    var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
-    VALUES ('${timestamp}', '${message.author.id}', '${message}', '${lengthOfTime}', '${reason}')`;
+    const values = [timestamp, toTempMute.id, lengthOfTime, reason, message.author.id, timestamp, message.author.id, message.content, lengthOfTime, reason];
+    const escaped = connection.format(sql, values);
 
-    connection.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
+    connection.query(escaped, function (err, result) {
         if (err) {
         console.log(err);
         } else {
@@ -137,10 +139,13 @@ function recordUnmuteInDB(toTempMute, connection) {
     let now = new Date()
     let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss")
 
-    var sqlModLog2 = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
-    VALUES ('${timestamp}', 'automatic', 'cc!unmute ${toTempMute}', NULL, 'tempmute expired')`;
+    const sql2 = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
+    VALUES (?, 'automatic', ?, NULL, 'tempmute expired')`;
 
-    connection.query(`${sqlModLog2}`, function (err, result) {
+    const values2 = [timestamp, `cc!unmute ${toTempMute}`];
+    const escaped2 = connection.format(sql2, values2);
+
+    connection.query(escaped2, function (err, result) {
         if (err) {
         console.log(err);
         } else {
