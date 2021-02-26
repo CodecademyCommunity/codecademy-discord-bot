@@ -20,7 +20,7 @@ module.exports = {
 
 function infractionsInDB(msg,con,targetUser){
 	// Find inractions in database
-	const sqlInfractions = `SELECT reason FROM infractions WHERE user = '${targetUser.id}';`;
+	const sqlInfractions = `SELECT timestamp,reason FROM infractions WHERE user = '${targetUser.id}';`;
 
 	con.query(`${sqlInfractions}`, function (err, result) {
 		if (err) {
@@ -35,22 +35,50 @@ function infractionsInDB(msg,con,targetUser){
 }
 
 function infractionLog(msg,targetUser,infractions) {
+	// parse infractions into an array
+	const infractionsList = infractions.map(infraction => [infraction.timestamp,infraction.reason]);
+
+	// Get properties from the list
+	const totalInfractions = infractionsList.length;
+	const hasMoreThan5 = infractionsList.length > 5;
+	const timestampList = infractionsList.map(infraction => infraction[0]);
+	const reasonsList = infractionsList.map(infraction => infraction[1]);
+
+	// Format timestamps to work backwards from current time
+	// First convert to millisecs, then compare with current time
+	timestampList.forEach((time, idx) => timestampList[idx] = Date.parse(time));
+	const now = Date.now();
+	const timeSinceInfraction = timestampList.map(time => now - time); // elapsed time
+	timeSinceInfraction.forEach((time,idx) => {
+		timeSinceInfraction[idx] = [
+			`${typeof time}`,
+			`${Math.round(time)}`,
+			`${Math.round(time /= 1000)}`,
+			`${Math.round(time /= 1000) % 60}`
+		]
+		});
+	console.log(timeSinceInfraction);
+	
 
 	const infractionsEmbed = new Discord.MessageEmbed()
-		.setColor('#2e294e')
-		.setTitle(`${targetUser.user.username}#${targetUser.user.discriminator} has the following infractions`)
-		.setThumbnail(`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
+		.setAuthor(`${targetUser.user.username}#${targetUser.user.discriminator}'s infractions`,
+			`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
+		.setColor('#c5d86d')
+		.addField(`Last 24h`,`test`,true)
+		.addField(`Last 7 days`,`test`,true)
+		.addField(`Total`,`${totalInfractions}`,true)
+		.addField(`Latest infractions: `,`${reasonsList} - ${timestampList}`)
 		.setTimestamp()
 		.setFooter(`${msg.guild.name}`);
-		if (infractions.length){
-			let counter = 1;
-			infractions.forEach(infraction => {
-			infractionsEmbed.addField(`Infraction: ${counter}`,infraction.reason);
-			counter++;
-		  });
-		} else {
-			infractionsEmbed.setDescription(`${targetUser.user.username}#${targetUser.user.discriminator} doesn't appear to have infractions.`);
-		}
+		// if (infractions.length){
+		// 	let counter = 1;
+		// 	infractions.forEach(infraction => {
+		// 	infractionsEmbed.addField(`Infraction: ${counter}`,infraction.reason);
+		// 	counter++;
+		//   });
+		// } else {
+		// 	infractionsEmbed.setDescription(`${targetUser.user.username}#${targetUser.user.discriminator} doesn't appear to have infractions.`);
+		// }
 		
 
 	msg.channel.send(infractionsEmbed);
