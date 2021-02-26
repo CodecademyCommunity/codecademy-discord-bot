@@ -82,7 +82,12 @@ function tempSQL(msg, toTempBan, timeLength, reason, con, args) {
     ('${date}', '${toTempBan.id}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.id}');
     INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
     ('${date}', '${msg.author.id}', '${action}', '${timeLength}', '${reason}');`;
-    con.query(sql, function (err, result) {
+
+    const values = [date, toTempBan.id, timeLength, reason, msg.author.id, date, msg.author.id, action, timeLength, reason]
+
+    const escaped = con.format(sql, values)
+
+    con.query(escaped, function (err, result) {
         if (err) {
             console.log(err);
         } else {

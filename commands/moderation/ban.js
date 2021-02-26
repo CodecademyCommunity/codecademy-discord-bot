@@ -64,11 +64,15 @@ function banSQL(msg, toBan, reason, args, con) {
     const action = "cc!ban " + args.join(" ")
 
     // Inserts row into database
-    var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
-    ('${date}', '${toBan.id}', 'cc!ban', NULL, '${reason}', true, '${msg.author.id}');
+    const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
+    (?, ?, 'cc!ban', NULL, ?, true, ?);
     INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-    ('${date}', '${msg.author.id}', '${action}', NULL, '${reason}')`;
-    con.query(sql, function (err, result) {
+    (?, ?, ?, NULL, ?)`;;
+
+    const values = [date, toBan.id, reason, msg.author.id, date, msg.author.id, action, reason]
+    const escaped = con.format(sql, values)
+
+    con.query(escaped, function (err, result) {
         if (err) {
             console.log(err);
         } else {

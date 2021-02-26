@@ -65,8 +65,11 @@ function unbanSQL(msg, con, args) {
     let date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
     // Inserts row into database
     var sql = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-                ('${date}', '${msg.author.id}', '${action}', NULL, NULL)`;
-    con.query(sql, function (err, result) {
+                (?, ?, ?, NULL, NULL)`;
+    const values = [date, msg.author.id, action]
+    const escaped = con.format(sql, values)
+
+    con.query(escaped, function (err, result) {
         if (err) {
             console.log(err);
         } else {

@@ -13,7 +13,7 @@ module.exports = {
             return msg.reply(err);
         }
 
-        kickUser(msg, toKick, reason)
+        // kickUser(msg, toKick, reason)
         kickSQL(msg, toKick, reason, args, con)
         kickEmbed(msg, toKick, reason)
             
@@ -71,11 +71,15 @@ function kickSQL(msg, toKick, reason, args, con) {
     const action = "cc!kick " + args.join(" ")
 
     // Inserts row into database
-    var sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
-    ('${date}', '${toKick.id}', 'cc!kick', NULL, '${reason}', true, '${msg.author.id}');
+    const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
+    (?, ?, 'cc!kick', NULL, ?, true, ?);
     INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-    ('${date}', '${msg.author.id}', '${action}', NULL, '${reason}')`;
-    con.query(sql, function (err, result) {
+    (?, ?, ?, NULL, ?)`;
+    const values = [date, toKick.id, reason, msg.author.id, date, msg.author.id, action, reason]
+    
+    const escaped = con.format(sql, values)
+
+    con.query(escaped, function (err, result) {
         if (err) {
             console.log(err);
         } else {
