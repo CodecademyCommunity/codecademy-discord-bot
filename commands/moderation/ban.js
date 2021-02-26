@@ -67,7 +67,7 @@ function banSQL(msg, toBan, reason, args, con) {
     const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
     (?, ?, 'cc!ban', NULL, ?, true, ?);
     INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-    (?, ?, ?, NULL, ?)`;;
+    (?, ?, ?, NULL, ?);`;
 
     const values = [date, toBan.id, reason, msg.author.id, date, msg.author.id, action, reason]
     const escaped = con.format(sql, values)
