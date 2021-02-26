@@ -9,3 +9,4 @@
 package.json
 package-lock.json
 .prettierrc.json
+settings.json.example
