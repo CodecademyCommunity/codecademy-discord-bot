@@ -89,13 +89,15 @@ function recordInDB(message, toMute, reason, connection) {
     let now = new Date();
     let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-    var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
-    VALUES ('${timestamp}', '${toMute.id}', 'cc!mute', NULL, '${reason}', true, '${message.author.id}')`;
+    const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
+    VALUES (?, ?, 'cc!mute', NULL, ?, true, ?);
+    INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
+    VALUES (?, ?, ?, NULL, ?);`;
 
-    var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
-    VALUES ('${timestamp}', '${message.author.id}', '${message}', NULL, '${reason}')`;
+    const values = [timestamp, toMute.id, reason, message.author.id, timestamp, message.author.id, message.content, reason];
+    const escaped = connection.format(sql, values);
 
-    connection.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
+    connection.query(escaped, function (err, result) {
         if (err) {
         console.log(err);
         } else {

@@ -71,10 +71,13 @@ function recordInDB(message, connection) {
     let now = new Date();
     let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
 
-    var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason)
-    VALUES ('${timestamp}', '${message.author.id}', '${message}', NULL, NULL)`;
+    const sql = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason)
+    VALUES (?, ?, ?, NULL, NULL);`;
 
-    connection.query(`${sqlModLog}`, function (err, result) {
+    const values = [timestamp, message.author.id, message.content];
+    const escaped = connection.format(sql, values);
+
+    connection.query(escaped, function (err, result) {
         if (err) {
         console.log(err);
         } else {
