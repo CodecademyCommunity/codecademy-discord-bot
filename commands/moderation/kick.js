@@ -13,7 +13,7 @@ module.exports = {
             return msg.reply(err);
         }
 
-        // kickUser(msg, toKick, reason)
+        kickUser(msg, toKick, reason)
         kickSQL(msg, toKick, reason, args, con)
         kickEmbed(msg, toKick, reason)
             
