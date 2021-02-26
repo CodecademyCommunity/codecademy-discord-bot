@@ -13,7 +13,7 @@ module.exports = {
 
         unmuteUser(msg, toUnmute);
         auditLog(msg, toUnmute);
-        recordInDB(msg, toUnmute, con);
+        recordInDB(msg, con);
     },
 };
 
@@ -67,21 +67,18 @@ function auditLog(message, toUnmute) {
     channel.send(unmuteEmbed);
 }
 
-function recordInDB(message, toUnmute, connection) {
+function recordInDB(message, connection) {
     let now = new Date();
     let timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
-
-    var sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
-    VALUES ('${timestamp}', '${toUnmute.id}', 'cc!unmute', NULL, NULL, true, '${message.author.id}')`;
 
     var sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason)
     VALUES ('${timestamp}', '${message.author.id}', '${message}', NULL, NULL)`;
 
-    connection.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
+    connection.query(`${sqlModLog}`, function (err, result) {
         if (err) {
         console.log(err);
         } else {
-        console.log("1 record inserted into infractions, 1 record inserted into mod_log.");
+        console.log("1 record inserted into mod_log.");
         }
     });
 }
