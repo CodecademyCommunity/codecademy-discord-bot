@@ -3,9 +3,11 @@ const Discord = require('discord.js');
 module.exports = {
 	name: 'infractions',
 	description: 'finds user infraction record in db and returns it to channel',
-	execute(msg,con) {
+	execute(msg,con,args) {
 		// Make sure only SU, Mods and Admin can run the command
-		const targetUser = msg.mentions.members.first();
+		const targetUser = msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+
+		if (targetUser) console.log(`targerUser is true`)
 		if (canCheckInfractions(msg)){
 			if (hasUserTarget(msg,targetUser)) {
 				// Find all infraction records in database

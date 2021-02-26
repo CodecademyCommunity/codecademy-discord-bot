@@ -83,7 +83,7 @@ const commandParser = (msg) => {
       break;
 
     case 'infractions':
-      client.commands.get('infractions').execute(msg,con);
+      client.commands.get('infractions').execute(msg,con,args);
       break;
 
     case 'sendcode':
