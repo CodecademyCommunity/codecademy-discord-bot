@@ -45,7 +45,7 @@ function canTempMute(message, args) {
         data.err = "The command you sent isn't in a valid format.";
         return data;
     }
-    [, id, data.lengthOfTime, data.reason] = args.join(" ").match(command_regex) ?? []
+    [, id, data.lengthOfTime, data.reason] = args.join(" ").match(command_regex)
 
     data.toTempMute = message.mentions.members.first();
     if (!data.toTempMute) {
