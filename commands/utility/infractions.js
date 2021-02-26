@@ -35,12 +35,32 @@ function infractionsInDB(msg,con,targetUser){
 }
 
 function infractionLog(msg,targetUser,infractions) {
-	// parse infractions into an array
-	const infractionsList = infractions.map(infraction => [infraction.timestamp,infraction.reason]);
+
+	const listOfInfractions = parseInfractions(infractions);
 
 	// Get properties from the list
-	const totalInfractions = infractionsList.length;
-	const hasMoreThan5 = infractionsList.length > 5;
+	const totalInfractions = listOfInfractions.length;
+	const hasMoreThan5 = listOfInfractions.length > 5;
+
+	const infractionsEmbed = new Discord.MessageEmbed()
+		.setAuthor(`${targetUser.user.username}#${targetUser.user.discriminator}'s infractions`,
+			`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
+		.setColor('#c5d86d')
+		//.addField(`Last 24h`,`test`,true)
+		//.addField(`Last 7 days`,`test`,true)
+		.addField(`Total`,`${totalInfractions}`)
+		.addField(`Latest infractions: `,listOfInfractions)
+		.setTimestamp()
+		.setFooter(`${msg.guild.name}`);
+
+	msg.channel.send(infractionsEmbed);
+
+
+}
+
+function parseInfractions(infractions){
+	// parse infractions into an array
+	const infractionsList = infractions.map(infraction => [infraction.timestamp,infraction.reason]);
 	const timestampList = infractionsList.map(infraction => infraction[0]);
 	const reasonsList = infractionsList.map(infraction => infraction[1]);
 
@@ -50,38 +70,20 @@ function infractionLog(msg,targetUser,infractions) {
 	const now = Date.now();
 	const timeSinceInfraction = timestampList.map(time => now - time); // elapsed time
 	timeSinceInfraction.forEach((time,idx) => {
-		timeSinceInfraction[idx] = [
-			`${typeof time}`,
-			`${Math.round(time)}`,
-			`${Math.round(time /= 1000)}`,
-			`${Math.round(time /= 1000) % 60}`
-		]
-		});
-	console.log(timeSinceInfraction);
-	
+		let seconds = time / 1000;
+		let minutes = seconds / 60;
+		let hours = minutes / 60;
+		let days = hours / 24;
+		timeSinceInfraction[idx] = [`${Math.floor(days)}d ${Math.floor(hours) % 24}h ${Math.floor(minutes) % 60}m ${Math.floor(seconds) % 60}s`]
+	});
 
-	const infractionsEmbed = new Discord.MessageEmbed()
-		.setAuthor(`${targetUser.user.username}#${targetUser.user.discriminator}'s infractions`,
-			`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
-		.setColor('#c5d86d')
-		.addField(`Last 24h`,`test`,true)
-		.addField(`Last 7 days`,`test`,true)
-		.addField(`Total`,`${totalInfractions}`,true)
-		.addField(`Latest infractions: `,`${reasonsList} - ${timestampList}`)
-		.setTimestamp()
-		.setFooter(`${msg.guild.name}`);
-		// if (infractions.length){
-		// 	let counter = 1;
-		// 	infractions.forEach(infraction => {
-		// 	infractionsEmbed.addField(`Infraction: ${counter}`,infraction.reason);
-		// 	counter++;
-		//   });
-		// } else {
-		// 	infractionsEmbed.setDescription(`${targetUser.user.username}#${targetUser.user.discriminator} doesn't appear to have infractions.`);
-		// }
-		
-
-	msg.channel.send(infractionsEmbed);
+	// Join reasonsList with timeSinceInfraction
+	// This lets us print out the embedded message so much better
+	const reasonsWithTimes = [];
+	for(let i = 0; i < reasonsList.length; i++){
+		reasonsWithTimes.push(`${reasonsList[i]} • ${timeSinceInfraction[i]} _ago_`);
+	}
+	return reasonsWithTimes;
 }
 
 function canCheckInfractions(msg) {
