@@ -1,5 +1,7 @@
 # Codecademy Discord Bot
 
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 Every great Discord server needs a great bot. So we coded up our own. It does a lot of things that other bots do, plus has a few tailored commands.
 
 ## Current Commands
@@ -7,6 +9,7 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 ```
 cc!createroles
 ```
+
 (admin only) Pulls all badges from Codecademy Discuss and creates a role for each one.
 
 ---
@@ -14,6 +17,7 @@ cc!createroles
 ```
 cc!deleteroles
 ```
+
 (admin only) Deletes all the roles added from Codecademy Discuss.
 
 ---
@@ -21,6 +25,7 @@ cc!deleteroles
 ```
 cc!sendcode [username]
 ```
+
 Sends a verification code to your Codecademy Discuss email.
 
 ---
@@ -28,6 +33,7 @@ Sends a verification code to your Codecademy Discuss email.
 ```
 cc!verify [code]
 ```
+
 Verifies that the code entered is valid and gives you a role for every badge you have on Discourse.
 
 ---
@@ -35,6 +41,7 @@ Verifies that the code entered is valid and gives you a role for every badge you
 ```
 cc!stats
 ```
+
 Displays basic server statistics (online members, offline members, total members).
 
 ---
@@ -42,6 +49,7 @@ Displays basic server statistics (online members, offline members, total members
 ```
 cc!ping
 ```
+
 Pong!
 
 ---
@@ -49,6 +57,7 @@ Pong!
 ```
 cc!ban [user] [reason]
 ```
+
 Bans a user.
 
 ---
@@ -56,6 +65,7 @@ Bans a user.
 ```
 cc!unban [user]
 ```
+
 Unbans a user.
 
 ---
@@ -63,6 +73,7 @@ Unbans a user.
 ```
 cc!tempban [user] [lengthoftime] [reason]
 ```
+
 Temporarily bans a user for a set time period.
 
 ---
@@ -70,6 +81,7 @@ Temporarily bans a user for a set time period.
 ```
 cc!kick [user] [reason]
 ```
+
 Kicks a user from the server.
 
 ---
@@ -77,13 +89,15 @@ Kicks a user from the server.
 ```
 cc!mute [user] [reason]
 ```
-Mutes a user by assigning them a *Muted* role (denies message sending and reacting privileges).
+
+Mutes a user by assigning them a _Muted_ role (denies message sending and reacting privileges).
 
 ---
 
 ```
 cc!unmute [user]
 ```
+
 Unmutes a user.
 
 ---
@@ -91,15 +105,16 @@ Unmutes a user.
 ```
 cc!tempmute [user] [lengthoftime] [reason]
 ```
+
 Temporarily mutes a user for a set time period.
 
 ---
 
 ## Other Functionality
 
-* **Logging Deleted Messages:** the bot checks when users delete their messages and creates a log of it. This hopefully helps moderating channels where users try to circumvent typical moderation by spamming and immediately deleting their messages.
+- **Logging Deleted Messages:** the bot checks when users delete their messages and creates a log of it. This hopefully helps moderating channels where users try to circumvent typical moderation by spamming and immediately deleting their messages.
 
-* **Logging Command Usage:** the bot logs the usage of moderation commands (ban, kick, mute, etc.) and stores this information in a MySQL database.
+- **Logging Command Usage:** the bot logs the usage of moderation commands (ban, kick, mute, etc.) and stores this information in a MySQL database.
 
 ## How to Contribute
 
