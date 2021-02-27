@@ -1,8 +1,8 @@
-require('dotenv').config();
-const mysql = require('mysql');
-const readline = require('readline').createInterface({
+require("dotenv").config();
+const mysql = require("mysql");
+const readline = require("readline").createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 const con = mysql.createConnection({
@@ -10,8 +10,8 @@ const con = mysql.createConnection({
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
-  multipleStatements: true
-  });
+  multipleStatements: true,
+});
 
 const sql = `
   SET foreign_key_checks = 0;
@@ -46,24 +46,24 @@ const sql = `
   );`;
 
 function recreateDB() {
-  con.query(sql, function(err) {
-    err ? console.log(err) : console.log('Database recreated successfully');
+  con.query(sql, function (err) {
+    err ? console.log(err) : console.log("Database recreated successfully");
   });
-  
-  con.end(function(err) {
-    err ? console.log(err) : console.log('Connection closed gracefully');
+
+  con.end(function (err) {
+    err ? console.log(err) : console.log("Connection closed gracefully");
   });
 }
 
 readline.question(
   `Are you sure you want to recreate your database? You will lose all your data. y/N  `,
-  answer => {
+  (answer) => {
     const lowerAns = answer.toLowerCase();
-    if (lowerAns === 'y' || lowerAns === 'yes') {
+    if (lowerAns === "y" || lowerAns === "yes") {
       recreateDB();
       readline.close();
     } else {
-      console.log('Exiting. Data will not be lost.');
+      console.log("Exiting. Data will not be lost.");
       readline.close();
     }
   }
