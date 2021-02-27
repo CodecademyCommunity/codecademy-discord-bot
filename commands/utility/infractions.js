@@ -42,11 +42,15 @@ function infractionLog(msg,targetUser,infractions) {
 
 	// Get properties from the list
 	const totalInfractions = listOfInfractions.length;
+
+	// Set some colors for the embed
+	const embedFlair = ['#f8f272','#f98948','#a23e48','#6096ba','#86a873','#d3b99f','#6e6a6f']
+
 	if (totalInfractions){
 		const infractionsEmbed = new Discord.MessageEmbed()
 		.setAuthor(`${targetUser.user.username}#${targetUser.user.discriminator}'s infractions`,
 			`https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`)
-		.setColor('#c5d86d')
+		.setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
 		//.addField(`Last 24h`,`test`,true)
 		//.addField(`Last 7 days`,`test`,true)
 		.addField(`Total`,`${totalInfractions}`)
