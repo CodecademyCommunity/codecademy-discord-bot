@@ -22,7 +22,7 @@ module.exports = {
 
 function infractionsInDB(msg,con,targetUser){
 	// Find inractions in database
-	const sqlInfractions = `SELECT timestamp,reason FROM infractions WHERE user = '${targetUser.id}';`;
+	const sqlInfractions = `SELECT timestamp,reason,id,action FROM infractions WHERE user = '${targetUser.id}';`;
 
 	con.query(`${sqlInfractions}`, function (err, result) {
 		if (err) {
@@ -65,9 +65,11 @@ function infractionLog(msg,targetUser,infractions) {
 
 function parseInfractions(infractions){
 	// parse infractions into an array
-	const infractionsList = infractions.map(infraction => [infraction.timestamp,infraction.reason]);
+	const infractionsList = infractions.map(infraction => [infraction.timestamp,infraction.reason,infraction.id,infraction.action]);
 	const timestampList = infractionsList.map(infraction => infraction[0]);
 	const reasonsList = infractionsList.map(infraction => infraction[1]);
+	const idList = infractionsList.map(infraction => infraction[2]);
+	const actionList =infractionsList.map(infraction => infraction[3]);
 
 	// Format timestamps to work backwards from current time
 	// First convert to millisecs, then compare with current time
@@ -79,14 +81,21 @@ function parseInfractions(infractions){
 		let minutes = seconds / 60;
 		let hours = minutes / 60;
 		let days = hours / 24;
-		timeSinceInfraction[idx] = [`${Math.floor(days)}d ${Math.floor(hours) % 24}h ${Math.floor(minutes) % 60}m ${Math.floor(seconds) % 60}s`]
+		if (Math.floor(days) > 0) {
+			timeSinceInfraction[idx] = [`${Math.floor(days)}d ${Math.round(days % 24)}h`];
+		} else if (Math.floor(hours) > 0) {
+			timeSinceInfraction[idx] = [`${Math.floor(hours)}h ${Math.round(hours % 60)}m`];
+		} else {
+			timeSinceInfraction[idx] = [`${Math.floor(minutes)}m ${Math.round(minutes % 60)}s`];
+		}
+		
 	});
 
 	// Join reasonsList with timeSinceInfraction
 	// This lets us print out the embedded message so much better
 	const reasonsWithTimes = [];
 	for(let i = 0; i < reasonsList.length; i++){
-		reasonsWithTimes.push(`${reasonsList[i]} • ${timeSinceInfraction[i]} _ago_`);
+		reasonsWithTimes.push(`**ID: ${idList[i]}** • ${actionList[i]} • _${reasonsList[i]}_ • ${timeSinceInfraction[i]} _ago_`);
 	}
 	return reasonsWithTimes;
 }
