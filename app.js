@@ -82,6 +82,10 @@ const commandParser = (msg) => {
       client.commands.get('deleteroles').execute(msg, fetch);
       break;
 
+    case 'infractions':
+      client.commands.get('infractions').execute(msg,con,args);
+      break;
+
     case 'sendcode':
       client.commands.get('sendcode').execute(msg, uuidv4(), fetch, con, sgMail);
       break;
