@@ -6,6 +6,7 @@
 # Individual files to ignore
 .env
 .eslintrc.json
+.git-blame-ignore-revs
 package.json
 package-lock.json
 .prettierrc.json
