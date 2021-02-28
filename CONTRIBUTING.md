@@ -7,6 +7,7 @@ Please review the _issues_ tab and self-assign one if you want to try to help in
 ## Table of contents
 
 - [Initial Setup](#initial-setup)
+- [Advanced Setup](#advanced-setup-optional) (optional)
 - [Typical Git Workflow](#typical-git-workflow)
 - [Report Issues](#report-issues)
 
@@ -63,6 +64,10 @@ $ npm start
 ```
 
 2. Your bot should now appear Online in your server.
+
+## Advanced Setup (optional)
+
+For information about our pre-commit hook and setting up your local environment to use ESLint, Prettier and Git Blame, check out the [Advanced Setup page](https://github.com/CodecademyCommunity/codecademy-discord-bot/wiki/Advanced-Setup) of our wiki.
 
 ## Repository Git Workflow
 
