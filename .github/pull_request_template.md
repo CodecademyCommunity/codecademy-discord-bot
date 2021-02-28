@@ -1,6 +1,6 @@
 ## What issue is this solving?
 <!-- replace ??? with the issue number. This will ensure the related issue is automatically closed when the PR is merged. -->
-Closes issue #???
+Closes #???
 
 ### Description
 <!-- Brief description of change -->
