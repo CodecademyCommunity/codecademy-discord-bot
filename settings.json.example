@@ -1,0 +1,12 @@
+{
+    "eslint.alwaysShowStatus": true,
+    "eslint.lintTask.options": "-c ./.eslintrc.json .",
+    "eslint.probe": [
+        "javascript",
+        "markdown"
+    ],
+    "editor.formatOnSave": true,
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
