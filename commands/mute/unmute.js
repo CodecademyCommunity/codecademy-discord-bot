@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
-const dateFormat = require("dateformat");
+const Discord = require('discord.js');
+const dateFormat = require('dateformat');
 
 module.exports = {
-  name: "unmute",
-  description: "Unmute a user",
+  name: 'unmute',
+  description: 'Unmute a user',
 
   execute(msg, con) {
     const {status, err, toUnmute} = canUnmute(msg);
@@ -27,23 +27,23 @@ function canUnmute(message) {
   if (
     !message.member.roles.cache.some(
       (role) =>
-        role.name === "Moderator" ||
-        role.name === "Admin" ||
-        role.name === "Super User"
+        role.name === 'Moderator' ||
+        role.name === 'Admin' ||
+        role.name === 'Super User'
     )
   ) {
     data.err =
-      "You must be a super user, moderator, or admin to use this command.";
+      'You must be a super user, moderator, or admin to use this command.';
     return data;
   }
 
   data.toUnmute = message.mentions.members.first();
   if (!data.toUnmute) {
-    data.err = "Please provide a user to unmute.";
+    data.err = 'Please provide a user to unmute.';
     return data;
   }
-  if (!data.toUnmute.roles.cache.some((role) => role.name === "Muted")) {
-    data.err = "This user is already unmuted.";
+  if (!data.toUnmute.roles.cache.some((role) => role.name === 'Muted')) {
+    data.err = 'This user is already unmuted.';
     return data;
   }
 
@@ -54,7 +54,7 @@ function canUnmute(message) {
 function unmuteUser(message, toUnmute) {
   // Removes Muted role from user.
   toUnmute.roles.remove(
-    message.guild.roles.cache.find((role) => role.name === "Muted")
+    message.guild.roles.cache.find((role) => role.name === 'Muted')
   );
   message.channel.send(`${toUnmute} was unmuted.`);
 
@@ -65,11 +65,11 @@ function unmuteUser(message, toUnmute) {
 function auditLog(message, toUnmute) {
   // Outputs a message to the audit-logs channel.
   const channel = message.guild.channels.cache.find(
-    (channel) => channel.name === "audit-logs"
+    (channel) => channel.name === 'audit-logs'
   );
 
   const unmuteEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(
       `${toUnmute.user.username}#${toUnmute.user.discriminator} was unmuted by ${message.author.tag}:`
     )
@@ -84,7 +84,7 @@ function auditLog(message, toUnmute) {
 
 function recordInDB(message, connection) {
   const now = new Date();
-  const timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+  const timestamp = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
   const sql = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason)
     VALUES (?, ?, ?, NULL, NULL);`;
@@ -96,7 +96,7 @@ function recordInDB(message, connection) {
     if (err) {
       console.log(err);
     } else {
-      console.log("1 record inserted into mod_log.");
+      console.log('1 record inserted into mod_log.');
     }
   });
 }

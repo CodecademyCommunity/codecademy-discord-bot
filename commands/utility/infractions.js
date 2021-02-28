@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
+const Discord = require('discord.js');
 
 module.exports = {
-  name: "infractions",
-  description: "finds user infraction record in db and returns it to channel",
+  name: 'infractions',
+  description: 'finds user infraction record in db and returns it to channel',
   execute(msg, con, args) {
     // Make sure only SU, Mods and Admin can run the command
     const targetUser =
@@ -31,7 +31,7 @@ function infractionsInDB(msg, con, targetUser) {
         `I couldn't read ${targetUser}'s infractions from the db!`
       );
     } else {
-      console.log("Found infraction records.");
+      console.log('Found infraction records.');
       infractionLog(msg, targetUser, result);
     }
   });
@@ -45,13 +45,13 @@ function infractionLog(msg, targetUser, infractions) {
 
   // Set some colors for the embed
   const embedFlair = [
-    "#f8f272",
-    "#f98948",
-    "#a23e48",
-    "#6096ba",
-    "#86a873",
-    "#d3b99f",
-    "#6e6a6f",
+    '#f8f272',
+    '#f98948',
+    '#a23e48',
+    '#6096ba',
+    '#86a873',
+    '#d3b99f',
+    '#6e6a6f',
   ];
 
   if (totalInfractions) {
@@ -127,13 +127,13 @@ function canCheckInfractions(msg) {
   if (
     !msg.member.roles.cache.some(
       (role) =>
-        role.name === "Super User" ||
-        role.name === "Moderator" ||
-        role.name === "Admin"
+        role.name === 'Super User' ||
+        role.name === 'Moderator' ||
+        role.name === 'Admin'
     )
   ) {
     msg.reply(
-      "You must be a Super User, Moderator or Admin to use this command."
+      'You must be a Super User, Moderator or Admin to use this command.'
     );
     return false;
   } else {
@@ -144,13 +144,13 @@ function canCheckInfractions(msg) {
 function hasUserTarget(msg, targetUser) {
   // Asortment of answers to make the bot more fun
   const failAttemptReply = [
-    "Ok there bud, whose infractions are you trying to check again?",
-    "You definitely missed the targer user there...",
-    "what? You want ALL the infractions from everyone? You forgot the targer user",
+    'Ok there bud, whose infractions are you trying to check again?',
+    'You definitely missed the targer user there...',
+    'what? You want ALL the infractions from everyone? You forgot the targer user',
     "Not judging, but you didn't set a user to read infractions from...",
-    "You forgot the targer user, so maybe YOU should have an infraction",
-    "Forgot the target user. Wanna try again?",
-    "Here I was thinking this command was easy enough. You forgot the target user",
+    'You forgot the targer user, so maybe YOU should have an infraction',
+    'Forgot the target user. Wanna try again?',
+    'Here I was thinking this command was easy enough. You forgot the target user',
   ];
 
   if (targetUser) {

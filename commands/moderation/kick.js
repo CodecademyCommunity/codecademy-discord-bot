@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
-const dateFormat = require("dateformat");
+const Discord = require('discord.js');
+const dateFormat = require('dateformat');
 
 module.exports = {
-  name: "kick",
-  description: "Kick a user",
+  name: 'kick',
+  description: 'Kick a user',
 
   execute(msg, con, args) {
     const {status, err, toKick, reason} = validKick(msg);
@@ -28,13 +28,13 @@ function validKick(msg) {
   if (
     !msg.member.roles.cache.some(
       (role) =>
-        role.name === "Admin" ||
-        role.name === "Moderator" ||
-        role.name === "Super User"
+        role.name === 'Admin' ||
+        role.name === 'Moderator' ||
+        role.name === 'Super User'
     )
   ) {
     data.err = msg.reply(
-      "You must be an Admin, Moderator, or Super User to use this command."
+      'You must be an Admin, Moderator, or Super User to use this command.'
     );
     return data;
   }
@@ -42,7 +42,7 @@ function validKick(msg) {
   // Grabs the user and makes sure that one was provided
   data.toKick = msg.mentions.members.first();
   if (!data.toKick) {
-    data.err = "Please provide a user to kick.";
+    data.err = 'Please provide a user to kick.';
     return data;
   }
 
@@ -53,15 +53,15 @@ function validKick(msg) {
   }
 
   // Checks that the person who is getting kicked doesn't have kick privileges
-  if (data.toKick.hasPermission("KICK_MEMBERS")) {
-    data.err = "This user also has kick privileges.";
+  if (data.toKick.hasPermission('KICK_MEMBERS')) {
+    data.err = 'This user also has kick privileges.';
     return data;
   }
 
   // Checks that a reason was included
-  data.reason = msg.content.substr(msg.content.indexOf(">") + 2);
-  if (data.reason === "") {
-    data.err = "Please provide a reason for kicking.";
+  data.reason = msg.content.substr(msg.content.indexOf('>') + 2);
+  if (data.reason === '') {
+    data.err = 'Please provide a reason for kicking.';
     return data;
   }
 
@@ -71,9 +71,9 @@ function validKick(msg) {
 
 function kickSQL(msg, toKick, reason, args, con) {
   const now = new Date();
-  const date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+  const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
-  const action = "cc!kick " + args.join(" ");
+  const action = 'cc!kick ' + args.join(' ');
 
   // Inserts row into database
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
@@ -97,7 +97,7 @@ function kickSQL(msg, toKick, reason, args, con) {
     if (err) {
       console.log(err);
     } else {
-      console.log("1 record inserted");
+      console.log('1 record inserted');
     }
   });
 }
@@ -105,11 +105,11 @@ function kickSQL(msg, toKick, reason, args, con) {
 function kickEmbed(msg, toKick, reason) {
   // Sends Audit Log Embed
   const channel = msg.guild.channels.cache.find(
-    (channel) => channel.name === "audit-logs"
+    (channel) => channel.name === 'audit-logs'
   );
 
   const kickEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(
       `${toKick.user.username}#${toKick.user.discriminator} was kicked by ${msg.author.tag}:`
     )
@@ -126,7 +126,7 @@ function kickEmbed(msg, toKick, reason) {
 function kickUser(msg, toKick, reason) {
   // Actual Kick
   toKick.send(
-    "You've been kicked for the following reason: ```" + reason + " ```"
+    "You've been kicked for the following reason: ```" + reason + ' ```'
   );
   toKick.kick({reason});
 

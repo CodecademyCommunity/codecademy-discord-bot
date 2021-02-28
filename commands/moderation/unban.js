@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
-const dateFormat = require("dateformat");
+const Discord = require('discord.js');
+const dateFormat = require('dateformat');
 
 module.exports = {
-  name: "unban",
-  description: "Unban a user",
+  name: 'unban',
+  description: 'Unban a user',
 
   async execute(msg, args, con) {
     const {status, err, toUnban} = await validUnban(msg, args);
@@ -12,7 +12,7 @@ module.exports = {
     }
 
     const channel = msg.guild.channels.cache.find(
-      (channel) => channel.name === "audit-logs"
+      (channel) => channel.name === 'audit-logs'
     );
 
     unbanSQL(msg, con, args);
@@ -28,8 +28,8 @@ async function validUnban(msg, args) {
     toUnban: null,
   };
 
-  if (!msg.member.roles.cache.some((role) => role.name === "Admin")) {
-    data.err = "You must be an Admin to use this command.";
+  if (!msg.member.roles.cache.some((role) => role.name === 'Admin')) {
+    data.err = 'You must be an Admin to use this command.';
     return data;
   }
 
@@ -42,7 +42,7 @@ async function validUnban(msg, args) {
 
   data.toUnban = args[0];
   if (!data.toUnban) {
-    data.err = "Please include a user ID to unban.";
+    data.err = 'Please include a user ID to unban.';
     return data;
   }
 
@@ -59,9 +59,9 @@ async function validUnban(msg, args) {
 }
 
 function unbanSQL(msg, con, args) {
-  const action = "cc!unban " + args.join(" ");
+  const action = 'cc!unban ' + args.join(' ');
   const now = new Date();
-  const date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+  const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
   // Inserts row into database
   const sql = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
                 (?, ?, ?, NULL, NULL)`;
@@ -72,7 +72,7 @@ function unbanSQL(msg, con, args) {
     if (err) {
       console.log(err);
     } else {
-      console.log("1 record inserted");
+      console.log('1 record inserted');
     }
   });
 }
@@ -81,7 +81,7 @@ function unbanEmbed(msg, toUnban, channel) {
   // Sends Audit Log Embed
 
   const unbanEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(`${toUnban} was unbanned by ${msg.author.tag}:`)
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
@@ -94,11 +94,11 @@ async function unbanUser(msg, toUnban) {
     await msg.guild.members.unban(toUnban);
   } catch (error) {
     if (error.code == 10026) {
-      return msg.reply("This user is not banned.");
+      return msg.reply('This user is not banned.');
     }
 
     if (error.code == 50035) {
-      return msg.reply("Please incalud a valid user ID");
+      return msg.reply('Please incalud a valid user ID');
     }
   }
   msg.reply(`${toUnban} was unbanned.`);

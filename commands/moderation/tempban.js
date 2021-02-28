@@ -1,10 +1,10 @@
-const Discord = require("discord.js");
-const ms = require("ms");
-const dateFormat = require("dateformat");
+const Discord = require('discord.js');
+const ms = require('ms');
+const dateFormat = require('dateformat');
 
 module.exports = {
-  name: "tempban",
-  description: "Temporarily ban a user",
+  name: 'tempban',
+  description: 'Temporarily ban a user',
 
   execute(msg, args, con) {
     const {status, err, toTempBan, reason, timeLength} = validTempBan(
@@ -16,7 +16,7 @@ module.exports = {
     }
 
     const channel = msg.guild.channels.cache.find(
-      (channel) => channel.name === "audit-logs"
+      (channel) => channel.name === 'audit-logs'
     );
 
     tempSQL(msg, toTempBan, timeLength, reason, con, args);
@@ -38,27 +38,27 @@ function validTempBan(msg, args) {
 
   if (
     !msg.member.roles.cache.some(
-      (role) => role.name === "Admin" || role.name === "Moderator"
+      (role) => role.name === 'Admin' || role.name === 'Moderator'
     )
   ) {
-    data.err = "You must be an Admin to use this command.";
+    data.err = 'You must be an Admin to use this command.';
     return data;
   }
 
   const userInformation = /(<@!?\d+>)\s(\d+[yhwdms])\s(.+)$/;
 
-  if (!args.join(" ").match(userInformation)) {
+  if (!args.join(' ').match(userInformation)) {
     data.err = "The command you sent isn't in a valid format";
     return data;
   }
 
   [, data.userID, data.timeLength, data.reason] = args
-    .join(" ")
+    .join(' ')
     .match(userInformation);
 
   data.toTempBan = msg.mentions.members.first();
   if (!data.toTempBan) {
-    data.err = "Please provide a user to temporarily ban.";
+    data.err = 'Please provide a user to temporarily ban.';
     return data;
   }
 
@@ -67,13 +67,13 @@ function validTempBan(msg, args) {
     return data;
   }
 
-  if (data.toTempBan.hasPermission("BAN_MEMBERS")) {
-    data.err = "This user also has ban privileges.";
+  if (data.toTempBan.hasPermission('BAN_MEMBERS')) {
+    data.err = 'This user also has ban privileges.';
     return data;
   }
 
-  if (data.reason === "") {
-    data.err = "Please provide a reason for temporarily banning this user.";
+  if (data.reason === '') {
+    data.err = 'Please provide a reason for temporarily banning this user.';
     return data;
   }
 
@@ -83,8 +83,8 @@ function validTempBan(msg, args) {
 
 function tempSQL(msg, toTempBan, timeLength, reason, con, args) {
   const now = new Date();
-  const date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
-  const action = "cc!tempban " + args.join(" ");
+  const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
+  const action = 'cc!tempban ' + args.join(' ');
 
   // Inserts row into database
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES
@@ -111,7 +111,7 @@ function tempSQL(msg, toTempBan, timeLength, reason, con, args) {
     if (err) {
       console.log(err);
     } else {
-      console.log("1 record inserted");
+      console.log('1 record inserted');
     }
   });
 }
@@ -119,7 +119,7 @@ function tempSQL(msg, toTempBan, timeLength, reason, con, args) {
 function tempEmbed(msg, toTempBan, reason, channel, timeLength) {
   // Sends Audit Log Embed
   const tempBanEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(
       `${toTempBan.user.username}#${toTempBan.user.discriminator} was banned by ${msg.author.tag} for ${timeLength}:`
     )
@@ -138,9 +138,9 @@ function tempBanUser(msg, toTempBan, reason, timeLength) {
   toTempBan.send(
     "You've been banned for " +
       timeLength +
-      " for the following reason: ```" +
+      ' for the following reason: ```' +
       reason +
-      " ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform"
+      ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
   );
   toTempBan.ban({reason});
 
@@ -149,7 +149,7 @@ function tempBanUser(msg, toTempBan, reason, timeLength) {
 
 function tempBan(msg, toTempBan, con, channel, timeLength) {
   const tempUnBanEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(
       `${toTempBan.user.username}#${toTempBan.user.discriminator} was unbanned after ${timeLength}:`
     )
@@ -168,7 +168,7 @@ function tempBan(msg, toTempBan, con, channel, timeLength) {
     );
 
     const now = new Date();
-    const date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+    const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
     const modLogTempban = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
         VALUES ('${date}', 'automatic', 'cc!unban', NULL, 'tempban expired')`;
@@ -177,7 +177,7 @@ function tempBan(msg, toTempBan, con, channel, timeLength) {
       if (err) {
         console.log(err);
       } else {
-        console.log("1 record inserted into mod_log.");
+        console.log('1 record inserted into mod_log.');
       }
     });
   }, ms(timeLength));

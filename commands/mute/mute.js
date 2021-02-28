@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
-const dateFormat = require("dateformat");
+const Discord = require('discord.js');
+const dateFormat = require('dateformat');
 
 module.exports = {
-  name: "mute",
-  description: "Mute a user",
+  name: 'mute',
+  description: 'Mute a user',
 
   execute(msg, con) {
     const {status, err, toMute, reason} = canMute(msg);
@@ -28,38 +28,38 @@ function canMute(message) {
   // Checks if user can perform command and validates message content.
   if (
     !message.member.roles.cache.some(
-      (role) => role.name === "Moderator" || role.name === "Admin"
+      (role) => role.name === 'Moderator' || role.name === 'Admin'
     )
   ) {
-    data.err = "You must be a moderator or admin to use this command.";
+    data.err = 'You must be a moderator or admin to use this command.';
     return data;
   }
 
   data.toMute = message.mentions.members.first();
   if (!data.toMute) {
-    data.err = "Please provide a user to mute.";
+    data.err = 'Please provide a user to mute.';
     return data;
   }
   if (data.toMute === message.member) {
-    data.err = "You cannot mute yourself.";
+    data.err = 'You cannot mute yourself.';
     return data;
   }
   if (
     data.toMute.roles.cache.some(
-      (role) => role.name === "Moderator" || role.name === "Admin"
+      (role) => role.name === 'Moderator' || role.name === 'Admin'
     )
   ) {
-    data.err = "You cannot mute a moderator or admin.";
+    data.err = 'You cannot mute a moderator or admin.';
     return data;
   }
-  if (data.toMute.roles.cache.some((role) => role.name === "Muted")) {
-    data.err = "This user is already muted.";
+  if (data.toMute.roles.cache.some((role) => role.name === 'Muted')) {
+    data.err = 'This user is already muted.';
     return data;
   }
 
-  data.reason = message.content.substr(message.content.indexOf(">") + 2);
-  if (data.reason === "") {
-    data.err = "Please provide a reason for muting.";
+  data.reason = message.content.substr(message.content.indexOf('>') + 2);
+  if (data.reason === '') {
+    data.err = 'Please provide a reason for muting.';
     return data;
   }
 
@@ -70,7 +70,7 @@ function canMute(message) {
 function muteUser(message, toMute, reason) {
   // Adds Muted role to user.
   toMute.roles.add(
-    message.guild.roles.cache.find((role) => role.name === "Muted")
+    message.guild.roles.cache.find((role) => role.name === 'Muted')
   );
   message.channel.send(
     `${toMute} was muted by ${message.member}.\nReason: ${reason}`
@@ -78,18 +78,18 @@ function muteUser(message, toMute, reason) {
 
   // Sends user a DM notifying them of their muted status.
   toMute.send(
-    "You've been muted for the following reason: ```" + reason + " ```"
+    "You've been muted for the following reason: ```" + reason + ' ```'
   );
 }
 
 function auditLog(message, toMute, reason) {
   // Outputs a message to the audit-logs channel.
   const channel = message.guild.channels.cache.find(
-    (channel) => channel.name === "audit-logs"
+    (channel) => channel.name === 'audit-logs'
   );
 
   const muteEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(
       `${toMute.user.username}#${toMute.user.discriminator} was muted by ${message.author.tag}:`
     )
@@ -105,7 +105,7 @@ function auditLog(message, toMute, reason) {
 
 function recordInDB(message, toMute, reason, connection) {
   const now = new Date();
-  const timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+  const timestamp = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
     VALUES (?, ?, 'cc!mute', NULL, ?, true, ?);
@@ -129,7 +129,7 @@ function recordInDB(message, toMute, reason, connection) {
       console.log(err);
     } else {
       console.log(
-        "1 record inserted into infractions, 1 record inserted into mod_log."
+        '1 record inserted into infractions, 1 record inserted into mod_log.'
       );
     }
   });

@@ -1,52 +1,52 @@
 module.exports = {
-  name: "help",
-  description: "Send help message",
+  name: 'help',
+  description: 'Send help message',
   execute(msg, args) {
     if (args[0]) {
       switch (args[0]) {
-        case "cc!createroles":
-        case "createroles":
+        case 'cc!createroles':
+        case 'createroles':
           msg.channel.send(
-            "Pulls all badges from Codecademy Discuss and create a roll for each one. *Admin priviliges required"
+            'Pulls all badges from Codecademy Discuss and create a roll for each one. *Admin priviliges required'
           );
           break;
 
-        case "cc!deleteroles":
-        case "deleteroles":
+        case 'cc!deleteroles':
+        case 'deleteroles':
           msg.channel.send(
-            "Deletes all roles created from Codecademy Discuss. *Admin priviliges required"
+            'Deletes all roles created from Codecademy Discuss. *Admin priviliges required'
           );
           break;
 
-        case "cc!sendcode":
-        case "sendcode":
+        case 'cc!sendcode':
+        case 'sendcode':
           msg.channel.send(
-            "Sends a varification code to your Codecademy Discull email. *requires you to insert your user name after command: cc!sendcode [username]"
+            'Sends a varification code to your Codecademy Discull email. *requires you to insert your user name after command: cc!sendcode [username]'
           );
           break;
 
-        case "cc!verify":
-        case "verify":
+        case 'cc!verify':
+        case 'verify':
           msg.channel.send(
-            "Verifies that the code entered is valid and gives you a role for every badge you have on Discourse. *requires you to enter your verification code after command: cc!verify [code]"
+            'Verifies that the code entered is valid and gives you a role for every badge you have on Discourse. *requires you to enter your verification code after command: cc!verify [code]'
           );
           break;
 
-        case "cc!ping":
-        case "ping":
-          msg.channel.send("Responds with Pong.");
+        case 'cc!ping':
+        case 'ping':
+          msg.channel.send('Responds with Pong.');
           break;
 
-        case "cc!stats":
-        case "stats":
+        case 'cc!stats':
+        case 'stats':
           msg.channel.send(
-            "Displays numbers of online members, offline members, and total members."
+            'Displays numbers of online members, offline members, and total members.'
           );
           break;
 
         default:
           msg.channel.send(
-            "That is not a command. For a full list type cc!help"
+            'That is not a command. For a full list type cc!help'
           );
       }
     } else {

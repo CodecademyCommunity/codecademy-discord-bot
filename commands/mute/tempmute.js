@@ -1,10 +1,10 @@
-const Discord = require("discord.js");
-const dateFormat = require("dateformat");
-const ms = require("ms");
+const Discord = require('discord.js');
+const dateFormat = require('dateformat');
+const ms = require('ms');
 
 module.exports = {
-  name: "tempmute",
-  description: "Temporarily mute a user",
+  name: 'tempmute',
+  description: 'Temporarily mute a user',
 
   execute(msg, args, con) {
     const {status, err, toTempMute, lengthOfTime, reason} = canTempMute(
@@ -40,41 +40,41 @@ function canTempMute(message, args) {
   // Checks if user can perform command and validates message content.
   if (
     !message.member.roles.cache.some(
-      (role) => role.name === "Moderator" || role.name === "Admin"
+      (role) => role.name === 'Moderator' || role.name === 'Admin'
     )
   ) {
-    data.err = "You must be a moderator or admin to use this command.";
+    data.err = 'You must be a moderator or admin to use this command.';
     return data;
   }
 
   const commandRegex = /(<@!?\d+>)\s(\d+[yhwdms])\s(.+)$/;
-  if (!args.join(" ").match(commandRegex)) {
+  if (!args.join(' ').match(commandRegex)) {
     data.err = "The command you sent isn't in a valid format.";
     return data;
   }
   [, data.userID, data.lengthOfTime, data.reason] = args
-    .join(" ")
+    .join(' ')
     .match(commandRegex);
 
   data.toTempMute = message.mentions.members.first();
   if (!data.toTempMute) {
-    data.err = "Please provide a user to temporarily mute.";
+    data.err = 'Please provide a user to temporarily mute.';
     return data;
   }
   if (data.toTempMute === message.member) {
-    data.err = "You cannot temporarily mute yourself.";
+    data.err = 'You cannot temporarily mute yourself.';
     return data;
   }
   if (
     data.toTempMute.roles.cache.some(
-      (role) => role.name === "Moderator" || role.name === "Admin"
+      (role) => role.name === 'Moderator' || role.name === 'Admin'
     )
   ) {
-    data.err = "You cannot temporarily mute a moderator or admin.";
+    data.err = 'You cannot temporarily mute a moderator or admin.';
     return data;
   }
-  if (data.toTempMute.roles.cache.some((role) => role.name === "Muted")) {
-    data.err = "This user is already muted.";
+  if (data.toTempMute.roles.cache.some((role) => role.name === 'Muted')) {
+    data.err = 'This user is already muted.';
     return data;
   }
 
@@ -85,7 +85,7 @@ function canTempMute(message, args) {
 function muteUser(message, toTempMute, lengthOfTime, reason) {
   // Adds Muted role to user.
   toTempMute.roles.add(
-    message.guild.roles.cache.find((role) => role.name === "Muted")
+    message.guild.roles.cache.find((role) => role.name === 'Muted')
   );
   message.channel.send(
     `${toTempMute} was muted by ${message.member}.\nReason: ${reason}`
@@ -95,16 +95,16 @@ function muteUser(message, toTempMute, lengthOfTime, reason) {
   toTempMute.send(
     "You've been muted for " +
       ms(ms(lengthOfTime), {long: true}) +
-      " for the following reason: ```" +
+      ' for the following reason: ```' +
       reason +
-      " ```"
+      ' ```'
   );
 }
 
 function unmuteUser(message, toTempMute) {
   toTempMute = message.mentions.members.first();
   toTempMute.roles.remove(
-    message.guild.roles.cache.find((role) => role.name === "Muted")
+    message.guild.roles.cache.find((role) => role.name === 'Muted')
   );
   message.channel.send(`${toTempMute} was unmuted.`);
   toTempMute.send("You've been unmuted.");
@@ -113,11 +113,11 @@ function unmuteUser(message, toTempMute) {
 function auditLogMute(message, toTempMute, lengthOfTime, reason) {
   // Outputs a message to the audit-logs channel.
   const channel = message.guild.channels.cache.find(
-    (channel) => channel.name === "audit-logs"
+    (channel) => channel.name === 'audit-logs'
   );
 
   const tempmuteEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(
       `${toTempMute.user.username}#${
         toTempMute.user.discriminator
@@ -137,11 +137,11 @@ function auditLogMute(message, toTempMute, lengthOfTime, reason) {
 
 function auditLogUnmute(message, toTempMute, lengthOfTime) {
   const channel = message.guild.channels.cache.find(
-    (channel) => channel.name === "audit-logs"
+    (channel) => channel.name === 'audit-logs'
   );
 
   const tempUnmuteEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(
       `${toTempMute.user.username}#${
         toTempMute.user.discriminator
@@ -158,7 +158,7 @@ function auditLogUnmute(message, toTempMute, lengthOfTime) {
 
 function recordMuteInDB(message, toTempMute, lengthOfTime, reason, connection) {
   const now = new Date();
-  const timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+  const timestamp = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) 
     VALUES (?, ?, 'cc!tempmute', ?, ?, true, ?);
@@ -184,7 +184,7 @@ function recordMuteInDB(message, toTempMute, lengthOfTime, reason, connection) {
       console.log(err);
     } else {
       console.log(
-        "1 record inserted into infractions, 1 record inserted into mod_log."
+        '1 record inserted into infractions, 1 record inserted into mod_log.'
       );
     }
   });
@@ -192,7 +192,7 @@ function recordMuteInDB(message, toTempMute, lengthOfTime, reason, connection) {
 
 function recordUnmuteInDB(toTempMute, connection) {
   const now = new Date();
-  const timestamp = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+  const timestamp = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
   const sql2 = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) 
     VALUES (?, 'automatic', ?, NULL, 'tempmute expired')`;
@@ -204,7 +204,7 @@ function recordUnmuteInDB(toTempMute, connection) {
     if (err) {
       console.log(err);
     } else {
-      console.log("1 record inserted into mod_log.");
+      console.log('1 record inserted into mod_log.');
     }
   });
 }

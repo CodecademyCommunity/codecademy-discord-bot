@@ -1,25 +1,25 @@
-const fs = require("fs");
-const Discord = require("discord.js");
-const fetch = require("node-fetch");
+const fs = require('fs');
+const Discord = require('discord.js');
+const fetch = require('node-fetch');
 
-const sgMail = require("@sendgrid/mail");
-const mysql = require("mysql");
-require("dotenv").config();
-const {v4: uuidv4} = require("uuid");
+const sgMail = require('@sendgrid/mail');
+const mysql = require('mysql');
+require('dotenv').config();
+const {v4: uuidv4} = require('uuid');
 
-const constants = require("./constants");
+const constants = require('./constants');
 
 const client = new Discord.Client({
-  partials: ["MESSAGE", "CHANNEL", "REACTION"],
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 });
 client.commands = new Discord.Collection();
 
-const commandFolders = fs.readdirSync("./commands");
+const commandFolders = fs.readdirSync('./commands');
 
 for (const folder of commandFolders) {
   const commandFiles = fs
     .readdirSync(`./commands/${folder}`)
-    .filter((file) => file.endsWith(".js"));
+    .filter((file) => file.endsWith('.js'));
   for (const file of commandFiles) {
     const command = require(`./commands/${folder}/${file}`);
     client.commands.set(command.name, command);
@@ -36,16 +36,16 @@ const con = mysql.createConnection({
   multipleStatements: true,
 });
 
-client.on("ready", () => {
+client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on("guildCreate", (guild) => {
+client.on('guildCreate', (guild) => {
   guild.roles
     .create({
       data: {
-        name: "Muted",
-        color: "DARK_BUT_NOT_BLACK",
+        name: 'Muted',
+        color: 'DARK_BUT_NOT_BLACK',
         permissions: [],
       },
     })
@@ -54,13 +54,13 @@ client.on("guildCreate", (guild) => {
 });
 
 // Denies reacting and message sending permissions for users with Muted role.
-client.on("guildMemberUpdate", (oldMember, newMember) => {
+client.on('guildMemberUpdate', (oldMember, newMember) => {
   const muted = newMember.guild.roles.cache.find(
-    (role) => role.name === "Muted"
+    (role) => role.name === 'Muted'
   );
   newMember.guild.channels.cache.forEach((channel) => {
     if (
-      channel.type === "text" &&
+      channel.type === 'text' &&
       newMember === channel.members.find((member) => member.id === newMember.id)
     ) {
       channel.updateOverwrite(muted.id, {
@@ -72,10 +72,10 @@ client.on("guildMemberUpdate", (oldMember, newMember) => {
   });
 });
 
-client.on("channelCreate", (channel) => {
+client.on('channelCreate', (channel) => {
   if (channel.guild != null) {
     const muted = channel.guild.roles.cache.find(
-      (role) => role.name === "Muted"
+      (role) => role.name === 'Muted'
     );
     channel.updateOverwrite(muted.id, {
       ADD_REACTIONS: false,
@@ -86,90 +86,90 @@ client.on("channelCreate", (channel) => {
 });
 
 const commandParser = (msg) => {
-  const args = msg.content.slice("cc!".length).trim().split(/ +/);
+  const args = msg.content.slice('cc!'.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
   switch (command) {
-    case "createroles":
-      client.commands.get("createroles").execute(msg, fetch, constants.colors);
+    case 'createroles':
+      client.commands.get('createroles').execute(msg, fetch, constants.colors);
       break;
 
-    case "deleteroles":
-      client.commands.get("deleteroles").execute(msg, fetch);
+    case 'deleteroles':
+      client.commands.get('deleteroles').execute(msg, fetch);
       break;
 
-    case "infractions":
-      client.commands.get("infractions").execute(msg, con, args);
+    case 'infractions':
+      client.commands.get('infractions').execute(msg, con, args);
       break;
 
-    case "sendcode":
+    case 'sendcode':
       client.commands
-        .get("sendcode")
+        .get('sendcode')
         .execute(msg, uuidv4(), fetch, con, sgMail);
       break;
 
-    case "stats":
-      client.commands.get("stats").execute(msg, Discord);
+    case 'stats':
+      client.commands.get('stats').execute(msg, Discord);
       break;
 
-    case "verify":
-      client.commands.get("verify").execute(msg, con, fetch);
+    case 'verify':
+      client.commands.get('verify').execute(msg, con, fetch);
       break;
 
-    case "ping":
-      client.commands.get("ping").execute(msg);
+    case 'ping':
+      client.commands.get('ping').execute(msg);
       break;
 
-    case "ban":
-      client.commands.get("ban").execute(msg, con, args);
+    case 'ban':
+      client.commands.get('ban').execute(msg, con, args);
       break;
 
-    case "unban":
-      client.commands.get("unban").execute(msg, args, con);
+    case 'unban':
+      client.commands.get('unban').execute(msg, args, con);
       break;
 
-    case "tempban":
-      client.commands.get("tempban").execute(msg, args, con);
+    case 'tempban':
+      client.commands.get('tempban').execute(msg, args, con);
       break;
 
-    case "kick":
-      client.commands.get("kick").execute(msg, con, args);
+    case 'kick':
+      client.commands.get('kick').execute(msg, con, args);
       break;
 
-    case "warn":
-      client.commands.get("warn").execute(msg, con, args);
+    case 'warn':
+      client.commands.get('warn').execute(msg, con, args);
       break;
 
-    case "help":
-    case "info":
-    case "information":
-      client.commands.get("help").execute(msg, args);
+    case 'help':
+    case 'info':
+    case 'information':
+      client.commands.get('help').execute(msg, args);
       break;
 
-    case "mute":
-      client.commands.get("mute").execute(msg, con);
+    case 'mute':
+      client.commands.get('mute').execute(msg, con);
       break;
 
-    case "unmute":
-      client.commands.get("unmute").execute(msg, con);
+    case 'unmute':
+      client.commands.get('unmute').execute(msg, con);
       break;
 
-    case "tempmute":
-      client.commands.get("tempmute").execute(msg, args, con);
+    case 'tempmute':
+      client.commands.get('tempmute').execute(msg, args, con);
       break;
 
     default:
-      msg.reply("That is not a command. Try cc!help for information.");
+      msg.reply('That is not a command. Try cc!help for information.');
   }
 };
 
-client.on("message", (msg) => {
-  if (msg.content.substring(0, 3) === "cc!" && !(msg.member === client)) {
+client.on('message', (msg) => {
+  if (msg.content.substring(0, 3) === 'cc!' && !(msg.member === client)) {
     commandParser(msg);
   }
 });
 
-client.on("messageDelete", async function (message) {
+client.on('messageDelete', async function (message) {
   if (!message.partial) {
     // Stolen from StackOverFlow: https://stackoverflow.com/questions/53328061/finding-who-deleted-the-message
     // Add latency as audit logs aren't instantly updated, adding a higher latency will result in slower logs, but higher accuracy.
@@ -179,7 +179,7 @@ client.on("messageDelete", async function (message) {
     const fetchedLogs = await message.guild
       .fetchAuditLogs({
         limit: 6,
-        type: "MESSAGE_DELETE",
+        type: 'MESSAGE_DELETE',
       })
       .catch(() => ({
         entries: [],
@@ -198,12 +198,12 @@ client.on("messageDelete", async function (message) {
     const executor = auditEntry ? auditEntry.executor.tag : message.author.tag;
 
     const channel = message.guild.channels.cache.find(
-      (channel) => channel.name === "audit-logs"
+      (channel) => channel.name === 'audit-logs'
     );
     console.log(`message is deleted -> ${message}`);
     // channel.send(`${message.author.username} deleted: ${message.content}`)
     const exampleEmbed = new Discord.MessageEmbed()
-      .setColor("#0099ff")
+      .setColor('#0099ff')
       .setTitle(
         `${message.author.tag} message was deleted by ${executor} from #${message.channel.name}:`
       )

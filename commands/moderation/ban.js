@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
-const dateFormat = require("dateformat");
+const Discord = require('discord.js');
+const dateFormat = require('dateformat');
 
 module.exports = {
-  name: "ban",
-  description: "Ban a user",
+  name: 'ban',
+  description: 'Ban a user',
 
   execute(msg, con, args) {
     const {status, err, toBan, reason} = validBan(msg);
@@ -25,14 +25,14 @@ function validBan(msg) {
     reason: null,
   };
 
-  if (!msg.member.roles.cache.some((role) => role.name === "Admin")) {
-    data.err = msg.reply("You must be an Admin to use this command.");
+  if (!msg.member.roles.cache.some((role) => role.name === 'Admin')) {
+    data.err = msg.reply('You must be an Admin to use this command.');
     return data;
   }
 
   data.toBan = msg.mentions.members.first();
   if (!data.toBan) {
-    data.err = "Please provide a user to ban.";
+    data.err = 'Please provide a user to ban.';
     return data;
   }
 
@@ -41,14 +41,14 @@ function validBan(msg) {
     return data;
   }
 
-  if (data.toBan.hasPermission("BAN_MEMBERS")) {
-    data.err = "This user also has ban privileges.";
+  if (data.toBan.hasPermission('BAN_MEMBERS')) {
+    data.err = 'This user also has ban privileges.';
     return data;
   }
 
-  data.reason = msg.content.substr(msg.content.indexOf(">") + 2);
-  if (data.reason === "") {
-    data.err = "Please provide a reason for banning.";
+  data.reason = msg.content.substr(msg.content.indexOf('>') + 2);
+  if (data.reason === '') {
+    data.err = 'Please provide a reason for banning.';
     return data;
   }
 
@@ -58,9 +58,9 @@ function validBan(msg) {
 
 function banSQL(msg, toBan, reason, args, con) {
   const now = new Date();
-  const date = dateFormat(now, "yyyy-mm-dd HH:MM:ss");
+  const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
-  const action = "cc!ban " + args.join(" ");
+  const action = 'cc!ban ' + args.join(' ');
 
   // Inserts row into database
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
@@ -84,7 +84,7 @@ function banSQL(msg, toBan, reason, args, con) {
     if (err) {
       console.log(err);
     } else {
-      console.log("1 record inserted");
+      console.log('1 record inserted');
     }
   });
 }
@@ -92,11 +92,11 @@ function banSQL(msg, toBan, reason, args, con) {
 function banEmbed(msg, toBan, reason) {
   // Sends Audit Log Embed
   const channel = msg.guild.channels.cache.find(
-    (channel) => channel.name === "audit-logs"
+    (channel) => channel.name === 'audit-logs'
   );
 
   const banEmbed = new Discord.MessageEmbed()
-    .setColor("#0099ff")
+    .setColor('#0099ff')
     .setTitle(
       `${toBan.user.username}#${toBan.user.discriminator} was banned by ${msg.author.tag}:`
     )
@@ -115,7 +115,7 @@ function banUser(msg, toBan, reason) {
   toBan.send(
     "You've been banned for the following reason: ```" +
       reason +
-      " ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform"
+      ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
   );
   toBan.ban({reason});
 
