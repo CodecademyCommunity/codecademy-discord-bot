@@ -46,7 +46,8 @@ function canTempMute(message, args) {
         role.name === 'Super User'
     )
   ) {
-    data.err = 'You must be a moderator or admin to use this command.';
+    data.err =
+      'You must be a super user, moderator, or admin to use this command.';
     return data;
   }
 
