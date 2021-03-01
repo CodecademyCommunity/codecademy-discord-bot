@@ -55,7 +55,9 @@ module.exports = {
 
         case 'cc!unban':
         case 'unban':
-          msg.channel.send('`cc!unban [userid]`\nUnbans a user. *Admin only.*');
+          msg.channel.send(
+            '`cc!unban [userid]`\nUnbans a user. *Admin only.*'
+          );
           break;
 
         case 'cc!tempban':
