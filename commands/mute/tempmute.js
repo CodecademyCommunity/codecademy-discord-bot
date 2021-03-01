@@ -40,7 +40,10 @@ function canTempMute(message, args) {
   // Checks if user can perform command and validates message content.
   if (
     !message.member.roles.cache.some(
-      (role) => role.name === 'Moderator' || role.name === 'Admin'
+      (role) =>
+        role.name === 'Moderator' ||
+        role.name === 'Admin' ||
+        role.name === 'Super User'
     )
   ) {
     data.err = 'You must be a moderator or admin to use this command.';
