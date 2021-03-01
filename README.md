@@ -6,109 +6,32 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 
 ## Current Commands
 
-```
-cc!createroles
-```
+<!-- Only Admin Commands Here-->
+<details><summary><strong>Admin only</strong></summary>
 
-(admin only) Pulls all badges from Codecademy Discuss and creates a role for each one.
+| Command  | Arguments  | Description                                 |
+|----------|------------|---------------------------------------------|
+| `cc!createroles` | N/A | Pulls all badges from Codecademy Discuss and creates a role for each one. |
+| `cc!deleteroles` | [username] | Deletes all the roles added from Codecademy Discuss. |
 
----
+</details>
+<!-- Other Commands Here-->
+<details><summary><strong>Other Commands</strong></summary>
 
-```
-cc!deleteroles
-```
-
-(admin only) Deletes all the roles added from Codecademy Discuss.
-
----
-
-```
-cc!sendcode [username]
-```
-
-Sends a verification code to your Codecademy Discuss email.
-
----
-
-```
-cc!verify [code]
-```
-
-Verifies that the code entered is valid and gives you a role for every badge you have on Discourse.
-
----
-
-```
-cc!stats
-```
-
-Displays basic server statistics (online members, offline members, total members).
-
----
-
-```
-cc!ping
-```
-
-Pong!
-
----
-
-```
-cc!ban [user] [reason]
-```
-
-Bans a user.
-
----
-
-```
-cc!unban [user]
-```
-
-Unbans a user.
-
----
-
-```
-cc!tempban [user] [lengthoftime] [reason]
-```
-
-Temporarily bans a user for a set time period.
-
----
-
-```
-cc!kick [user] [reason]
-```
-
-Kicks a user from the server.
-
----
-
-```
-cc!mute [user] [reason]
-```
-
-Mutes a user by assigning them a _Muted_ role (denies message sending and reacting privileges).
-
----
-
-```
-cc!unmute [user]
-```
-
-Unmutes a user.
-
----
-
-```
-cc!tempmute [user] [lengthoftime] [reason]
-```
-
-Temporarily mutes a user for a set time period.
-
----
+| Command  | Arguments  | Description                                 |
+|----------|------------|---------------------------------------------|
+| `cc!sendcode` | [username] | Sends a verification code to your Codecademy Discuss email. |
+| `cc!verify` | [code] | Verifies that the code entered is valid and gives you a role for every badge you have on Discourse. |
+| `cc!stats` | N/A | Displays basic server statistics (online members, offline members, total members). |
+| `cc!ping` | N/A | Pong! |
+| `cc!ban` | [user] [reason] | Bans a user. |
+| `cc!unban` | [user] | Unbans a user. |
+| `cc!tempban` | [user] [lengthoftime] [reason] | Temporarily bans a user for a set of time period. |
+| `cc!kick` | [user] [reason] | Kicks a user from the server. |
+| `cc!mute` | [user] [reason] | Mutes a user by assigning them a _Muted_ role (denies message sending and reacting privileges). |
+| `cc!unmute` | [user] | Unmute a user. |
+| `cc!tempmute` | [user] [lengthoftime] [reason] | Temporarily mutes a user for a set time period. |
+</details>
 
 ## Other Functionality
 
