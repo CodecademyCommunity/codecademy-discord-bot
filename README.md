@@ -7,17 +7,17 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 ## Current Commands
 
 |      Command        |         Arguments       |    Permission       |                      Description                                                                     |
-|---------------------|-------------------------|---------------------|------------------------------------------------------------------------------------------------------|
+|:--------------------|:------------------------|:--------------------|:-----------------------------------------------------------------------------------------------------|
 | `cc!createroles`    | N/A                     | Admin               | Pulls all badges from Codecademy Discuss and creates a role for each one.                            |
-| `cc!deleteroles`    | [username]              | Admin               | Deletes all the roles added from Codecademy Discuss.                                                 |   
+| `cc!deleteroles`    | [username]              | Admin               | Deletes all the roles added from Codecademy Discuss.                                                 |
 | `cc!kick`           | [user] [reason]         | Admin               | Kicks a user from the server.                                                                        |
 | `cc!ban`            | [user] [reason]         | Admin               | Bans a user.                                                                                         |
 | `cc!unban`          | [user]                  | Admin               | Unbans a user.                                                                                       |
 | `cc!tempban`        | [user] [lengthoftime] [reason] | Admin, Mods  | Temporarily bans a user for a set time period.                                           |
 | `cc!tempmute`       | [user] [lengthoftime] [reason] | Admin, Mods  | Temporarily mutes a user for a set time period.                                                      |
 | `cc!mute`           | [user] [reason]         | Admin, Mods         | Mutes a user by assigning them a _Muted_ role (denies message sending and reacting privileges).      |
-| `cc!warn`           | [reason]                | Admin, Mods, SU     | Warn a user of an infraction and logs infraction in db.                                              | 
-| `cc!infractions`    |                         | Admin, Mods, SU     | Finds user infraction record in db and returns it to channel.                                        |
+| `cc!warn`           | [user] [reason]         | Admin, Mods, SU     | Warn a user of an infraction and logs infraction in db.                                              | 
+| `cc!infractions`    | [user]                  | Admin, Mods, SU     | Finds user infraction record in db and returns it to channel.                                        |
 | `cc!unmute`         | [user]                  | Admin, Mods, SU     | Unmute a user.                                                                                       |
 | `cc!sendcode`       | [username]              | Everyone            | Sends a verification code to your Codecademy Discuss email.                                          |
 | `cc!verify`         | [code]                  | Everyone            | Verifies that the code entered is valid and gives you a role for every badge you have on Discourse.  |
