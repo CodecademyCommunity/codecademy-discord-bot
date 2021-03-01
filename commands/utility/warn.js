@@ -71,10 +71,24 @@ function recordInDB(msg, con, offendingUser, warningReason) {
   const now = new Date();
   const timestamp = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
-  const sqlInfractions = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES ('${timestamp}', '${offendingUser.id}', 'cc!warn', 'NULL', '${warningReason}', true, '${msg.author.id}')`;
-  const sqlModLog = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES ('${timestamp}', '${msg.author.id}', '${msg}', 'NULL', '${warningReason}')`;
+  const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator)
+    VALUES (?, ?, 'cc!warn', NULL, ?, true, ?);
+    INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason)
+    VALUES (?, ?, ?, NULL, ?);`;
 
-  con.query(`${sqlInfractions}; ${sqlModLog}`, function (err, result) {
+  const values = [
+    timestamp,
+    offendingUser.id,
+    warningReason,
+    msg.author.id,
+    timestamp,
+    msg.author.id,
+    msg.content,
+    warningReason,
+  ];
+  const escaped = con.format(sql, values);
+
+  con.query(escaped, function (err, result) {
     if (err) {
       console.log(err);
       // Include a warning in case something goes wrong writing to the db
