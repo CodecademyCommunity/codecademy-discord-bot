@@ -18,6 +18,7 @@ module.exports = {
         // grab the note
         const note = args.slice(1).join(' ');
         if (!note) return msg.reply(`You forgot to write the note.`);
+        if (note.length > 255) return msg.reply(`Too long! Notes can only be 255 characters or less.`);
 
         // Feedback back to the command caller
         postEmbed(msg, targetUser, note);
