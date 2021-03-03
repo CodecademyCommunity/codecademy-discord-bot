@@ -157,6 +157,10 @@ const commandParser = (msg) => {
     case 'tempmute':
       client.commands.get('tempmute').execute(msg, args, con);
       break;
+    
+    case 'addnote':
+      client.commands.get('addnote').execute(msg, con, args);
+      break;
 
     default:
       msg.reply('That is not a command. Try cc!help for information.');
