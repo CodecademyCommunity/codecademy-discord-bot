@@ -20,16 +20,16 @@ module.exports = {
         if (!note) return msg.reply(`You forgot to write the note.`);
 
         // Feedback back to the command caller
-        postEmbed(msg,targetUser,note);
+        postEmbed(msg, targetUser, note);
 
         // write it to the db
-        addNoteToDB(msg,con,targetUser, note);
+        addNoteToDB(msg, con, targetUser, note);
       }
     }
   },
 };
 
-function postEmbed(msg,targetUser,note){
+function postEmbed(msg, targetUser, note) {
   const embedFlair = [
     '#f8f272',
     '#f98948',
@@ -51,7 +51,7 @@ function postEmbed(msg,targetUser,note){
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
 
-    msg.channel.send(embed);
+  msg.channel.send(embed);
 }
 
 function addNoteToDB(msg, con, targetUser, note) {
@@ -59,31 +59,21 @@ function addNoteToDB(msg, con, targetUser, note) {
   const timestamp = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
   const sql = `INSERT INTO user_notes (timestamp, user, moderator, note)
-    VALUES (?, ?, ?, ?);`
+    VALUES (?, ?, ?, ?);`;
 
-  const values = [
-    timestamp,
-    targetUser.id,
-    msg.author.id,
-    note,
-  ];
+  const values = [timestamp, targetUser.id, msg.author.id, note];
   const escaped = con.format(sql, values);
 
   con.query(escaped, function (err, result) {
     if (err) {
       console.log(err);
       // Include a warning in case something goes wrong writing to the db
-      msg.channel.send(
-        `Writing to the db failed!`
-      );
+      msg.channel.send(`Writing to the db failed!`);
     } else {
-      console.log(
-        `1 note added to table: user_notes`
-      );
+      console.log(`1 note added to table: user_notes`);
     }
   });
 }
-
 
 function canWriteNotes(msg) {
   if (
@@ -134,7 +124,9 @@ function notHighRoller(msg, targetUser) {
         role.name === 'Admin'
     )
   ) {
-    msg.reply(`You cannot write a note about a super user, moderator or admin.`);
+    msg.reply(
+      `You cannot write a note about a super user, moderator or admin.`
+    );
     return false;
   } else {
     return true;
