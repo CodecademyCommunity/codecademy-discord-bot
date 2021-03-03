@@ -47,7 +47,7 @@ function postEmbed(msg,targetUser,note){
     )
     .setTitle(`New note`)
     .setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
-    .addField(`Note:`, `${note}`)
+    .addField(`Note content`, `${note}`)
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
 
