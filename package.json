@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "db-recreate": "node utils/data/db.js"
+    "db-recreate": "node utils/data/recreate.js"
   },
   "author": "StevenC",
   "license": "ISC",

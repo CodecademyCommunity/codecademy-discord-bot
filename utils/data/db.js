@@ -1,36 +1,18 @@
 require('dotenv').config();
 const mysql = require('mysql');
-const readline = require('readline').createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
 
-const tables = require('./tables.js');
-
-const con = mysql.createConnection({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  multipleStatements: true,
-});
-
-async function recreateDB() {
-  for (const table of Object.values(tables)) {
-    const sql = `
-      SET foreign_key_checks = 0;
-      DROP TABLE IF EXISTS ${table.name};
-      SET foreign_key_checks = 1;
-  
-      CREATE TABLE ${table.name}(
-        ${table.columns.join(', ')}
-      );`;
-
-    await query(sql, table);
-  }
+function connect() {
+  return mysql.createConnection({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    multipleStatements: true,
+  });
 }
 
-function query(sql, table) {
+// Converts MySQL query into a promise and executes query on given table
+function query(con, sql, table) {
   return new Promise((resolve, reject) => {
     con.query(sql, (err, results, fields) => {
       if (err) {
@@ -43,27 +25,17 @@ function query(sql, table) {
   });
 }
 
-function disconnect(status = null) {
+function disconnect(con, status = null) {
   if (status === 'success') {
-    console.log('Database recreated successfully');
+    console.log('Database updated successfully');
   }
   con.end(function (err) {
     err ? console.log(err) : console.log('Connection closed gracefully');
   });
 }
 
-readline.question(
-  `Are you sure you want to recreate your database? You will lose all your data. y/N  `,
-  async (answer) => {
-    const lowerAns = answer.toLowerCase();
-    if (lowerAns === 'y' || lowerAns === 'yes') {
-      await recreateDB();
-      readline.close();
-      disconnect('success');
-    } else {
-      console.log('Exiting. Data will not be lost.');
-      readline.close();
-      disconnect();
-    }
-  }
-);
+module.exports = {
+  connect: connect,
+  query: query,
+  disconnect: disconnect,
+};
