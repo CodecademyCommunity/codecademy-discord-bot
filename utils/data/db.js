@@ -15,7 +15,7 @@ const con = mysql.createConnection({
 
 const sql = `
   SET foreign_key_checks = 0;
-  DROP TABLE IF EXISTS verifications, infractions, mod_log;
+  DROP TABLE IF EXISTS verifications, infractions, mod_log, msg_counter, user_notes;
   SET foreign_key_checks = 1;
 
   CREATE TABLE verifications(
@@ -43,6 +43,20 @@ const sql = `
     action varchar(255),
     length_of_time varchar(255),
     reason varchar(255)
+  );
+  
+  CREATE TABLE msg_counter(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp DATETIME,
+    channel_name VARCHAR(255)
+  );
+  
+  CREATE TABLE user_notes(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp DATETIME,
+    user varchar(255) NOT NULL,
+    moderator varchar(255) NOT NULL,
+    note varchar(255)
   );`;
 
 function recreateDB() {
