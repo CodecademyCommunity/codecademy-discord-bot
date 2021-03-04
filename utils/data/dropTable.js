@@ -14,7 +14,7 @@ const msg = `Are you sure you want to drop table(s) "${tableNamesStr}" from your
 
 // Drops one or more tables defined in `tables.js` if they exist.
 // Returns 'success' or a SQL error string.
-async function addTable() {
+async function dropTable() {
   if (!tablesToDrop.length) {
     return 'You did not name an existing table. No changes were made.';
   }
@@ -33,4 +33,4 @@ async function addTable() {
   return 'success';
 }
 
-prompt(msg, addTable, con);
+prompt(msg, dropTable, con);
