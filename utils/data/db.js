@@ -11,7 +11,8 @@ function connect() {
   });
 }
 
-// Converts MySQL query into a promise and executes query on given table
+// Converts MySQL query into a promise and
+// executes query on given table
 function query(con, sql, table) {
   return new Promise((resolve, reject) => {
     con.query(sql, (err, results, fields) => {
@@ -28,6 +29,8 @@ function query(con, sql, table) {
 function disconnect(con, status = null) {
   if (status === 'success') {
     console.log('Database updated successfully');
+  } else {
+    status ? console.log(status) : console.log('...');
   }
   con.end(function (err) {
     err ? console.log(err) : console.log('Connection closed gracefully');

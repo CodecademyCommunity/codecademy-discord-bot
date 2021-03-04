@@ -17,8 +17,13 @@ async function recreateDB() {
           ${table.columns.join(', ')}
         );`;
 
-    await db.query(con, sql, table);
+    try {
+      await db.query(con, sql, table);
+    } catch (error) {
+      return error.sqlMessage;
+    }
   }
+  return 'success';
 }
 
 prompt(msg, recreateDB, con);

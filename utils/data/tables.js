@@ -1,9 +1,9 @@
 const verifications = {
   name: 'verifications',
   columns: [
-    'id INT AUTO_INCREMENT PRIMARY Key',
-    'username varchar(255)',
-    'verify_id varchar(255) NOT NULL',
+    'id INT AUTO_INCREMENT PRIMARY KEY',
+    'username VARCHAR(255)',
+    'verify_id VARCHAR(255) NOT NULL',
     'expiration DATETIME',
   ],
 };
@@ -13,12 +13,12 @@ const infractions = {
   columns: [
     'id INT AUTO_INCREMENT PRIMARY KEY',
     'timestamp DATETIME',
-    'user varchar(255) NOT NULL',
-    'action varchar(255)',
-    'length_of_time varchar(255)',
-    'reason varchar(255)',
-    'valid boolean',
-    'moderator varchar(255)',
+    'user VARCHAR(255) NOT NULL',
+    'action VARCHAR(255)',
+    'length_of_time VARCHAR(255)',
+    'reason VARCHAR(255)',
+    'valid BOOLEAN',
+    'moderator VARCHAR(255)',
   ],
 };
 
@@ -27,10 +27,10 @@ const modLog = {
   columns: [
     'id INT AUTO_INCREMENT PRIMARY KEY',
     'timestamp DATETIME',
-    'moderator varchar(255) NOT NULL',
-    'action varchar(255)',
-    'length_of_time varchar(255)',
-    'reason varchar(255)',
+    'moderator VARCHAR(255) NOT NULL',
+    'action VARCHAR(255)',
+    'length_of_time VARCHAR(255)',
+    'reason VARCHAR(255)',
   ],
 };
 
@@ -48,9 +48,9 @@ const userNotes = {
   columns: [
     'id INT AUTO_INCREMENT PRIMARY KEY',
     'timestamp DATETIME',
-    'user varchar(255) NOT NULL',
-    'moderator varchar(255) NOT NULL',
-    'note varchar(255)',
+    'user VARCHAR(255) NOT NULL',
+    'moderator VARCHAR(255) NOT NULL',
+    'note VARCHAR(255)',
   ],
 };
 
