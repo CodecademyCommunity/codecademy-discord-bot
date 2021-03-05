@@ -5,7 +5,10 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "db-recreate": "node utils/data/db.js"
+    "db-recreate": "node utils/data/recreate.js",
+    "addtable": "node utils/data/addTable.js",
+    "addcolumn": "node utils/data/addColumn.js",
+    "droptable": "node utils/data/dropTable.js"
   },
   "author": "StevenC",
   "license": "ISC",
