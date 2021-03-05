@@ -23,7 +23,7 @@ function parseArgs(raw) {
   };
 }
 
-// Creates one or more tables from `tables.js` if they don't exist.
+// Adds one new column in any table that is defined in `tables.js`
 // Returns 'success' or a SQL error string.
 async function addColumn() {
   const table = tables[`${data.table}`];
