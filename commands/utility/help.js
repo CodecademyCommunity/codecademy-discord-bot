@@ -107,6 +107,13 @@ module.exports = {
           );
           break;
 
+        case 'cc!addnote':
+        case 'addnote':
+          msg.channel.send(
+            '`cc!addnote [user] [note]`\nAdds a note to a user.'
+          );
+          break;
+
         default:
           msg.channel.send(
             'That is not a command. For a full list type `cc!help`.'
@@ -126,7 +133,7 @@ module.exports = {
         .addField('Moderator & Above Only', 'cc!tempban, cc!mute')
         .addField(
           'Super User & Above Only',
-          'cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions'
+          'cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!addnote'
         )
         .addField(
           'Everyone',
