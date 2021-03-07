@@ -114,6 +114,13 @@ module.exports = {
           );
           break;
 
+        case 'cc!helpcenter':
+        case 'helpcenter':
+          msg.channel.send(
+            "`cc!helpcenter {plaintext}`\nProvides links to Codecademy's Help Center (either embedded or plaintext)."
+          );
+          break;
+
         default:
           msg.channel.send(
             'That is not a command. For a full list type `cc!help`.'
@@ -137,7 +144,7 @@ module.exports = {
         )
         .addField(
           'Everyone',
-          'cc!sendcode, cc!verify, cc!stats, cc!ping, cc!help'
+          'cc!sendcode, cc!verify, cc!stats, cc!ping, cc!helpcenter, cc!help'
         );
 
       msg.channel.send(commandsEmbed);

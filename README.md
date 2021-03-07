@@ -24,6 +24,7 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 | `cc!verify`      | [code]                         | Everyone       | Verifies that the code entered is valid and gives you a role for every badge you have on Discourse. |
 | `cc!stats`       | N/A                            | Everyone       | Displays basic server statistics (online members, offline members, total members).                  |
 | `cc!ping`        | N/A                            | Everyone       | Pong!                                                                                               |
+| `cc!helpcenter`  | {plaintext}                    | Everyone       | Provides links to Codecademy's Help Center (either embedded or plaintext).                          |
 | `cc!help`        | {command}                      | Everyone       | Shows information about a given command or lists all commands.                                      |
 
 ## Other Functionality
