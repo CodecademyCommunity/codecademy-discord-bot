@@ -195,6 +195,8 @@ const commandParser = (msg) => {
 client.on('message', (msg) => {
   if (msg.content.substring(0, 3) === 'cc!' && !(msg.member === client)) {
     commandParser(msg);
+  } else if (msg.author.id != client.user.id) {
+    client.commands.get('filter').execute(msg);
   }
 });
 
