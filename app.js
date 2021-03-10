@@ -72,6 +72,7 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   });
 });
 
+// Upon channel creation, mutes all users with Muted role in the new channel.
 client.on('channelCreate', (channel) => {
   if (channel.guild != null) {
     const muted = channel.guild.roles.cache.find(
@@ -109,7 +110,7 @@ const commandParser = (msg) => {
       break;
 
     case 'stats':
-      client.commands.get('stats').execute(msg, Discord);
+      client.commands.get('stats').execute(msg);
       break;
 
     case 'verify':
@@ -160,6 +161,10 @@ const commandParser = (msg) => {
 
     case 'addnote':
       client.commands.get('addnote').execute(msg, con, args);
+      break;
+
+    case 'helpcenter':
+      client.commands.get('helpcenter').execute(msg, args);
       break;
 
     default:
