@@ -65,18 +65,18 @@ module.exports = {
 
         const addition = ` User said: ${msg.content}`;
         
-        // call addnote function based on length of user     message
+        // call addnote function based on length of user message
         if (command.length + addition.length <= 255) {
           logs.send(command + addition);
         } else {
-          logs.send(command + ' Users message was to long to copy into database.');
+          logs.send(command + ' Users message was to long too copy into database.');
         }
       }
     }
   },
 };
 
-function dmTheUser(msg) {
+const dmTheUser = (msg) => {
   // Create an embed, craft it, and DM the user
   const Embed = new Discord.MessageEmbed()
     .setColor('#f1d302')
