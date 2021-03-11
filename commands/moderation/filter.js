@@ -17,7 +17,7 @@
        sexed         piss
        pissed        sexy
        sexual        sexuality
-       bastard       clitorias
+       bastard       clitoris
        bitch         boobs
        semen         sperm
        jizzed        jizz
@@ -58,7 +58,7 @@ module.exports = {
       const words = msg.content.toLowerCase().split(' ');
 
       // regex expression of strong offensive words
-      const strongWords = /hell|damn|goddamn|goddamned|damned|damnit|hell|fuck|fucked|fucking|fucker|fuckwad|fuckwad|motherfucker|wtf|nigger|nigga|penis|vagina|asshole|sex|sexed|piss|pissed|sexy|sexual|sexuality|bastard|bitch|boobs|semin|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitorias|condom[.,/\\:;\*\?\!\@\#\$]?/;
+      const strongWords = /hell|damn|goddamn|goddamned|damned|damnit|hell|fuck|fucked|fucking|fucker|fuckwad|fuckwad|motherfucker|wtf|nigger|nigga|penis|vagina|asshole|sex|sexed|piss|pissed|sexy|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom[.,/\\:;\*\?\!\@\#\$]?/;
 
       // regex expression of minor offensive words
       const lightWords = /darn|dern|darned|derned|darnit|dernit|dang|heck|frick|fricked|crap|omg[.,/\\:;\*\?\!\@\#\$]?/;
