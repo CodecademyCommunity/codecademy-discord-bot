@@ -106,6 +106,10 @@ const commandParser = (msg) => {
       client.commands.get('removeinfraction').execute(msg, con, args);
       break;
 
+    case 'clearinfractions':
+      client.commands.get('clearinfractions').execute(msg, con, args);
+      break;
+
     case 'sendcode':
       client.commands
         .get('sendcode')

@@ -2,19 +2,16 @@ const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 
 module.exports = {
-  name: 'removeinfraction',
-  description: 'Removes a specific infraction based on the ID provided',
+  name: 'clearinfractions',
+  description: 'Removes all infractions from a user',
 
   execute(msg, con, args) {
-    const {status, err, userInfraction, infractionID} = validInfraction(
-      msg,
-      args
-    );
+    const {status, err, userInfraction} = validInfraction(msg, args);
     if (!status) {
       return msg.reply(err);
     }
 
-    infractionSQL(msg, userInfraction, infractionID, args, con);
+    clearInfractionSQL(msg, userInfraction, args, con);
   },
 };
 
@@ -23,7 +20,6 @@ function validInfraction(msg, args) {
     status: false,
     err: null,
     userInfraction: null,
-    infractionID: null,
   };
 
   if (!msg.member.roles.cache.some((role) => role.name === 'Admin')) {
@@ -34,13 +30,7 @@ function validInfraction(msg, args) {
   data.userInfraction =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
   if (!data.userInfraction) {
-    data.err = 'Please provide a user to remove this infraction from.';
-    return data;
-  }
-  console.log(args);
-  data.infractionID = args[1];
-  if (data.infractionID === '') {
-    data.err = 'Please provide a infraction ID to remove.';
+    data.err = 'Please provide a user to remove infractions.';
     return data;
   }
 
@@ -48,43 +38,36 @@ function validInfraction(msg, args) {
   return data;
 }
 
-function infractionSQL(msg, userInfraction, infractionID, args, con) {
+function clearInfractionSQL(msg, userInfraction, args, con) {
   const now = new Date();
   const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
 
-  const action = 'cc!removeinfraction ' + args.join(' ');
+  const action = 'cc!clearinfractions ' + args.join(' ');
 
   // Inserts row into database
-  const sql = `UPDATE infractions SET valid = ? WHERE id = ?;
+  const sql = `UPDATE infractions SET valid = ? WHERE user = ?;
     INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
     (?, ?, ?, NULL, NULL);`;
 
-  const values = [
-    false,
-    infractionID,
-    date,
-    msg.author.id,
-    action,
-    infractionID,
-  ];
+  const values = [false, userInfraction.id, date, msg.author.id, action];
   const escaped = con.format(sql, values);
 
   con.query(escaped, function (err, result) {
     if (err) {
       console.log(err);
     } else {
-      console.log('Infraction was set to invalid');
-      if (result[0].affectedRows == 1) {
-        infractionResponse(msg, userInfraction, infractionID);
-        infractionEmbed(msg, userInfraction, infractionID);
+      console.log('Infractions were removed from user');
+      if (result[0].affectedRows >= 1) {
+        clearInfractionResponse(msg, userInfraction);
+        clearInfractionEmbed(msg, userInfraction);
       } else {
-        msg.reply('Please include a valid infraction ID');
+        msg.reply('This user does not have any infractions');
       }
     }
   });
 }
 
-function infractionEmbed(msg, userInfraction, infractionID) {
+function clearInfractionEmbed(msg, userInfraction) {
   // Sends Audit Log Embed
   const channel = msg.guild.channels.cache.find(
     (channel) => channel.name === 'audit-logs'
@@ -93,9 +76,8 @@ function infractionEmbed(msg, userInfraction, infractionID) {
   const userInfractionEmbed = new Discord.MessageEmbed()
     .setColor('#0099ff')
     .setTitle(
-      `${msg.author.tag} removed an infraction from ${userInfraction.user.username}#${userInfraction.user.discriminator}`
+      `${msg.author.tag} cleared all ${userInfraction.user.username}#${userInfraction.user.discriminator} infractions`
     )
-    .setDescription('Infraction: #' + infractionID)
     .setThumbnail(
       `https://cdn.discordapp.com/avatars/${userInfraction.user.id}/${userInfraction.user.avatar}.png`
     )
@@ -105,6 +87,6 @@ function infractionEmbed(msg, userInfraction, infractionID) {
   channel.send(userInfractionEmbed);
 }
 
-function infractionResponse(msg, userInfraction, infractionID) {
-  msg.reply(`Infraction #${infractionID} was removed from ${userInfraction}.`);
+function clearInfractionResponse(msg, userInfraction) {
+  msg.reply(`All infractions were removed from ${userInfraction}.`);
 }
