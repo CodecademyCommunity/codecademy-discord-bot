@@ -46,7 +46,6 @@ module.exports = {
   description: "filter a message",
 
   execute(msg) {
-    // Make sure user should be filtered
     if (
     !msg.member.roles.cache.some(
       (role) =>
@@ -57,8 +56,6 @@ module.exports = {
   ) {
 
       let words = convertToChar(msg.content).split(' ');
-
-      console.log(words);
 
       if (needsAction(words)) {
         
@@ -87,7 +84,7 @@ const moderation = (msg) => {
   if (command.length + addition.length <= 255) {
     logs.send(command + addition);
   } else {
-    logs.send(command + ' Users message was to long too copy into database.');
+    logs.send(command + ' Users message was too long to copy into database.');
   }
 }
 
