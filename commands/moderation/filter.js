@@ -46,14 +46,8 @@ module.exports = {
   description: "filter a message",
 
   execute(msg) {
-    if (
-    !msg.member.roles.cache.some(
-      (role) =>
-        role.name === 'Super User' ||
-        role.name === 'Moderator' ||
-        role.name === 'Admin'
-    )
-  ) {
+    
+    if (isHighRoller(msg)) {
 
       let words = convertToChar(msg.content).split(' ');
 
@@ -66,6 +60,23 @@ module.exports = {
     }
   },
 };
+
+
+
+const isHighRoller = (msg) => {
+  if (
+    !msg.member.roles.cache.some(
+      (role) =>
+        role.name === 'Super User' ||
+        role.name === 'Moderator' ||
+        role.name === 'Admin'
+    )
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 
 
