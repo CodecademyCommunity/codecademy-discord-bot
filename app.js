@@ -124,6 +124,10 @@ const commandParser = (msg) => {
       client.commands.get('verify').execute(msg, con, fetch);
       break;
 
+    case 'clear':
+      client.commands.get('clear').execute(msg, con, args);
+      break;
+
     case 'ping':
       client.commands.get('ping').execute(msg);
       break;
