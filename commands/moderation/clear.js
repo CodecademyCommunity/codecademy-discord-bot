@@ -25,7 +25,11 @@ function validClear(msg, args) {
     reason: null,
   };
 
-  if (!msg.member.roles.cache.some((role) => role.name === 'Admin')) {
+  if (
+    !msg.member.roles.cache.some(
+      (role) => role.name === 'Admin' || role.name === 'Moderator'
+    )
+  ) {
     data.err = msg.reply('You must be an Admin to use this command.');
     return data;
   }
