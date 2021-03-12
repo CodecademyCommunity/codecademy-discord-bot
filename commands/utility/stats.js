@@ -1,7 +1,9 @@
+const Discord = require('discord.js');
+
 module.exports = {
   name: 'stats',
   description: 'Basic server stats',
-  async execute(msg, Discord) {
+  async execute(msg) {
     const Embed = new Discord.MessageEmbed();
     Embed.setTitle(`Server Stats`);
     const fetchedMembers = await msg.guild.members.fetch();

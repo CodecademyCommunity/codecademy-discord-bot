@@ -1,5 +1,7 @@
 # Codecademy Discord Bot
 
+[![Discord](https://img.shields.io/discord/605859344243884081.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/codecademy)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 Every great Discord server needs a great bot. So we coded up our own. It does a lot of things that other bots do, plus has a few tailored commands.
@@ -24,6 +26,7 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 | `cc!verify`      | [code]                         | Everyone       | Verifies that the code entered is valid and gives you a role for every badge you have on Discourse. |
 | `cc!stats`       | N/A                            | Everyone       | Displays basic server statistics (online members, offline members, total members).                  |
 | `cc!ping`        | N/A                            | Everyone       | Pong!                                                                                               |
+| `cc!helpcenter`  | {plaintext}                    | Everyone       | Provides links to Codecademy's Help Center (either embedded or plaintext).                          |
 | `cc!help`        | {command}                      | Everyone       | Shows information about a given command or lists all commands.                                      |
 
 ## Other Functionality
