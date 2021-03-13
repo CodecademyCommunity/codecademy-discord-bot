@@ -11,7 +11,7 @@ module.exports = {
       return msg.reply(err);
     }
 
-    clearInfractionSQL(msg, userInfraction, args, con);
+    findInfractions(msg, userInfraction, args, con);
   },
 };
 
@@ -23,7 +23,8 @@ function validInfraction(msg, args) {
   };
 
   if (!msg.member.roles.cache.some((role) => role.name === 'Admin')) {
-    data.err = msg.reply('You must be an Admin to use this command.');
+    data.err = 'You must be an Admin to use this command.';
+    console.log(data);
     return data;
   }
 
@@ -36,6 +37,26 @@ function validInfraction(msg, args) {
 
   data.status = true;
   return data;
+}
+
+function findInfractions(msg, userInfraction, args, con) {
+  const sql = `SELECT COUNT(id) FROM infractions WHERE user = ? AND valid = ?;`;
+
+  const values = [userInfraction.id, true];
+
+  const escaped = con.format(sql, values);
+
+  con.query(escaped, function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (result[0].count > 0) {
+        clearInfractionSQL(msg, userInfraction, args, con);
+      } else {
+        msg.reply('This user does not have any infractions');
+      }
+    }
+  });
 }
 
 function clearInfractionSQL(msg, userInfraction, args, con) {
@@ -60,8 +81,6 @@ function clearInfractionSQL(msg, userInfraction, args, con) {
       if (result[0].affectedRows >= 1) {
         clearInfractionResponse(msg, userInfraction);
         clearInfractionEmbed(msg, userInfraction);
-      } else {
-        msg.reply('This user does not have any infractions');
       }
     }
   });

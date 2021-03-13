@@ -14,7 +14,7 @@ module.exports = {
       return msg.reply(err);
     }
 
-    infractionSQL(msg, userInfraction, infractionID, args, con);
+    validateInfractionID(msg, userInfraction, args, infractionID, con);
   },
 };
 
@@ -31,7 +31,7 @@ function validInfraction(msg, args) {
       (role) => role.name === 'Admin' || role.name === 'Moderator'
     )
   ) {
-    data.err = msg.reply('You must be an Admin to use this command.');
+    data.err = 'You must be an Admin or Moderator to use this command.';
     return data;
   }
 
@@ -50,6 +50,28 @@ function validInfraction(msg, args) {
 
   data.status = true;
   return data;
+}
+
+function validateInfractionID(msg, userInfraction, args, infractionID, con) {
+  const sql = `SELECT id, valid FROM infractions WHERE id = ?;`;
+
+  const values = [infractionID];
+
+  const escaped = con.format(sql, values);
+
+  con.query(escaped, function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (result[0] && result[0].valid != 0) {
+        infractionSQL(msg, userInfraction, infractionID, args, con);
+      } else if (result[0] && result[0].valid == 0) {
+        msg.reply('Please include a valid infraction ID');
+      } else {
+        msg.reply('Please include a valid infraction ID');
+      }
+    }
+  });
 }
 
 function infractionSQL(msg, userInfraction, infractionID, args, con) {
@@ -81,8 +103,6 @@ function infractionSQL(msg, userInfraction, infractionID, args, con) {
       if (result[0].affectedRows == 1) {
         infractionResponse(msg, userInfraction, infractionID);
         infractionEmbed(msg, userInfraction, infractionID);
-      } else {
-        msg.reply('Please include a valid infraction ID');
       }
     }
   });

@@ -30,7 +30,7 @@ function validClear(msg, args) {
       (role) => role.name === 'Admin' || role.name === 'Moderator'
     )
   ) {
-    data.err = msg.reply('You must be an Admin to use this command.');
+    data.err = 'You must be an Admin or a Moderator to use this command.';
     return data;
   }
 
@@ -96,7 +96,7 @@ function clearEmbed(msg, numberDeleted) {
 }
 
 function clearMessage(msg, numberDeleted) {
-  msg.channel.bulkDelete(numberDeleted + 1).catch((error) => {
+  msg.channel.bulkDelete(parseInt(numberDeleted) + 1).catch((error) => {
     if (error.code == 50035) {
       return msg.reply(`You can only delete a max of 100 messages`);
     }
