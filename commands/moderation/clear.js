@@ -36,7 +36,7 @@ function validClear(msg, args) {
 
   data.numberDeleted = args[0];
   if (isNaN(args[0])) {
-    data.err = 'Please provide an number of messages to delete.';
+    data.err = 'Please provide a number of messages to delete.';
     return data;
   }
 
@@ -96,11 +96,7 @@ function clearEmbed(msg, numberDeleted) {
 }
 
 function clearMessage(msg, numberDeleted) {
-  msg.channel.bulkDelete(parseInt(numberDeleted) + 1).catch((error) => {
-    if (error.code == 50035) {
-      return msg.reply(`You can only delete a max of 100 messages`);
-    }
+  msg.channel.bulkDelete(parseInt(numberDeleted) + 1);
 
-    msg.channel.send(`${numberDeleted} messages were deleted.`);
-  });
+  msg.channel.send(`${numberDeleted} messages were deleted.`);
 }

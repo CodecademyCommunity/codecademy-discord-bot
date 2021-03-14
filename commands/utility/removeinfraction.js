@@ -85,14 +85,7 @@ function infractionSQL(msg, userInfraction, infractionID, args, con) {
     INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
     (?, ?, ?, NULL, NULL);`;
 
-  const values = [
-    false,
-    infractionID,
-    date,
-    msg.author.id,
-    action,
-    infractionID,
-  ];
+  const values = [false, infractionID, date, msg.author.id, action];
   const escaped = con.format(sql, values);
 
   con.query(escaped, function (err, result) {
