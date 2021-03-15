@@ -38,7 +38,7 @@ function notesInDB(msg, con, targetUser) {
 }
 
 function notesLog(msg, targetUser, notes) {
-  const listOfNotes = parseNotes(notes);
+  const listOfNotes = parseNotes(msg,notes);
 
   // Get properties from the list
   const totalNotes = listOfNotes.length;
@@ -74,7 +74,7 @@ function notesLog(msg, targetUser, notes) {
   }
 }
 
-function parseNotes(notes) {
+function parseNotes(msg,notes) {
   // parse notes into an array
   const allNotes = notes.map((note) => [
     note.timestamp,
@@ -117,7 +117,7 @@ function parseNotes(notes) {
   const notesWithTimes = [];
   for (let i = 0; i < moderatorList.length; i++) {
     notesWithTimes.push(
-      `**ID: ${idList[i]}** • ${moderatorList[i]}: _${noteList[i]}_ • ${timeSinceNote[i]} _ago_`
+      `**ID: ${idList[i]}** • ${msg.guild.members.cache.get(moderatorList[i])}: _${noteList[i]}_ • ${timeSinceNote[i]} _ago_`
     );
   }
   return notesWithTimes;
