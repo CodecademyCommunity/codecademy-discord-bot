@@ -21,7 +21,7 @@ module.exports = {
 
 function notesInDB(msg, con, targetUser) {
   // Find notes in table user_notes
-  const sqlNotes = `SELECT timestamp,moderator,note FROM user_notes WHERE user = '${targetUser.id}';`;
+  const sqlNotes = `SELECT timestamp,moderator,id,note FROM user_notes WHERE user = '${targetUser.id}';`;
 
   con.query(`${sqlNotes}`, function (err, result) {
     if (err) {
