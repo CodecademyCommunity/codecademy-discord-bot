@@ -21,7 +21,7 @@ module.exports = {
 
 function infractionsInDB(msg, con, targetUser) {
   // Find inractions in database
-  const sqlInfractions = `SELECT timestamp,reason,id,action FROM infractions WHERE user = '${targetUser.id}';`;
+  const sqlInfractions = `SELECT timestamp,reason,id,action,valid FROM infractions WHERE user = '${targetUser.id}';`;
 
   con.query(`${sqlInfractions}`, function (err, result) {
     if (err) {
@@ -81,11 +81,13 @@ function parseInfractions(infractions) {
     infraction.reason,
     infraction.id,
     infraction.action,
+    infraction.valid,
   ]);
   const timestampList = infractionsList.map((infraction) => infraction[0]);
   const reasonsList = infractionsList.map((infraction) => infraction[1]);
   const idList = infractionsList.map((infraction) => infraction[2]);
   const actionList = infractionsList.map((infraction) => infraction[3]);
+  const validList = infractionsList.map((infraction) => infraction[4]);
 
   // Format timestamps to work backwards from current time
   // First convert to millisecs, then compare with current time
@@ -116,9 +118,10 @@ function parseInfractions(infractions) {
   // This lets us print out the embedded message so much better
   const reasonsWithTimes = [];
   for (let i = 0; i < reasonsList.length; i++) {
-    reasonsWithTimes.push(
-      `**ID: ${idList[i]}** • ${actionList[i]} • _${reasonsList[i]}_ • ${timeSinceInfraction[i]} _ago_`
-    );
+    if (validList[i])
+      reasonsWithTimes.push(
+        `**ID: ${idList[i]}** • ${actionList[i]} • _${reasonsList[i]}_ • ${timeSinceInfraction[i]} _ago_`
+      );
   }
   return reasonsWithTimes;
 }
