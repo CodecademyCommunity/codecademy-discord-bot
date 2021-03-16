@@ -103,6 +103,14 @@ const commandParser = (msg) => {
       client.commands.get('infractions').execute(msg, con, args);
       break;
 
+    case 'removeinfraction':
+      client.commands.get('removeinfraction').execute(msg, con, args);
+      break;
+
+    case 'clearinfractions':
+      client.commands.get('clearinfractions').execute(msg, con, args);
+      break;
+
     case 'sendcode':
       client.commands
         .get('sendcode')
@@ -115,6 +123,10 @@ const commandParser = (msg) => {
 
     case 'verify':
       client.commands.get('verify').execute(msg, con, fetch);
+      break;
+
+    case 'clearmessages':
+      client.commands.get('clearmessages').execute(msg, con, args);
       break;
 
     case 'ping':
