@@ -45,7 +45,7 @@ function validTempBan(msg, args) {
     return data;
   }
 
-  const userInformation = /((<@!?\d+>)|(\d{17,18}))\s(\d+[yhwdms])\s(.+)$/;
+  const userInformation = /((<@!?)?\d{17,}>?)\s(\d+[yhwdms])\s(.+)$/;
 
   if (!args.join(' ').match(userInformation)) {
     data.err = "The command you sent isn't in a valid format";

@@ -51,7 +51,7 @@ function canTempMute(message, args) {
     return data;
   }
 
-  const commandRegex = /((<@!?\d+>)|(\d{17,18}))\s(\d+[yhwdms])\s(.+)$/;
+  const commandRegex = /((<@!?)?\d{17,}>?)\s(\d+[yhwdms])\s(.+)$/;
   if (!args.join(' ').match(commandRegex)) {
     data.err = "The command you sent isn't in a valid format.";
     return data;

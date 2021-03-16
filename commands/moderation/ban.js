@@ -32,7 +32,6 @@ function validBan(msg, args) {
 
   data.toBan =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
-  console.log(data.toBan);
   if (!data.toBan) {
     data.err = 'Please provide a user to ban.';
     return data;
