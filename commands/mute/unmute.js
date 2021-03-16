@@ -5,8 +5,8 @@ module.exports = {
   name: 'unmute',
   description: 'Unmute a user',
 
-  execute(msg, con) {
-    const {status, err, toUnmute} = canUnmute(msg);
+  execute(msg, args, con) {
+    const {status, err, toUnmute} = canUnmute(msg, args);
     if (!status) {
       return msg.reply(err);
     }
@@ -17,7 +17,7 @@ module.exports = {
   },
 };
 
-function canUnmute(message) {
+function canUnmute(message, args) {
   const data = {
     status: false,
     err: null,
@@ -37,7 +37,9 @@ function canUnmute(message) {
     return data;
   }
 
-  data.toUnmute = message.mentions.members.first();
+  data.toUnmute =
+    message.mentions.members.first() ||
+    message.guild.members.cache.get(args[0]);
   if (!data.toUnmute) {
     data.err = 'Please provide a user to unmute.';
     return data;

@@ -6,7 +6,7 @@ module.exports = {
   description: 'Ban a user',
 
   execute(msg, con, args) {
-    const {status, err, toBan, reason} = validBan(msg);
+    const {status, err, toBan, reason} = validBan(msg, args);
     if (!status) {
       return msg.reply(err);
     }
@@ -17,7 +17,7 @@ module.exports = {
   },
 };
 
-function validBan(msg) {
+function validBan(msg, args) {
   const data = {
     status: false,
     err: null,
@@ -30,7 +30,9 @@ function validBan(msg) {
     return data;
   }
 
-  data.toBan = msg.mentions.members.first();
+  data.toBan =
+    msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+  console.log(data.toBan);
   if (!data.toBan) {
     data.err = 'Please provide a user to ban.';
     return data;
@@ -46,7 +48,7 @@ function validBan(msg) {
     return data;
   }
 
-  data.reason = msg.content.substr(msg.content.indexOf('>') + 2);
+  data.reason = args.slice(1).join(' ');
   if (data.reason === '') {
     data.err = 'Please provide a reason for banning.';
     return data;

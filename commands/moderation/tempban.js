@@ -45,18 +45,17 @@ function validTempBan(msg, args) {
     return data;
   }
 
-  const userInformation = /(<@!?\d+>)\s(\d+[yhwdms])\s(.+)$/;
+  const userInformation = /((<@!?\d+>)|(\d{17,18}))\s(\d+[yhwdms])\s(.+)$/;
 
   if (!args.join(' ').match(userInformation)) {
     data.err = "The command you sent isn't in a valid format";
     return data;
   }
 
-  [, data.userID, data.timeLength, data.reason] = args
-    .join(' ')
-    .match(userInformation);
+  [data.userID, data.timeLength, data.reason] = args;
 
-  data.toTempBan = msg.mentions.members.first();
+  data.toTempBan =
+    msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
   if (!data.toTempBan) {
     data.err = 'Please provide a user to temporarily ban.';
     return data;
