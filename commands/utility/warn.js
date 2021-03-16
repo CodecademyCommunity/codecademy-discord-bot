@@ -6,7 +6,8 @@ module.exports = {
   description: 'warns a user of an infraction and logs infraction in db',
   execute(msg, con, args) {
     // Make sure only SU, Mods and Admin can run the command
-    const offendingUser = msg.mentions.members.first();
+    const offendingUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
     if (canWarn(msg)) {
       if (
         hasUserTarget(msg, offendingUser) &&

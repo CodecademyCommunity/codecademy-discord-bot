@@ -5,8 +5,8 @@ module.exports = {
   name: 'mute',
   description: 'Mute a user',
 
-  execute(msg, con) {
-    const {status, err, toMute, reason} = canMute(msg);
+  execute(msg, args, con) {
+    const {status, err, toMute, reason} = canMute(msg, args);
     if (!status) {
       return msg.reply(err);
     }
@@ -17,7 +17,7 @@ module.exports = {
   },
 };
 
-function canMute(message) {
+function canMute(message, args) {
   const data = {
     status: false,
     err: null,
@@ -35,7 +35,9 @@ function canMute(message) {
     return data;
   }
 
-  data.toMute = message.mentions.members.first();
+  data.toMute =
+    message.mentions.members.first() ||
+    message.guild.members.cache.get(args[0]);
   if (!data.toMute) {
     data.err = 'Please provide a user to mute.';
     return data;
@@ -57,7 +59,7 @@ function canMute(message) {
     return data;
   }
 
-  data.reason = message.content.substr(message.content.indexOf('>') + 2);
+  data.reason = args.slice(1).join(' ');
   if (data.reason === '') {
     data.err = 'Please provide a reason for muting.';
     return data;
