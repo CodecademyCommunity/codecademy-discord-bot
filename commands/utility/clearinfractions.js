@@ -50,7 +50,7 @@ function findInfractions(msg, userInfraction, args, con) {
     if (err) {
       console.log(err);
     } else {
-      if (result[0].count > 0) {
+      if (result[0]['COUNT(id)'] > 0) {
         clearInfractionSQL(msg, userInfraction, args, con);
       } else {
         msg.reply('This user does not have any infractions');
