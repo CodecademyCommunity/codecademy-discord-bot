@@ -2,8 +2,8 @@ const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 
 module.exports = {
-  name: 'clear',
-  description: 'Clears a certain number of messagees',
+  name: 'clearmessages',
+  description: 'Clears a certain number of messages',
 
   execute(msg, con, args) {
     const {status, err, numberDeleted} = validClear(msg, args);
@@ -61,8 +61,6 @@ function clearSQL(msg, numberDeleted, con) {
     (?, ?, ?, NULL, NULL);`;
 
   const values = [date, msg.author.id, action];
-
-  console.log(values, sql);
 
   const escaped = con.format(sql, values);
 
