@@ -121,6 +121,34 @@ module.exports = {
           );
           break;
 
+        case 'cc!notes':
+        case 'notes':
+          msg.channel.send(
+            '`cc!notes [user]`\nDisplays all notes that have been added to a user.'
+          );
+          break;
+
+        case 'cc!removeinfraction':
+        case 'removeinfraction':
+          msg.channel.send(
+            '`cc!removeinfraction [user] [infractionid]`\nSets a single infraction as invalid.'
+          );
+          break;
+
+        case 'cc!clearinfractions':
+        case 'clearinfractions':
+          msg.channel.send(
+            "`cc!clearinfractions [user]`\nSets all the specified user's infractions as invalid."
+          );
+          break;
+
+        case 'cc!clear':
+        case 'clear':
+          msg.channel.send(
+            '`cc!clear [numberofmessages]`\nClears the specified number of messages in the channel where the command is used.'
+          );
+          break;
+
         default:
           msg.channel.send(
             'That is not a command. For a full list type `cc!help`.'
@@ -135,12 +163,15 @@ module.exports = {
         .setColor('DARK_NAVY')
         .addField(
           'Admin Only',
-          'cc!createroles, cc!deleteroles, cc!ban, cc!unban'
+          'cc!createroles, cc!deleteroles, cc!ban, cc!unban, cc!clearinfractions'
         )
-        .addField('Moderator & Above Only', 'cc!tempban, cc!mute')
+        .addField(
+          'Moderator & Above Only',
+          'cc!tempban, cc!mute, cc!removeinfraction, cc!clear'
+        )
         .addField(
           'Super User & Above Only',
-          'cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!addnote'
+          'cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!addnote, cc!notes'
         )
         .addField(
           'Everyone',
