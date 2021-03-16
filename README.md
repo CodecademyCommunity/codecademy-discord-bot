@@ -18,7 +18,7 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 | `cc!tempban`          | [user] [lengthoftime] [reason] | Admin, Mod     | Temporarily bans a user for a set time period.                                                      |
 | `cc!mute`             | [user] [reason]                | Admin, Mod     | Mutes a user by assigning them a _Muted_ role (denies message sending and reacting privileges).     |
 | `cc!removeinfraction` | [user] [infractionid]          | Admin, Mod     | Sets a single infraction as invalid.                                                                |
-| `cc!clear`            | [numberofmessages]             | Admin, Mod     | Clears the specified number of messages in the channel where the command is used.                   |
+| `cc!clearmessages`    | [numberofmessages]             | Admin, Mod     | Clears the specified number of messages in the channel where the command is used.                   |
 | `cc!unmute`           | [user]                         | Admin, Mod, SU | Unmutes a user.                                                                                     |
 | `cc!tempmute`         | [user] [lengthoftime] [reason] | Admin, Mod, SU | Temporarily mutes a user for a set time period.                                                     |
 | `cc!kick`             | [user] [reason]                | Admin, Mod, SU | Kicks a user from the server.                                                                       |
@@ -32,6 +32,8 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 | `cc!ping`             | N/A                            | Everyone       | Pong!                                                                                               |
 | `cc!helpcenter`       | {plaintext}                    | Everyone       | Provides links to Codecademy's Help Center (either embedded or plaintext).                          |
 | `cc!help`             | {command}                      | Everyone       | Shows information about a given command or lists all commands.                                      |
+
+`[user]` can take either a user mention or user ID.
 
 ## Other Functionality
 

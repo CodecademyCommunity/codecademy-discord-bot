@@ -142,10 +142,10 @@ module.exports = {
           );
           break;
 
-        case 'cc!clear':
-        case 'clear':
+        case 'cc!clearmessages':
+        case 'clearmessages':
           msg.channel.send(
-            '`cc!clear [numberofmessages]`\nClears the specified number of messages in the channel where the command is used.'
+            '`cc!clearmessages [numberofmessages]`\nClears the specified number of messages in the channel where the command is used.'
           );
           break;
 
@@ -167,7 +167,7 @@ module.exports = {
         )
         .addField(
           'Moderator & Above Only',
-          'cc!tempban, cc!mute, cc!removeinfraction, cc!clear'
+          'cc!tempban, cc!mute, cc!removeinfraction, cc!clearmessages'
         )
         .addField(
           'Super User & Above Only',
