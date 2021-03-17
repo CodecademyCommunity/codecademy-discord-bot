@@ -33,7 +33,8 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 | `cc!helpcenter`       | {plaintext}                    | Everyone       | Provides links to Codecademy's Help Center (either embedded or plaintext).                          |
 | `cc!help`             | {command}                      | Everyone       | Shows information about a given command or lists all commands.                                      |
 
-`[user]` can take either a user mention or user ID.
+- Parameters in square brackets are mandatory, while those in curly braces are optional.
+- `[user]` can take either a user mention or user ID.
 
 ## Other Functionality
 
