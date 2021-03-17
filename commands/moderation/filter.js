@@ -3,14 +3,8 @@
   
     Strong Words 
       *one of these words will trigger the filter 
-       hell          damn
-       goddamn       goddamned
-       goddamnit     damned
-       damnit        hell
-       fuck          fucked
-       fucking       fucker
-       fuckwad       buttplug
-       motherfucker  wtf
+       
+       buttplug      motherfucker  
        nigger        nigga
        penis         vagina
        asshole       sex
@@ -28,14 +22,16 @@
                
        
     Minor Words    
-       *3+ of these words will trigger the filter
-       darn        dern
-       darned      derned
-       darnit      dernit
-       dang        heck
-       frick       fricked
-       crap        omg
-       shit        sexy
+       *one of these words will notify staff
+
+       hell          damn
+       goddamn       goddamned
+       goddamnit     damned
+       damnit        hell
+       sexy          fuck          
+       fucked        wtf
+       fucking       fucker
+       fuckwad       fuckin
       
 */
 
@@ -50,12 +46,17 @@ module.exports = {
     if (isHighRoller(msg)) {
 
       let words = convertToChar(msg.content).split(' ');
+      const results = needsAction(words);
 
-      if (needsAction(words)) {
+      if (results[0] === 'auto') {
         
+        console.log('auto');
         moderation(msg);
-        dmTheUser(msg);
         
+      } else if (results[0] === 'manual') {
+
+        logSwear(msg, results[1]);
+
       }
     }
   },
@@ -85,30 +86,21 @@ const moderation = (msg) => {
   msg.delete();
   
   const logs = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs');
-  
-  logs.send(`I warned ${msg.author} for saying something hurtful in ${msg.channel}...`);
         
-  const command = `cc!addnote ${msg.author} excessive cussing/offensive language in ${msg.channel}.`;
+  const command = `cc!warn ${msg.author} In reference to your message in ${msg.channel}, please refrain from excessive cussing/offensive language.`;
 
-  const addition = ` User said: ${msg.content}`;
-        
-  if (command.length + addition.length <= 255) {
-    logs.send(command + addition);
-  } else {
-    logs.send(command + ' Users message was too long to copy into database.');
-  }
+  logs.send(command);
+
 }
 
 
 
-const dmTheUser = (msg) => {
-  const Embed = new Discord.MessageEmbed()
-    .setColor('#f1d302')
-    .setTitle(`Reminder to ${msg.author.username}`)
-    .setDescription(`Regarding your message in ${msg.channel}:\n\n"${msg.content}"\n\nPlease refrain from excessive cussing and/or posting offensive content.`)
-    .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
-  msg.author.send(Embed);
+const logSwear = (msg, word) => {
+  const logs = msg.guild.channels.cache.find(channel => channel.name === 'swear-jar');
+  
+  const message = `${msg.author} said "${word}" in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+
+  logs.send(message);
 }
 
 
@@ -134,30 +126,22 @@ const convertToChar = (sentence) => {
 
 const needsAction = (words) => {
 
-  let result = false;
+  const strongWords = /motherfucker|nigger|nigga|penis|vagina|asshole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom/;
 
-  const strongWords = /hell|damn|goddamn|goddamned|damned|damnit|hell|fuck|fucked|fucking|fucker|fuckwad|fuckwad|motherfucker|wtf|nigger|nigga|penis|vagina|asshole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom/;
+  const lightWords = /hell|damn|goddamn|goddamned|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin/;
 
-  const lightWords = /darn|dern|darned|derned|darnit|dernit|dang|heck|frick|fricked|crap|omg|sexy|shit/;
-
-  let numLightWords = 0;
-  let numStrongWords = 0;
-
-  let i = 0;
+  let manual = false;
+  let word;
   
-  while (i < words.length && !result) {
+  for (let i = 0; i < words.length; i++) {
     if (strongWords.test(words[i])) {
-      result = true;
-    } else if (lightWords.test(words[i])) {
-      numLightWords++;
+      return ['auto', words[i]];
+    } else if (!manual && lightWords.test(words[i])) {
+      manual = true;
+      word = words[i];
     }
-
-    if (numLightWords >= 3) {
-      result = true;
-    }
-
-    i++;
   }
-
-  return result;
-} 
+  if (manual) {
+    return ['manual', word];
+  }
+}
