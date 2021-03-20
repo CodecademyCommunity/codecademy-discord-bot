@@ -145,7 +145,7 @@ function hasUserTarget(msg, targetUser) {
   const failAttemptReply = [
     'Ok there bud, whose notes are you trying to check again?',
     'You definitely missed the targer user there...',
-    'what? You want ALL the notes from everyone? You forgot the targer user',
+    'What? You want ALL the notes from everyone? You forgot the targer user',
     "Not judging, but you didn't set a user to read notes from...",
     'You forgot the targer user',
     'Forgot the target user. Wanna try again?',
