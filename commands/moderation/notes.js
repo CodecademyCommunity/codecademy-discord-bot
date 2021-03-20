@@ -8,7 +8,6 @@ module.exports = {
     const targetUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
-    if (targetUser) console.log(`targerUser is true`);
     if (canCheckNotes(msg)) {
       if (hasUserTarget(msg, targetUser)) {
         // Find all notes records in database
