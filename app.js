@@ -175,6 +175,10 @@ const commandParser = (msg) => {
       client.commands.get('addnote').execute(msg, con, args);
       break;
 
+    case 'notes':
+      client.commands.get('notes').execute(msg, con, args);
+      break;
+
     case 'helpcenter':
       client.commands.get('helpcenter').execute(msg, args);
       break;
