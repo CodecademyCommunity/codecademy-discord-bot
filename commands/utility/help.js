@@ -131,7 +131,7 @@ module.exports = {
         case 'cc!removenote':
         case 'removenote':
           msg.channel.send(
-            '`cc!removenote [noteid]`\nSets a single note as invalid.'
+            '`cc!removenote [user] [noteid]`\nSets a single note as invalid.'
           );
           break;
 
