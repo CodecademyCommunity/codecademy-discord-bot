@@ -51,16 +51,16 @@ function canTempMute(message, args) {
     return data;
   }
 
-  const commandRegex = /(<@!?\d+>)\s(\d+[yhwdms])\s(.+)$/;
+  const commandRegex = /((<@!?)?\d{17,}>?)\s(\d+[yhwdms])\s(.+)$/;
   if (!args.join(' ').match(commandRegex)) {
     data.err = "The command you sent isn't in a valid format.";
     return data;
   }
-  [, data.userID, data.lengthOfTime, data.reason] = args
-    .join(' ')
-    .match(commandRegex);
+  [data.userID, data.lengthOfTime, data.reason] = args;
 
-  data.toTempMute = message.mentions.members.first();
+  data.toTempMute =
+    message.mentions.members.first() ||
+    message.guild.members.cache.get(args[0]);
   if (!data.toTempMute) {
     data.err = 'Please provide a user to temporarily mute.';
     return data;
@@ -106,7 +106,6 @@ function muteUser(message, toTempMute, lengthOfTime, reason) {
 }
 
 function unmuteUser(message, toTempMute) {
-  toTempMute = message.mentions.members.first();
   toTempMute.roles.remove(
     message.guild.roles.cache.find((role) => role.name === 'Muted')
   );

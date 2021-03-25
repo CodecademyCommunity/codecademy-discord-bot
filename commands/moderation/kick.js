@@ -6,7 +6,7 @@ module.exports = {
   description: 'Kick a user',
 
   execute(msg, con, args) {
-    const {status, err, toKick, reason} = validKick(msg);
+    const {status, err, toKick, reason} = validKick(msg, args);
     if (!status) {
       return msg.reply(err);
     }
@@ -17,7 +17,7 @@ module.exports = {
   },
 };
 
-function validKick(msg) {
+function validKick(msg, args) {
   const data = {
     status: false,
     err: null,
@@ -40,7 +40,8 @@ function validKick(msg) {
   }
 
   // Grabs the user and makes sure that one was provided
-  data.toKick = msg.mentions.members.first();
+  data.toKick =
+    msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
   if (!data.toKick) {
     data.err = 'Please provide a user to kick.';
     return data;
@@ -59,7 +60,7 @@ function validKick(msg) {
   }
 
   // Checks that a reason was included
-  data.reason = msg.content.substr(msg.content.indexOf('>') + 2);
+  data.reason = args.slice(1).join(' ');
   if (data.reason === '') {
     data.err = 'Please provide a reason for kicking.';
     return data;
