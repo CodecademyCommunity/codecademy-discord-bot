@@ -128,6 +128,13 @@ module.exports = {
           );
           break;
 
+        case 'cc!removenote':
+        case 'removenote':
+          msg.channel.send(
+            '`cc!removenote [noteid]`\nSets a single note as invalid.'
+          );
+          break;
+
         case 'cc!removeinfraction':
         case 'removeinfraction':
           msg.channel.send(
@@ -171,7 +178,7 @@ module.exports = {
         )
         .addField(
           'Super User & Above Only',
-          'cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!addnote, cc!notes'
+          'cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!addnote, cc!removenote, cc!notes'
         )
         .addField(
           'Everyone',

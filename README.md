@@ -26,6 +26,7 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 | `cc!infractions`      | [user]                         | Admin, Mod, SU | Finds user infraction record in db and returns it to channel.                                       |
 | `cc!addnote`          | [user] [note]                  | Admin, Mod, SU | Adds a note to a user.                                                                              |
 | `cc!notes`            | [user]                         | Admin, Mod, SU | Displays all notes that have been added to a user.                                                  |
+| `cc!removenote`       | [noteid]                       | Admin, Mod, SU | Sets a single note as invalid.                                                                      |
 | `cc!sendcode`         | [username]                     | Everyone       | Sends a verification code to your Codecademy Discuss email.                                         |
 | `cc!verify`           | [code]                         | Everyone       | Verifies that the code entered is valid and gives you a role for every badge you have on Discourse. |
 | `cc!stats`            | N/A                            | Everyone       | Displays basic server statistics (online members, offline members, total members).                  |
