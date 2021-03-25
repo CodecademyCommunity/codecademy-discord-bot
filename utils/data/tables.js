@@ -51,6 +51,7 @@ const userNotes = {
     'user VARCHAR(255) NOT NULL',
     'moderator VARCHAR(255) NOT NULL',
     'note VARCHAR(255)',
+    'valid BOOLEAN DEFAULT true',
   ],
 };
 
