@@ -110,7 +110,7 @@ module.exports = {
         case 'cc!addnote':
         case 'addnote':
           msg.channel.send(
-            '`cc!addnote [user] [note]`\nAdds a note to a user.'
+            '`cc!addnote [user] [note]`\nAdds a note to a user. *Super User and above only.*'
           );
           break;
 
@@ -124,35 +124,35 @@ module.exports = {
         case 'cc!notes':
         case 'notes':
           msg.channel.send(
-            '`cc!notes [user]`\nDisplays all notes that have been added to a user.'
+            '`cc!notes [user]`\nDisplays all notes that have been added to a user. *Super User and above only.*'
           );
           break;
 
         case 'cc!removenote':
         case 'removenote':
           msg.channel.send(
-            '`cc!removenote [user] [noteid]`\nSets a single note as invalid.'
+            '`cc!removenote [user] [noteid]`\nSets a single note as invalid. *Super User and above only.*'
           );
           break;
 
         case 'cc!removeinfraction':
         case 'removeinfraction':
           msg.channel.send(
-            '`cc!removeinfraction [user] [infractionid]`\nSets a single infraction as invalid.'
+            '`cc!removeinfraction [user] [infractionid]`\nSets a single infraction as invalid. *Moderator and above only.*'
           );
           break;
 
         case 'cc!clearinfractions':
         case 'clearinfractions':
           msg.channel.send(
-            "`cc!clearinfractions [user]`\nSets all the specified user's infractions as invalid."
+            "`cc!clearinfractions [user]`\nSets all the specified user's infractions as invalid. *Admin only.*"
           );
           break;
 
         case 'cc!clearmessages':
         case 'clearmessages':
           msg.channel.send(
-            '`cc!clearmessages [numberofmessages]`\nClears the specified number of messages in the channel where the command is used.'
+            '`cc!clearmessages [numberofmessages]`\nClears the specified number of messages in the channel where the command is used. *Moderator and above only.*'
           );
           break;
 
