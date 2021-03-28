@@ -8,10 +8,10 @@ module.exports = {
   execute(msg, args, con) {
     const {status, err, userNote, noteID} = validNote(msg, args);
     if (!status) {
-      return msg.reply(err);
+      msg.reply(err);
+    } else {
+      validatenoteID(msg, userNote, args, noteID, con);
     }
-
-    validatenoteID(msg, userNote, args, noteID, con);
   },
 };
 
@@ -50,7 +50,7 @@ function validNote(msg, args) {
 
   console.log(args);
   data.noteID = args[1];
-  if (data.noteID === '') {
+  if (!data.noteID) {
     data.err = 'Please provide a note ID to remove.';
     return data;
   }
