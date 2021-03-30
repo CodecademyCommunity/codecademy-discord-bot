@@ -56,7 +56,10 @@ function canTempMute(message, args) {
     data.err = "The command you sent isn't in a valid format.";
     return data;
   }
-  [data.userID, data.lengthOfTime, data.reason] = args;
+
+  let reasonArray = null;
+  [data.userID, data.lengthOfTime, ...reasonArray] = args;
+  data.reason = reasonArray.join(' ');
 
   data.toTempMute =
     message.mentions.members.first() ||
@@ -92,7 +95,7 @@ function muteUser(message, toTempMute, lengthOfTime, reason) {
     message.guild.roles.cache.find((role) => role.name === 'Muted')
   );
   message.channel.send(
-    `${toTempMute} was muted by ${message.member}.\nReason: ${reason}`
+    `${toTempMute} was muted by ${message.member} for ${lengthOfTime}.\nReason: ${reason}`
   );
 
   // Sends user a DM notifying them of their muted status.
@@ -109,7 +112,6 @@ function unmuteUser(message, toTempMute) {
   toTempMute.roles.remove(
     message.guild.roles.cache.find((role) => role.name === 'Muted')
   );
-  message.channel.send(`${toTempMute} was unmuted.`);
   toTempMute.send("You've been unmuted.");
 }
 
