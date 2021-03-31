@@ -78,10 +78,8 @@ function clearInfractionSQL(msg, userInfraction, args, con) {
       console.log(err);
     } else {
       console.log('Infractions were removed from user');
-      if (result[0].affectedRows >= 1) {
-        clearInfractionResponse(msg, userInfraction);
-        clearInfractionEmbed(msg, userInfraction);
-      }
+      clearInfractionResponse(msg, userInfraction);
+      clearInfractionEmbed(msg, userInfraction);
     }
   });
 }

@@ -102,10 +102,8 @@ function noteSQL(msg, userNote, noteID, args, con) {
       console.log(err);
     } else {
       console.log('Note was set to invalid.');
-      if (result[0].affectedRows == 1) {
-        noteResponse(msg, userNote, noteID);
-        noteEmbed(msg, userNote, noteID);
-      }
+      noteResponse(msg, userNote, noteID);
+      noteEmbed(msg, userNote, noteID);
     }
   });
 }

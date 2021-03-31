@@ -93,10 +93,8 @@ function infractionSQL(msg, userInfraction, infractionID, args, con) {
       console.log(err);
     } else {
       console.log('Infraction was set to invalid');
-      if (result[0].affectedRows == 1) {
-        infractionResponse(msg, userInfraction, infractionID);
-        infractionEmbed(msg, userInfraction, infractionID);
-      }
+      infractionResponse(msg, userInfraction, infractionID);
+      infractionEmbed(msg, userInfraction, infractionID);
     }
   });
 }
