@@ -87,20 +87,30 @@ const moderation = (msg) => {
   
   const logs = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs');
         
-  const command = `cc!warn ${msg.author} In reference to your message in ${msg.channel}, please refrain from excessive cussing/offensive language.`;
+  if (logs) {
+    const command = `cc!warn ${msg.author} In reference to your message in ${msg.channel}, please refrain from excessive cussing/offensive language.`;
 
-  logs.send(command);
+    logs.send(command);
+  }
+
+  // room for channel creation later
 
 }
 
 
 
 const logSwear = (msg, word) => {
-  const logs = msg.guild.channels.cache.find(channel => channel.name === 'swear-jar');
-  
-  const message = `${msg.author} said "${word}" in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
 
-  logs.send(message);
+  let logs = msg.guild.channels.cache.find(channel => channel.name === 'swear-jar');
+  
+  if (logs) {
+    const message = `${msg.author} said "${word}" in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+
+    logs.send(message);
+  }
+
+  // room for channel creation later
+
 }
 
 
@@ -144,4 +154,4 @@ const needsAction = (words) => {
   if (manual) {
     return ['manual', word];
   }
-}
+} 
