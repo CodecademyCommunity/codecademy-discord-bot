@@ -153,5 +153,7 @@ const needsAction = (words) => {
   }
   if (manual) {
     return ['manual', word];
+  } else {
+    return ['clean'];
   }
 } 
