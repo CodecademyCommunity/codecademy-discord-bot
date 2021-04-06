@@ -20,15 +20,13 @@ module.exports = {
 
 function notesInDB(msg, con, targetUser) {
   // Find notes in table user_notes
-  const sqlNotes = `SELECT timestamp,moderator,id,note FROM user_notes WHERE user = '${targetUser.id}';`;
+  const sqlNotes = `SELECT timestamp,moderator,id,note,valid FROM user_notes WHERE user = '${targetUser.id}';`;
 
   con.query(`${sqlNotes}`, function (err, result) {
     if (err) {
       console.log(err);
       // Include a warning in case something goes wrong writing to the db
-      msg.channel.send(
-        `I couldn't read ${targetUser}'s notes from the db!`
-      );
+      msg.channel.send(`I couldn't read ${targetUser}'s notes from the db!`);
     } else {
       console.log('Found note records.');
       notesLog(msg, targetUser, result);
@@ -37,7 +35,7 @@ function notesInDB(msg, con, targetUser) {
 }
 
 function notesLog(msg, targetUser, notes) {
-  const listOfNotes = parseNotes(msg,notes);
+  const listOfNotes = parseNotes(msg, notes);
 
   // Get properties from the list
   const totalNotes = listOfNotes.length;
@@ -73,18 +71,20 @@ function notesLog(msg, targetUser, notes) {
   }
 }
 
-function parseNotes(msg,notes) {
+function parseNotes(msg, notes) {
   // parse notes into an array
   const allNotes = notes.map((note) => [
     note.timestamp,
     note.moderator,
     note.id,
     note.note,
+    note.valid,
   ]);
   const timestampList = allNotes.map((note) => note[0]);
   const moderatorList = allNotes.map((note) => note[1]);
   const idList = allNotes.map((note) => note[2]);
   const noteList = allNotes.map((note) => note[3]);
+  const validList = allNotes.map((note) => note[4]);
 
   // Format timestamps to work backwards from current time
   // First convert to millisecs, then compare with current time
@@ -97,13 +97,9 @@ function parseNotes(msg,notes) {
     const hours = minutes / 60;
     const days = hours / 24;
     if (Math.floor(days) > 0) {
-      timeSinceNote[idx] = [
-        `${Math.floor(days)}d ${Math.round(days % 24)}h`,
-      ];
+      timeSinceNote[idx] = [`${Math.floor(days)}d ${Math.round(days % 24)}h`];
     } else if (Math.floor(hours) > 0) {
-      timeSinceNote[idx] = [
-        `${Math.floor(hours)}h ${Math.round(hours % 60)}m`,
-      ];
+      timeSinceNote[idx] = [`${Math.floor(hours)}h ${Math.round(hours % 60)}m`];
     } else {
       timeSinceNote[idx] = [
         `${Math.floor(minutes)}m ${Math.round(minutes % 60)}s`,
@@ -115,9 +111,12 @@ function parseNotes(msg,notes) {
   // This lets us print out the embedded message so much better
   const notesWithTimes = [];
   for (let i = 0; i < moderatorList.length; i++) {
-    notesWithTimes.push(
-      `**ID: ${idList[i]}** • ${msg.guild.members.cache.get(moderatorList[i])}: _${noteList[i]}_ • ${timeSinceNote[i]} _ago_`
-    );
+    if (validList[i])
+      notesWithTimes.push(
+        `**ID: ${idList[i]}** • ${msg.guild.members.cache.get(
+          moderatorList[i]
+        )}: _${noteList[i]}_ • ${timeSinceNote[i]} _ago_`
+      );
   }
   return notesWithTimes;
 }
