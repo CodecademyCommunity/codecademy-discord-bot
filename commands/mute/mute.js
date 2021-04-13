@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+let Discord = require('discord.js');
 const dateFormat = require('dateformat');
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
 };
 
 function canMute(message, args) {
-  const data = {
+  data = {
     status: false,
     err: null,
     toMute: null,
