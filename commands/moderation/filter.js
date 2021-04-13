@@ -35,34 +35,23 @@
       
 */
 
-const Discord = require('discord.js');
-
 module.exports = {
-  name: "filter",
-  description: "filter a message",
+  name: 'filter',
+  description: 'filter a message',
 
   execute(msg) {
-    
     if (isHighRoller(msg)) {
-
-      let words = convertToChar(msg.content).split(' ');
+      const words = convertToChar(msg.content).split(' ');
       const results = needsAction(words);
-
       if (results[0] === 'auto') {
-        
         console.log('auto');
         moderation(msg);
-        
       } else if (results[0] === 'manual') {
-
         logSwear(msg, results[1]);
-
       }
     }
   },
 };
-
-
 
 const isHighRoller = (msg) => {
   if (
@@ -77,16 +66,15 @@ const isHighRoller = (msg) => {
   } else {
     return false;
   }
-}
-
-
+};
 
 const moderation = (msg) => {
-  
   msg.delete();
-  
-  const logs = msg.guild.channels.cache.find(channel => channel.name === 'audit-logs');
-        
+
+  const logs = msg.guild.channels.cache.find(
+    (channel) => channel.name === 'audit-logs'
+  );
+
   if (logs) {
     const command = `cc!warn ${msg.author} In reference to your message in ${msg.channel}, please refrain from excessive cussing/offensive language.`;
 
@@ -94,15 +82,13 @@ const moderation = (msg) => {
   }
 
   // room for channel creation later
-
-}
-
-
+};
 
 const logSwear = (msg, word) => {
+  const logs = msg.guild.channels.cache.find(
+    (channel) => channel.name === 'swear-jar'
+  );
 
-  let logs = msg.guild.channels.cache.find(channel => channel.name === 'swear-jar');
-  
   if (logs) {
     const message = `${msg.author} said "${word}" in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
 
@@ -110,39 +96,41 @@ const logSwear = (msg, word) => {
   }
 
   // room for channel creation later
-
-}
-
-
+};
 
 const convertToChar = (sentence) => {
   let result = '';
-  
+
   for (let i = 0; i < sentence.length; i++) {
-    if ((sentence[i] >= 'a' && sentence[i] <= 'z') || (sentence[i] >= 'A' && sentence[i] <= 'Z') || sentence[i] === ' ') {
+    if (
+      (sentence[i] >= 'a' && sentence[i] <= 'z') ||
+      (sentence[i] >= 'A' && sentence[i] <= 'Z') ||
+      sentence[i] === ' '
+    ) {
       result += sentence[i];
     } else if (sentence[i] === '@') {
       result += 'a';
-    } else if (sentence[i] === '1' || sentence[i] === '|' || sentence[i] === '!') {
+    } else if (
+      sentence[i] === '1' ||
+      sentence[i] === '|' ||
+      sentence[i] === '!'
+    ) {
       result += 'i';
     } else if (sentence[i] === '$') {
       result += 's';
     }
   }
   return result;
-}
-
-
+};
 
 const needsAction = (words) => {
-
   const strongWords = /motherfucker|nigger|nigga|penis|vagina|asshole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom/;
 
   const lightWords = /hell|damn|goddamn|goddamned|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin/;
 
   let manual = false;
   let word;
-  
+
   for (let i = 0; i < words.length; i++) {
     if (strongWords.test(words[i])) {
       return ['auto', words[i]];
@@ -151,9 +139,6 @@ const needsAction = (words) => {
       word = words[i];
     }
   }
-  if (manual) {
-    return ['manual', word];
-  } else {
-    return 'clean';
-  }
-} 
+
+  return manual ? ['manual', word] : ['clean', word];
+};
