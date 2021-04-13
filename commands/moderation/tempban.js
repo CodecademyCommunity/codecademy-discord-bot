@@ -52,7 +52,9 @@ function validTempBan(msg, args) {
     return data;
   }
 
-  [data.userID, data.timeLength, data.reason] = args;
+  let reasonArray = null;
+  [data.userID, data.timeLength, ...reasonArray] = args;
+  data.reason = reasonArray.join(' ');
 
   data.toTempBan =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
