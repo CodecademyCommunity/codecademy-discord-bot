@@ -5,7 +5,7 @@ module.exports = {
   name: 'removeinfraction',
   description: 'Removes a specific infraction based on the ID provided',
 
-  execute(msg, con, args) {
+  execute(msg, args, con) {
     const {status, err, userInfraction, infractionID} = validInfraction(
       msg,
       args
