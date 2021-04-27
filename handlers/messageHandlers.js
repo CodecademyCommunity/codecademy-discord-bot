@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const {getClient} = require('../config/client');
-const {getConnection} = require('../config/connection');
+const {getConnection} = require('../config/db');
 
 const con = getConnection();
 const client = getClient();
