@@ -1,6 +1,6 @@
-// const Discord = require('discord.js');
 const {getClient} = require('./config/client.js');
 const {collectCommands} = require('./config/commands');
+const {extendMutes} = require('./handlers/channelHandlers.js');
 const {applyMute, createMutedRole} = require('./handlers/guildHandlers.js');
 const {
   messageHandler,
@@ -25,18 +25,7 @@ client.on('guildCreate', createMutedRole);
 client.on('guildMemberUpdate', applyMute);
 
 // Upon channel creation, mutes all users with Muted role in the new channel.
-client.on('channelCreate', (channel) => {
-  if (channel.guild != null) {
-    const muted = channel.guild.roles.cache.find(
-      (role) => role.name === 'Muted'
-    );
-    channel.updateOverwrite(muted.id, {
-      ADD_REACTIONS: false,
-      SEND_MESSAGES: false,
-      SEND_TTS_MESSAGES: false,
-    });
-  }
-});
+client.on('channelCreate', extendMutes);
 
 client.on('message', messageHandler);
 
