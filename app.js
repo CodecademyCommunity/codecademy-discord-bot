@@ -5,7 +5,7 @@ const {applyMute, createMutedRole} = require('./handlers/guildHandlers.js');
 const {
   messageHandler,
   logDeletedMessages,
-} = require('./handlers/messageHandler');
+} = require('./handlers/messageHandlers');
 
 require('dotenv').config();
 
