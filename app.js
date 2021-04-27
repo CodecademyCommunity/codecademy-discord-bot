@@ -1,32 +1,13 @@
-const fs = require('fs');
 const Discord = require('discord.js');
-const mysql = require('mysql');
+const {getClient} = require('./config/client.js');
+const {collectCommands} = require('./config/commands');
+const {messageHandler} = require('./handlers/messageHandler');
 require('dotenv').config();
 
-const client = new Discord.Client({
-  partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-});
-client.commands = new Discord.Collection();
+const client = getClient();
+const commandsDir = `${__dirname}/commands`;
 
-const commandFolders = fs.readdirSync('./commands');
-
-for (const folder of commandFolders) {
-  const commandFiles = fs
-    .readdirSync(`./commands/${folder}`)
-    .filter((file) => file.endsWith('.js'));
-  for (const file of commandFiles) {
-    const command = require(`./commands/${folder}/${file}`);
-    client.commands.set(command.name, command);
-  }
-}
-
-const con = mysql.createConnection({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  multipleStatements: true,
-});
+collectCommands(client, commandsDir);
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -78,31 +59,7 @@ client.on('channelCreate', (channel) => {
   }
 });
 
-const commandParser = (msg) => {
-  const args = msg.content.slice('cc!'.length).trim().split(/ +/);
-  const commandName = args.shift().toLowerCase();
-
-  if (!client.commands.has(commandName)) return;
-
-  const command = client.commands.get(commandName);
-
-  try {
-    command.execute(msg, args, con);
-  } catch (error) {
-    console.error(error);
-    msg.reply(
-      'There was an error trying to execute that command! Try cc!help for information.'
-    );
-  }
-};
-
-client.on('message', (msg) => {
-  if (msg.content.substring(0, 3) === 'cc!' && !(msg.member === client)) {
-    commandParser(msg);
-  } else if (msg.author.id != client.user.id && msg.guild !== null) {
-    client.commands.get('filter').execute(msg);
-  }
-});
+client.on('message', messageHandler);
 
 client.on('messageDelete', async function (message) {
   if (!message.partial) {
