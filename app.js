@@ -1,13 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const fetch = require('node-fetch');
-
-const sgMail = require('@sendgrid/mail');
 const mysql = require('mysql');
 require('dotenv').config();
-const {v4: uuidv4} = require('uuid');
-
-const constants = require('./constants');
 
 const client = new Discord.Client({
   partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
@@ -25,8 +19,6 @@ for (const folder of commandFolders) {
     client.commands.set(command.name, command);
   }
 }
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const con = mysql.createConnection({
   user: process.env.DB_USER,
@@ -88,107 +80,19 @@ client.on('channelCreate', (channel) => {
 
 const commandParser = (msg) => {
   const args = msg.content.slice('cc!'.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
+  const commandName = args.shift().toLowerCase();
 
-  switch (command) {
-    case 'createroles':
-      client.commands.get('createroles').execute(msg, fetch, constants.colors);
-      break;
+  if (!client.commands.has(commandName)) return;
 
-    case 'deleteroles':
-      client.commands.get('deleteroles').execute(msg, fetch);
-      break;
+  const command = client.commands.get(commandName);
 
-    case 'infractions':
-      client.commands.get('infractions').execute(msg, con, args);
-      break;
-
-    case 'removeinfraction':
-      client.commands.get('removeinfraction').execute(msg, con, args);
-      break;
-
-    case 'clearinfractions':
-      client.commands.get('clearinfractions').execute(msg, con, args);
-      break;
-
-    case 'sendcode':
-      client.commands
-        .get('sendcode')
-        .execute(msg, uuidv4(), fetch, con, sgMail);
-      break;
-
-    case 'stats':
-      client.commands.get('stats').execute(msg);
-      break;
-
-    case 'verify':
-      client.commands.get('verify').execute(msg, con, fetch);
-      break;
-
-    case 'clearmessages':
-      client.commands.get('clearmessages').execute(msg, con, args);
-      break;
-
-    case 'ping':
-      client.commands.get('ping').execute(msg);
-      break;
-
-    case 'ban':
-      client.commands.get('ban').execute(msg, con, args);
-      break;
-
-    case 'unban':
-      client.commands.get('unban').execute(msg, args, con);
-      break;
-
-    case 'tempban':
-      client.commands.get('tempban').execute(msg, args, con);
-      break;
-
-    case 'kick':
-      client.commands.get('kick').execute(msg, con, args);
-      break;
-
-    case 'warn':
-      client.commands.get('warn').execute(msg, con, args);
-      break;
-
-    case 'help':
-    case 'info':
-    case 'information':
-      client.commands.get('help').execute(msg, args);
-      break;
-
-    case 'mute':
-      client.commands.get('mute').execute(msg, args, con);
-      break;
-
-    case 'unmute':
-      client.commands.get('unmute').execute(msg, args, con);
-      break;
-
-    case 'tempmute':
-      client.commands.get('tempmute').execute(msg, args, con);
-      break;
-
-    case 'addnote':
-      client.commands.get('addnote').execute(msg, con, args);
-      break;
-
-    case 'notes':
-      client.commands.get('notes').execute(msg, con, args);
-      break;
-
-    case 'removenote':
-      client.commands.get('removenote').execute(msg, args, con);
-      break;
-
-    case 'helpcenter':
-      client.commands.get('helpcenter').execute(msg, args);
-      break;
-
-    default:
-      msg.reply('That is not a command. Try cc!help for information.');
+  try {
+    command.execute(msg, args, con);
+  } catch (error) {
+    console.error(error);
+    msg.reply(
+      'There was an error trying to execute that command! Try cc!help for information.'
+    );
   }
 };
 

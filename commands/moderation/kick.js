@@ -5,7 +5,7 @@ module.exports = {
   name: 'kick',
   description: 'Kick a user',
 
-  execute(msg, con, args) {
+  execute(msg, args, con) {
     const {status, err, toKick, reason} = validKick(msg, args);
     if (!status) {
       return msg.reply(err);

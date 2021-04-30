@@ -5,7 +5,7 @@ module.exports = {
   name: 'ban',
   description: 'Ban a user',
 
-  execute(msg, con, args) {
+  execute(msg, args, con) {
     const {status, err, toBan, reason} = validBan(msg, args);
     if (!status) {
       return msg.reply(err);
