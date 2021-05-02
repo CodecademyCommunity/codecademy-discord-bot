@@ -3,10 +3,14 @@
     "eslint.lintTask.options": "-c ./.eslintrc.json .",
     "eslint.probe": [
         "javascript",
+        "typescript",
         "markdown"
     ],
     "editor.formatOnSave": true,
     "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
 }
