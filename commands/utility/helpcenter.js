@@ -4,7 +4,7 @@ module.exports = {
   name: 'helpcenter',
   description: "Provides commonly used links to CC's Help Centre",
 
-  execute(msg, args) {
+  execute(msg, args, con) {
     if (args == 'plaintext') {
       msg.channel.send(
         '**Codecademy Help Center:** https://help.codecademy.com/hc/en-us\n' +

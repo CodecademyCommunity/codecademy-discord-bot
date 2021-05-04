@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   name: 'help',
   description: 'Send help message',
-  execute(msg, args) {
+  execute(msg, args, con) {
     if (args[0]) {
       switch (args[0]) {
         case 'cc!createroles':

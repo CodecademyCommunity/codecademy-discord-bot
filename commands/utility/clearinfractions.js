@@ -5,7 +5,7 @@ module.exports = {
   name: 'clearinfractions',
   description: 'Removes all infractions from a user',
 
-  execute(msg, con, args) {
+  execute(msg, args, con) {
     const {status, err, userInfraction} = validInfraction(msg, args);
     if (!status) {
       return msg.reply(err);

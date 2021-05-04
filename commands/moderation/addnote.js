@@ -4,7 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'addnote',
   description: 'write a user note and store in the db',
-  execute(msg, con, args) {
+  execute(msg, args, con) {
     // Make sure only SU, Mods and Admin can run the command
     const targetUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
