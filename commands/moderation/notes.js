@@ -115,7 +115,7 @@ function parseNotes(msg, notes) {
       notesWithTimes.push(
         `**ID: ${idList[i]}** • ${msg.guild.members.cache.get(
           moderatorList[i]
-        )}: _${noteList[i]}_ • ${timeSinceNote[i]} _ago_`
+        )}: *${noteList[i]}* • ${timeSinceNote[i]} *ago*`
       );
   }
   return notesWithTimes;
