@@ -8,6 +8,7 @@
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:verbose": "jest --verbose",
+    "test:watch": "jest --watch",
     "db-recreate": "node utils/data/recreate.js",
     "addtable": "node utils/data/addTable.js",
     "addcolumn": "node utils/data/addColumn.js",
