@@ -64,7 +64,7 @@ function validateInfractionID(msg, userInfraction, args, infractionID, con) {
       console.log(err);
     } else {
       if (result[0].user !== userInfraction.id) {
-        msg.reply('Please include a valid infraction ID');
+        msg.reply('The specified infraction does not belong to that user.');
       } else if (result[0] && result[0].valid == 0) {
         msg.reply('Please include a valid infraction ID');
       } else if (result[0] && result[0].valid != 0) {
