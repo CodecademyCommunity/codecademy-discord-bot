@@ -53,7 +53,7 @@ function validInfraction(msg, args) {
 }
 
 function validateInfractionID(msg, userInfraction, args, infractionID, con) {
-  const sql = `SELECT id, valid FROM infractions WHERE id = ?;`;
+  const sql = `SELECT user, id, valid FROM infractions WHERE id = ?;`;
 
   const values = [infractionID];
 
@@ -63,10 +63,12 @@ function validateInfractionID(msg, userInfraction, args, infractionID, con) {
     if (err) {
       console.log(err);
     } else {
-      if (result[0] && result[0].valid != 0) {
-        infractionSQL(msg, userInfraction, infractionID, args, con);
+      if (result[0].user !== userInfraction.id) {
+        msg.reply('The specified infraction does not belong to that user.');
       } else if (result[0] && result[0].valid == 0) {
         msg.reply('Please include a valid infraction ID');
+      } else if (result[0] && result[0].valid != 0) {
+        infractionSQL(msg, userInfraction, infractionID, args, con);
       } else {
         msg.reply('Please include a valid infraction ID');
       }

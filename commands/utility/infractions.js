@@ -120,7 +120,7 @@ function parseInfractions(infractions) {
   for (let i = 0; i < reasonsList.length; i++) {
     if (validList[i])
       reasonsWithTimes.push(
-        `**ID: ${idList[i]}** • ${actionList[i]} • _${reasonsList[i]}_ • ${timeSinceInfraction[i]} _ago_`
+        `**ID: ${idList[i]}** • ${actionList[i]} • *${reasonsList[i]}* • ${timeSinceInfraction[i]} *ago*`
       );
   }
   return reasonsWithTimes;
