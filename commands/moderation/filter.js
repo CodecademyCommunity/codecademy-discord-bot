@@ -44,7 +44,7 @@ module.exports = {
 
   execute(msg) {
     if (isHighRoller(msg)) {
-      const autoMod = false; //change to activate auto mod
+      const autoMod = false; // change to activate auto mod
       const words = convertToChar(msg.content).split(' ');
       const results = needsAction(words);
       if (results[0] === 'auto' && autoMod) {
