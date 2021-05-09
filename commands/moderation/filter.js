@@ -105,10 +105,7 @@ const convertToChar = (sentence) => {
   let result = '';
 
   for (let i = 0; i < sentence.length; i++) {
-    if (
-      (sentence[i] >= 'a' && sentence[i] <= 'z') ||
-      sentence[i] === ' '
-    ) {
+    if ((sentence[i] >= 'a' && sentence[i] <= 'z') || sentence[i] === ' ') {
       result += sentence[i];
     } else if (sentence[i] === '@' || sentence[i] === '4') {
       result += 'a';
