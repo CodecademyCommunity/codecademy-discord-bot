@@ -45,7 +45,7 @@ module.exports = {
   execute(msg) {
     if (isHighRoller(msg)) {
       const autoMod = false; // change to activate auto mod
-      const words = convertToChar(msg.content).split(' ');
+      const words = convertToChar(msg.content.toLowerCase()).split(' ');
       const results = needsAction(words);
       if (results[0] === 'auto' && autoMod) {
         moderation(msg);
@@ -107,7 +107,6 @@ const convertToChar = (sentence) => {
   for (let i = 0; i < sentence.length; i++) {
     if (
       (sentence[i] >= 'a' && sentence[i] <= 'z') ||
-      (sentence[i] >= 'A' && sentence[i] <= 'Z') ||
       sentence[i] === ' '
     ) {
       result += sentence[i];
@@ -123,6 +122,8 @@ const convertToChar = (sentence) => {
       result += 's';
     } else if (sentence[i] === '0') {
       result += 'o';
+    } else if (sentence[i] === '7') {
+      result += 't';
     }
   }
   return result;
