@@ -20,7 +20,7 @@
        adultery      adulter
        adulteress    slut
        porn          pornography
-       pornographic
+       pornographic  shithole
                
        
     Minor Words    
@@ -34,6 +34,7 @@
        fucked        wtf
        fucking       fucker
        fuckwad       fuckin
+       shit
       
 */
 
@@ -43,7 +44,7 @@ module.exports = {
 
   execute(msg) {
     if (isHighRoller(msg)) {
-      const autoMod = false; // change to activate auto mod
+      const autoMod = false; //change to activate auto mod
       const words = convertToChar(msg.content).split(' ');
       const results = needsAction(words);
       if (results[0] === 'auto' && autoMod) {
@@ -128,9 +129,9 @@ const convertToChar = (sentence) => {
 };
 
 const needsAction = (words) => {
-  const strongWords = /^(motherfucker|nigger|nigga|penis|vagina|asshole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom|porn|pornography|pornographic)$/;
+  const strongWords = /^(motherfucker|nigger|nigga|penis|vagina|asshole|shithole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom|porn|pornography|pornographic)$/;
 
-  const lightWords = /^(hell|damn|goddamn|goddamned|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin)$/;
+  const lightWords = /^(hell|damn|goddamn|goddamned|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin|shit)$/;
 
   let manual = false;
   let word;
