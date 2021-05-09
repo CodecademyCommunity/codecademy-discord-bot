@@ -105,9 +105,12 @@ const convertToChar = (sentence) => {
   let result = '';
 
   for (let i = 0; i < sentence.length; i++) {
-    if ((sentence[i] >= 'a' && sentence[i] <= 'z') || sentence[i] === ' ') {
+    if (
+      (sentence[i] >= 'a' && sentence[i] <= 'z') ||
+      sentence[i] === ' '
+    ) {
       result += sentence[i];
-    } else if (sentence[i] === '@') {
+    } else if (sentence[i] === '@' || sentence[i] === '4') {
       result += 'a';
     } else if (
       sentence[i] === '1' ||
@@ -121,6 +124,8 @@ const convertToChar = (sentence) => {
       result += 'o';
     } else if (sentence[i] === '7') {
       result += 't';
+    } else if (sentence[i] === '3') {
+      result += 'e';
     }
   }
   return result;
