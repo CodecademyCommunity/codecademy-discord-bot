@@ -140,10 +140,10 @@ module.exports = {
           'Use `cc!help [command]` to get more information about a particular command.'
         )
         .setColor('DARK_NAVY')
-        .addField('Admin Only', 'cc!ban, cc!unban, cc!clearinfractions')
+        .addField('Admin Only', 'cc!clearinfractions')
         .addField(
           'Moderator & Above Only',
-          'cc!tempban, cc!mute, cc!removeinfraction, cc!clearmessages'
+          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!removeinfraction, cc!clearmessages'
         )
         .addField(
           'Super User & Above Only',

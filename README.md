@@ -10,9 +10,9 @@ Every great Discord server needs a great bot. So we coded up our own. It does a 
 
 | Command               | Arguments                      | Permission     | Description                                                                                     |
 | :-------------------- | :----------------------------- | :------------- | :---------------------------------------------------------------------------------------------- |
-| `cc!ban`              | [user] [reason]                | Admin          | Bans a user.                                                                                    |
-| `cc!unban`            | [userid]                       | Admin          | Unbans a user.                                                                                  |
 | `cc!clearinfractions` | [user]                         | Admin          | Sets all the specified user's infractions as invalid.                                           |
+| `cc!ban`              | [user] [reason]                | Admin, Mod     | Bans a user.                                                                                    |
+| `cc!unban`            | [userid]                       | Admin, Mod     | Unbans a user.                                                                                  |
 | `cc!tempban`          | [user] [lengthoftime] [reason] | Admin, Mod     | Temporarily bans a user for a set time period.                                                  |
 | `cc!mute`             | [user] [reason]                | Admin, Mod     | Mutes a user by assigning them a _Muted_ role (denies message sending and reacting privileges). |
 | `cc!removeinfraction` | [user] [infractionid]          | Admin, Mod     | Sets a single infraction as invalid.                                                            |
