@@ -6,34 +6,6 @@ module.exports = {
   execute(msg, args, con) {
     if (args[0]) {
       switch (args[0]) {
-        case 'cc!createroles':
-        case 'createroles':
-          msg.channel.send(
-            '`cc!createroles`\nPulls all badges from Codecademy Discuss and creates a role for each one. *Admin only.*'
-          );
-          break;
-
-        case 'cc!deleteroles':
-        case 'deleteroles':
-          msg.channel.send(
-            '`cc!deleteroles`\nDeletes all the roles added from Codecademy Discuss. *Admin only.*'
-          );
-          break;
-
-        case 'cc!sendcode':
-        case 'sendcode':
-          msg.channel.send(
-            '`cc!sendcode [username]`\nSends a verification code to your Codecademy Discuss email. *Requires you to provide your Codecademy Discuss username.*'
-          );
-          break;
-
-        case 'cc!verify':
-        case 'verify':
-          msg.channel.send(
-            '`cc!verify [code]`\nVerifies that the code entered is valid and gives you a role for every badge you have on Discourse. *Requires you to enter your verification code.*'
-          );
-          break;
-
         case 'cc!ping':
         case 'ping':
           msg.channel.send('`cc!ping`\nPong!');
@@ -168,22 +140,16 @@ module.exports = {
           'Use `cc!help [command]` to get more information about a particular command.'
         )
         .setColor('DARK_NAVY')
-        .addField(
-          'Admin Only',
-          'cc!createroles, cc!deleteroles, cc!ban, cc!unban, cc!clearinfractions'
-        )
+        .addField('Admin Only', 'cc!clearinfractions')
         .addField(
           'Moderator & Above Only',
-          'cc!tempban, cc!mute, cc!removeinfraction, cc!clearmessages'
+          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!removeinfraction, cc!clearmessages'
         )
         .addField(
           'Super User & Above Only',
           'cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!addnote, cc!removenote, cc!notes'
         )
-        .addField(
-          'Everyone',
-          'cc!sendcode, cc!verify, cc!stats, cc!ping, cc!helpcenter, cc!help'
-        );
+        .addField('Everyone', 'cc!stats, cc!ping, cc!helpcenter, cc!help');
 
       msg.channel.send(commandsEmbed);
     }

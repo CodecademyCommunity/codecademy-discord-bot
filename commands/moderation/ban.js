@@ -25,8 +25,12 @@ function validBan(msg, args) {
     reason: null,
   };
 
-  if (!msg.member.roles.cache.some((role) => role.name === 'Admin')) {
-    data.err = 'You must be an Admin to use this command.';
+  if (
+    !msg.member.roles.cache.some(
+      (role) => role.name === 'Admin' || role.name === 'Moderator'
+    )
+  ) {
+    data.err = 'You must be an Admin or Moderator to use this command.';
     return data;
   }
 
