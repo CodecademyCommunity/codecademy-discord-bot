@@ -105,9 +105,7 @@ const convertToChar = (sentence) => {
   let result = '';
 
   for (let i = 0; i < sentence.length; i++) {
-    if ((sentence[i] >= 'a' && sentence[i] <= 'z') || sentence[i] === ' ') {
-      result += sentence[i];
-    } else if (sentence[i] === '@' || sentence[i] === '4') {
+    if (sentence[i] === '@' || sentence[i] === '4') {
       result += 'a';
     } else if (
       sentence[i] === '1' ||
@@ -123,15 +121,17 @@ const convertToChar = (sentence) => {
       result += 't';
     } else if (sentence[i] === '3') {
       result += 'e';
+    } else {
+      result += sentence[i];
     }
   }
   return result;
 };
 
 const needsAction = (words) => {
-  const strongWords = /^(motherfucker|nigger|nigga|penis|vagina|asshole|shithole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom|porn|pornography|pornographic)$/;
+  const strongWords = /^(,|\.|\?|'|"|:|;|`)?(motherfucker|nigger|nigga|penis|vagina|asshole|shithole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom|porn|pornography|pornographic)(,|\.|\?|'|"|:|;|`)?$/;
 
-  const lightWords = /^(hell|damn|goddamn|goddamned|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin|shit)$/;
+  const lightWords = /^(,|\.|\?|'|"|:|;|`)*?(hell|damn|goddamn|goddamned|godamn|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin|shit)(,|\.|\?|'|"|:|;|`)?$/;
 
   let manual = false;
   let word;
