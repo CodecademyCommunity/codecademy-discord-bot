@@ -19,6 +19,8 @@
        fornicate     fornication
        adultery      adulter
        adulteress    slut
+       porn          pornography
+       pornographic  shithole
                
        
     Minor Words    
@@ -32,6 +34,7 @@
        fucked        wtf
        fucking       fucker
        fuckwad       fuckin
+       shit
       
 */
 
@@ -41,12 +44,12 @@ module.exports = {
 
   execute(msg) {
     if (isHighRoller(msg)) {
-      const words = convertToChar(msg.content).split(' ');
+      const autoMod = false; // change to activate auto mod
+      const words = convertToChar(msg.content.toLowerCase()).split(' ');
       const results = needsAction(words);
-      if (results[0] === 'auto') {
-        console.log('auto');
+      if (results[0] === 'auto' && autoMod) {
         moderation(msg);
-      } else if (results[0] === 'manual') {
+      } else if (results[0] === 'manual' || results[0] === 'auto') {
         logSwear(msg, results[1]);
       }
     }
@@ -102,13 +105,7 @@ const convertToChar = (sentence) => {
   let result = '';
 
   for (let i = 0; i < sentence.length; i++) {
-    if (
-      (sentence[i] >= 'a' && sentence[i] <= 'z') ||
-      (sentence[i] >= 'A' && sentence[i] <= 'Z') ||
-      sentence[i] === ' '
-    ) {
-      result += sentence[i];
-    } else if (sentence[i] === '@') {
+    if (sentence[i] === '@' || sentence[i] === '4') {
       result += 'a';
     } else if (
       sentence[i] === '1' ||
@@ -118,15 +115,23 @@ const convertToChar = (sentence) => {
       result += 'i';
     } else if (sentence[i] === '$') {
       result += 's';
+    } else if (sentence[i] === '0') {
+      result += 'o';
+    } else if (sentence[i] === '7') {
+      result += 't';
+    } else if (sentence[i] === '3') {
+      result += 'e';
+    } else {
+      result += sentence[i];
     }
   }
   return result;
 };
 
 const needsAction = (words) => {
-  const strongWords = /^(motherfucker|nigger|nigga|penis|vagina|asshole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom)$/;
+  const strongWords = /^(,|\.|\?|'|"|:|;|`)?(motherfucker|nigger|nigga|penis|vagina|asshole|shithole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom|porn|pornography|pornographic)(,|\.|\?|'|"|:|;|`)?$/;
 
-  const lightWords = /^(hell|damn|goddamn|goddamned|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin)$/;
+  const lightWords = /^(,|\.|\?|'|"|:|;|`)*?(hell|damn|goddamn|goddamned|godamn|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin|shit)(,|\.|\?|'|"|:|;|`)?$/;
 
   let manual = false;
   let word;
