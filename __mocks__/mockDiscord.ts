@@ -11,6 +11,7 @@ import {
   GuildMember,
   Message,
   Role,
+  ClientUser,
 } from 'discord.js';
 
 import {getClient} from '../config/client';
@@ -33,6 +34,7 @@ export default class MockDiscord {
     this.mockGuildChannel();
     this.mockTextChannel();
     this.mockUser();
+    this.mockClientUser();
     this.mockGuildMember();
     // this.guild.addMember(this.guildMember, { accessToken: "mockAccessToken" });
     this.mockMessage();
@@ -142,6 +144,16 @@ export default class MockDiscord {
       avatar: 'user avatar url',
       bot: false,
     });
+  }
+
+  private mockClientUser(): void {
+    this.client.user = new User(this.client, {
+      id: 'client-user-id',
+      username: 'iamthebot',
+      discriminator: 'bot#0000',
+      avatar: 'bot avatar url',
+      bot: true,
+    }) as ClientUser;
   }
 
   private mockGuildMember(): void {
