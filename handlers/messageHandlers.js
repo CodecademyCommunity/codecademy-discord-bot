@@ -2,18 +2,18 @@ const Discord = require('discord.js');
 const {getClient} = require('../config/client');
 const {getConnection} = require('../config/db');
 
-const con = getConnection();
-const client = getClient();
+const connection = getConnection();
+const discordClient = getClient();
 
-const messageHandler = async (msg) => {
+async function messageHandler(msg, client = discordClient, con = connection) {
   if (msg.content.substring(0, 3) === 'cc!') {
-    await commandParser(client, con, msg);
+    await commandParser(msg, client, con);
   } else if (msg.author.id != client.user.id && msg.guild !== null) {
     await client.commands.get('filter').execute(msg);
   }
-};
+}
 
-const commandParser = async (client, con, msg) => {
+async function commandParser(msg, client, con) {
   const args = msg.content.slice('cc!'.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
 
@@ -29,7 +29,7 @@ const commandParser = async (client, con, msg) => {
       'There was an error trying to execute that command! Try cc!help for information.'
     );
   }
-};
+}
 
 async function logDeletedMessages(message) {
   if (!message.partial) {
