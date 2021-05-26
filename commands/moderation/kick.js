@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'kick',
   description: 'Kick a user',
+  guildOnly: true,
 
   execute(msg, args, con) {
     const {status, err, toKick, reason} = validKick(msg, args);
