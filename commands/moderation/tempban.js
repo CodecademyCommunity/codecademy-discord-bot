@@ -5,6 +5,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'tempban',
   description: 'Temporarily ban a user',
+  guildOnly: true,
 
   execute(msg, args, con) {
     const {status, err, toTempBan, reason, timeLength} = validTempBan(

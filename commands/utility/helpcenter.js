@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   name: 'helpcenter',
   description: "Provides commonly used links to CC's Help Centre",
+  guildOnly: false,
 
   execute(msg, args, con) {
     if (args == 'plaintext') {

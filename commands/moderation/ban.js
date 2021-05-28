@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'ban',
   description: 'Ban a user',
+  guildOnly: true,
 
   execute(msg, args, con) {
     const {status, err, toBan, reason} = validBan(msg, args);

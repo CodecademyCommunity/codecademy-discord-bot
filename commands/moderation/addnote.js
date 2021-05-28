@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'addnote',
   description: 'write a user note and store in the db',
+  guildOnly: true,
   execute(msg, args, con) {
     // Make sure only SU, Mods and Admin can run the command
     const targetUser =

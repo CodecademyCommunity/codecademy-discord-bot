@@ -41,6 +41,7 @@
 module.exports = {
   name: 'filter',
   description: 'filter a message',
+  guildOnly: true,
 
   execute(msg) {
     if (isHighRoller(msg)) {

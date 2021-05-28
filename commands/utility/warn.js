@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'warn',
   description: 'warns a user of an infraction and logs infraction in db',
+  guildOnly: true,
   execute(msg, args, con) {
     // Make sure only SU, Mods and Admin can run the command
     const offendingUser =
