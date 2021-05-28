@@ -1,11 +1,15 @@
 const Discord = require('discord.js');
 const ms = require('ms');
 const dateFormat = require('dateformat');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   name: 'tempban',
   description: 'Temporarily ban a user',
   guildOnly: true,
+  banIntro: "You've been banned for the following reason: ```",
+  unbanRequest:
+    ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://forms.gle/KxTMhPbi866r2FEz5',
 
   async execute(msg, args, con) {
     const {status, err, toTempBan, reason, timeLength} = validTempBan(
@@ -16,6 +20,9 @@ module.exports = {
       return msg.reply(err);
     }
 
+    const banText = this.banIntro + reason + this.unbanRequest;
+    verifyReasonLength(banText, msg);
+
     const channel = msg.guild.channels.cache.find(
       (channel) => channel.name === 'audit-logs'
     );
@@ -24,7 +31,7 @@ module.exports = {
     tempEmbed(msg, toTempBan, reason, channel, timeLength);
 
     try {
-      await tempBanUser(msg, toTempBan, reason, timeLength);
+      await tempBanUser(msg, toTempBan, banText, timeLength);
     } catch (error) {
       return msg.reply(`${error.name}: ${error.message}`);
     }
@@ -144,13 +151,7 @@ function tempEmbed(msg, toTempBan, reason, channel, timeLength) {
 async function tempBanUser(msg, toTempBan, reason, timeLength) {
   // Banning member and sending him a DM with a form to refute the ban and the reason
   try {
-    await toTempBan.send(
-      "You've been banned for " +
-        timeLength +
-        ' for the following reason: ```' +
-        reason +
-        ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
-    );
+    await toTempBan.send(reason);
     await msg.reply(`Message sent to ${toTempBan} successfully`);
     await toTempBan.ban({reason});
   } catch (error) {

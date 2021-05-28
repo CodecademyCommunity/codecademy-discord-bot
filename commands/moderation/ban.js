@@ -1,10 +1,14 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   name: 'ban',
   description: 'Ban a user',
   guildOnly: true,
+  banIntro: "You've been banned for the following reason: ```",
+  unbanRequest:
+    ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://forms.gle/KxTMhPbi866r2FEz5',
 
   async execute(msg, args, con) {
     const {status, err, toBan, reason} = validBan(msg, args);
@@ -12,8 +16,11 @@ module.exports = {
       return msg.reply(err);
     }
 
+    const banText = this.banIntro + reason + this.unbanRequest;
+    verifyReasonLength(banText, msg);
+
     try {
-      await banUser(msg, toBan, reason);
+      await banUser(msg, toBan, banText);
     } catch (error) {
       return msg.reply(`${error.name}: ${error.message}`);
     }
@@ -123,12 +130,9 @@ function banEmbed(msg, toBan, reason) {
 
 async function banUser(msg, toBan, reason) {
   // Banning member and sending him a DM with a form to refute the ban and the reason
+
   try {
-    await toBan.send(
-      "You've been banned for the following reason: ```" +
-        reason +
-        ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
-    );
+    await toBan.send(reason);
     await msg.reply(`Message sent to ${toBan} successfully`);
     await toBan.ban({reason});
   } catch (error) {
