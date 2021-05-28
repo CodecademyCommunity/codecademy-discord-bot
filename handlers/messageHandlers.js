@@ -21,6 +21,10 @@ const commandParser = async (client, con, msg) => {
 
   const command = client.commands.get(commandName);
 
+  if (command.guildOnly && msg.channel.type === 'dm') {
+    return msg.reply(`I can't execute that command inside DMs!`);
+  }
+
   try {
     await command.execute(msg, args, con);
   } catch (error) {

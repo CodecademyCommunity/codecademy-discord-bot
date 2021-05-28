@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'removenote',
   description: 'Removes a specific note based on the note ID provided',
+  guildOnly: true,
 
   execute(msg, args, con) {
     const {status, err, userNote, noteID} = validNote(msg, args);

@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'removeinfraction',
   description: 'Removes a specific infraction based on the ID provided',
+  guildOnly: true,
 
   execute(msg, args, con) {
     const {status, err, userInfraction, infractionID} = validInfraction(

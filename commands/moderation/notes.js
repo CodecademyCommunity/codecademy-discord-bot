@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   name: 'notes',
   description: 'finds user notes record in db and returns it to channel',
+  guildOnly: true,
   execute(msg, args, con) {
     // Make sure only SU, Mods and Admin can run the command
     const targetUser =

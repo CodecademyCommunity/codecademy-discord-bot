@@ -5,6 +5,7 @@ const ms = require('ms');
 module.exports = {
   name: 'tempmute',
   description: 'Temporarily mute a user',
+  guildOnly: true,
 
   execute(msg, args, con) {
     const {status, err, toTempMute, lengthOfTime, reason} = canTempMute(

@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'unban',
   description: 'Unban a user',
+  guildOnly: true,
 
   async execute(msg, args, con) {
     const {status, err, toUnban} = await validUnban(msg, args);

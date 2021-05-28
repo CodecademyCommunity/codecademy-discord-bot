@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   name: 'help',
   description: 'Send help message',
+  guildOnly: false,
   execute(msg, args, con) {
     if (args[0]) {
       switch (args[0]) {

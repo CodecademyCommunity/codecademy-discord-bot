@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'clearmessages',
   description: 'Clears a certain number of messages',
+  guildOnly: true,
 
   execute(msg, args, con) {
     const {status, err, numberDeleted} = validClear(msg, args);

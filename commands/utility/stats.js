@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
   name: 'stats',
   description: 'Basic server stats',
+  guildOnly: true,
   async execute(msg, args, con) {
     const Embed = new Discord.MessageEmbed();
     Embed.setTitle(`Server Stats`);

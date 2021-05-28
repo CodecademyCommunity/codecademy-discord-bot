@@ -4,6 +4,7 @@ const dateFormat = require('dateformat');
 module.exports = {
   name: 'mute',
   description: 'Mute a user',
+  guildOnly: true,
 
   execute(msg, args, con) {
     const {status, err, toMute, reason} = canMute(msg, args);
