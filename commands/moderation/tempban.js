@@ -21,13 +21,13 @@ module.exports = {
     }
 
     const banText = this.banIntro + reason + this.unbanRequest;
-    verifyReasonLength(banText, msg);
+    if (!verifyReasonLength(msg.content, msg)) return;
 
     const channel = msg.guild.channels.cache.find(
       (channel) => channel.name === 'audit-logs'
     );
 
-    tempSQL(msg, toTempBan, timeLength, reason, con, args);
+    tempSQL(msg, toTempBan, timeLength, reason, con);
     tempEmbed(msg, toTempBan, reason, channel, timeLength);
 
     try {
@@ -96,16 +96,15 @@ function validTempBan(msg, args) {
   return data;
 }
 
-function tempSQL(msg, toTempBan, timeLength, reason, con, args) {
+function tempSQL(msg, toTempBan, timeLength, reason, con) {
   const now = new Date();
   const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
-  const action = 'cc!tempban ' + args.join(' ');
 
   // Inserts row into database
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES
-    ('${date}', '${toTempBan.id}', 'cc!tempban', '${timeLength}', '${reason}', true, '${msg.author.id}');
+    (?, ?, 'cc!tempban', ?, ?, true, ?);
     INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-    ('${date}', '${msg.author.id}', '${action}', '${timeLength}', '${reason}');`;
+    (?, ?, ?, ?, ?);`;
 
   const values = [
     date,
@@ -115,7 +114,7 @@ function tempSQL(msg, toTempBan, timeLength, reason, con, args) {
     msg.author.id,
     date,
     msg.author.id,
-    action,
+    msg.content,
     timeLength,
     reason,
   ];

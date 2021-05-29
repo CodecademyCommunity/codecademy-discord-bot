@@ -17,7 +17,7 @@ module.exports = {
     }
 
     const banText = this.banIntro + reason + this.unbanRequest;
-    verifyReasonLength(banText, msg);
+    if (!verifyReasonLength(msg.content, msg)) return;
 
     try {
       await banUser(msg, toBan, banText);
@@ -25,7 +25,7 @@ module.exports = {
       return msg.reply(`${error.name}: ${error.message}`);
     }
 
-    banSQL(msg, toBan, reason, args, con);
+    banSQL(msg, toBan, reason, con);
     banEmbed(msg, toBan, reason);
   },
 };
@@ -74,11 +74,9 @@ function validBan(msg, args) {
   return data;
 }
 
-function banSQL(msg, toBan, reason, args, con) {
+function banSQL(msg, toBan, reason, con) {
   const now = new Date();
   const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
-
-  const action = 'cc!ban ' + args.join(' ');
 
   // Inserts row into database
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
@@ -93,7 +91,7 @@ function banSQL(msg, toBan, reason, args, con) {
     msg.author.id,
     date,
     msg.author.id,
-    action,
+    msg.content,
     reason,
   ];
   const escaped = con.format(sql, values);
