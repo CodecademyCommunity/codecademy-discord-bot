@@ -6,13 +6,13 @@ module.exports = {
   description: 'Kick a user',
   guildOnly: true,
 
-  execute(msg, args, con) {
+  async execute(msg, args, con) {
     const {status, err, toKick, reason} = validKick(msg, args);
     if (!status) {
       return msg.reply(err);
     }
 
-    kickUser(msg, toKick, reason);
+    await kickUser(msg, toKick, reason);
     kickSQL(msg, toKick, reason, args, con);
     kickEmbed(msg, toKick, reason);
   },
@@ -125,12 +125,17 @@ function kickEmbed(msg, toKick, reason) {
   channel.send(kickEmbed);
 }
 
-function kickUser(msg, toKick, reason) {
+async function kickUser(msg, toKick, reason) {
   // Actual Kick
-  toKick.send(
-    "You've been kicked for the following reason: ```" + reason + ' ```'
-  );
-  toKick.kick({reason});
+  try {
+    await toKick.send(
+      "You've been kicked for the following reason: ```" + reason + ' ```'
+    );
+    await toKick.kick({reason});
+  } catch (error) {
+    console.error(error);
+    msg.reply(`${error.name}: ${error.message}`);
+  }
 
   msg.reply(`${toKick} was kicked.`);
 }

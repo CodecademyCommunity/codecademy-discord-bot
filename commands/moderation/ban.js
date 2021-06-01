@@ -6,13 +6,13 @@ module.exports = {
   description: 'Ban a user',
   guildOnly: true,
 
-  execute(msg, args, con) {
+  async execute(msg, args, con) {
     const {status, err, toBan, reason} = validBan(msg, args);
     if (!status) {
       return msg.reply(err);
     }
 
-    banUser(msg, toBan, reason);
+    await banUser(msg, toBan, reason);
     banSQL(msg, toBan, reason, args, con);
     banEmbed(msg, toBan, reason);
   },
@@ -116,14 +116,19 @@ function banEmbed(msg, toBan, reason) {
   channel.send(banEmbed);
 }
 
-function banUser(msg, toBan, reason) {
+async function banUser(msg, toBan, reason) {
   // Banning member and sending him a DM with a form to refute the ban and the reason
-  toBan.send(
-    "You've been banned for the following reason: ```" +
-      reason +
-      ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
-  );
-  toBan.ban({reason});
+  try {
+    await toBan.send(
+      "You've been banned for the following reason: ```" +
+        reason +
+        ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
+    );
+    await toBan.ban({reason});
+  } catch (error) {
+    console.error(error);
+    msg.reply(`${error.name}: ${error.message}`);
+  }
 
   msg.reply(`${toBan} was banned.`);
 }
