@@ -12,7 +12,12 @@ module.exports = {
       return msg.reply(err);
     }
 
-    await kickUser(msg, toKick, reason);
+    try {
+      await kickUser(msg, toKick, reason);
+    } catch (error) {
+      return msg.reply(`${error.name}: ${error.message}`);
+    }
+
     kickSQL(msg, toKick, reason, args, con);
     kickEmbed(msg, toKick, reason);
   },
@@ -131,10 +136,11 @@ async function kickUser(msg, toKick, reason) {
     await toKick.send(
       "You've been kicked for the following reason: ```" + reason + ' ```'
     );
+    await msg.reply(`Message sent to ${toKick} successfully`);
     await toKick.kick({reason});
   } catch (error) {
     console.error(error);
-    msg.reply(`${error.name}: ${error.message}`);
+    throw error;
   }
 
   msg.reply(`${toKick} was kicked.`);

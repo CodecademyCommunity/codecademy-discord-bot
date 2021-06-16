@@ -22,7 +22,13 @@ module.exports = {
 
     tempSQL(msg, toTempBan, timeLength, reason, con, args);
     tempEmbed(msg, toTempBan, reason, channel, timeLength);
-    await tempBanUser(msg, toTempBan, reason, timeLength);
+
+    try {
+      await tempBanUser(msg, toTempBan, reason, timeLength);
+    } catch (error) {
+      return msg.reply(`${error.name}: ${error.message}`);
+    }
+
     await tempBan(msg, toTempBan, con, channel, timeLength);
   },
 };
@@ -145,10 +151,11 @@ async function tempBanUser(msg, toTempBan, reason, timeLength) {
         reason +
         ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
     );
+    await msg.reply(`Message sent to ${toTempBan} successfully`);
     await toTempBan.ban({reason});
   } catch (error) {
     console.error(error);
-    msg.reply(`${error.name}: ${error.message}`);
+    throw error;
   }
 
   msg.reply(`${toTempBan} was banned for ${timeLength}.`);

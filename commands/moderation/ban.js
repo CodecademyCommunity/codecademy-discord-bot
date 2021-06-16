@@ -12,7 +12,12 @@ module.exports = {
       return msg.reply(err);
     }
 
-    await banUser(msg, toBan, reason);
+    try {
+      await banUser(msg, toBan, reason);
+    } catch (error) {
+      return msg.reply(`${error.name}: ${error.message}`);
+    }
+
     banSQL(msg, toBan, reason, args, con);
     banEmbed(msg, toBan, reason);
   },
@@ -124,10 +129,11 @@ async function banUser(msg, toBan, reason) {
         reason +
         ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
     );
+    await msg.reply(`Message sent to ${toBan} successfully`);
     await toBan.ban({reason});
   } catch (error) {
     console.error(error);
-    msg.reply(`${error.name}: ${error.message}`);
+    throw error;
   }
 
   msg.reply(`${toBan} was banned.`);
