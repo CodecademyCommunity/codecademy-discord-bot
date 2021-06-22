@@ -7,7 +7,7 @@ module.exports = {
   description: 'Temporarily ban a user',
   guildOnly: true,
 
-  execute(msg, args, con) {
+  async execute(msg, args, con) {
     const {status, err, toTempBan, reason, timeLength} = validTempBan(
       msg,
       args
@@ -22,8 +22,14 @@ module.exports = {
 
     tempSQL(msg, toTempBan, timeLength, reason, con, args);
     tempEmbed(msg, toTempBan, reason, channel, timeLength);
-    tempBanUser(msg, toTempBan, reason, timeLength);
-    tempBan(msg, toTempBan, con, channel, timeLength);
+
+    try {
+      await tempBanUser(msg, toTempBan, reason, timeLength);
+    } catch (error) {
+      return msg.reply(`${error.name}: ${error.message}`);
+    }
+
+    await tempBan(msg, toTempBan, con, channel, timeLength);
   },
 };
 
@@ -135,21 +141,27 @@ function tempEmbed(msg, toTempBan, reason, channel, timeLength) {
   channel.send(tempBanEmbed);
 }
 
-function tempBanUser(msg, toTempBan, reason, timeLength) {
+async function tempBanUser(msg, toTempBan, reason, timeLength) {
   // Banning member and sending him a DM with a form to refute the ban and the reason
-  toTempBan.send(
-    "You've been banned for " +
-      timeLength +
-      ' for the following reason: ```' +
-      reason +
-      ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
-  );
-  toTempBan.ban({reason});
+  try {
+    await toTempBan.send(
+      "You've been banned for " +
+        timeLength +
+        ' for the following reason: ```' +
+        reason +
+        ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
+    );
+    await msg.reply(`Message sent to ${toTempBan} successfully`);
+    await toTempBan.ban({reason});
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 
   msg.reply(`${toTempBan} was banned for ${timeLength}.`);
 }
 
-function tempBan(msg, toTempBan, con, channel, timeLength) {
+async function tempBan(msg, toTempBan, con, channel, timeLength) {
   const tempUnBanEmbed = new Discord.MessageEmbed()
     .setColor('#0099ff')
     .setTitle(
@@ -161,13 +173,18 @@ function tempBan(msg, toTempBan, con, channel, timeLength) {
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
 
-  setTimeout(() => {
-    msg.guild.members.unban(toTempBan);
-    channel.send(tempUnBanEmbed);
+  setTimeout(async () => {
+    try {
+      await msg.guild.members.unban(toTempBan);
+      await channel.send(tempUnBanEmbed);
 
-    toTempBan.send(
-      `You have been unbanned from the Codecademy Community after ${timeLength}`
-    );
+      await toTempBan.send(
+        `You have been unbanned from the Codecademy Community after ${timeLength}`
+      );
+    } catch (error) {
+      console.error(error);
+      msg.reply(`${error.name}: ${error.message}`);
+    }
 
     const now = new Date();
     const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
