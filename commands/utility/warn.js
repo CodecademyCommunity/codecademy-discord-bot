@@ -127,8 +127,8 @@ function hasUserTarget(msg, offendingUser) {
   // Asortment of answers to make the bot more fun
   const failAttemptReply = [
     'Ok there bud, who are you trying to warn again?',
-    'You definitely missed the targer user there...',
-    'shoot first ask later? You forgot the targer user',
+    'You definitely missed the target user there...',
+    'shoot first ask later? You forgot the target user',
     "Not judging, but you didn't set a user to warn",
     "Without a target user I can't warn anyone but you",
     'Forgot the target user. Wanna try again?',

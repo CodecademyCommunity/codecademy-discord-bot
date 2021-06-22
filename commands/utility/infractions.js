@@ -9,7 +9,7 @@ module.exports = {
     const targetUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
-    if (targetUser) console.log(`targerUser is true`);
+    if (targetUser) console.log(`targetUser is true`);
     if (canCheckInfractions(msg)) {
       if (hasUserTarget(msg, targetUser)) {
         // Find all infraction records in database
@@ -149,10 +149,10 @@ function hasUserTarget(msg, targetUser) {
   // Asortment of answers to make the bot more fun
   const failAttemptReply = [
     'Ok there bud, whose infractions are you trying to check again?',
-    'You definitely missed the targer user there...',
-    'what? You want ALL the infractions from everyone? You forgot the targer user',
+    'You definitely missed the target user there...',
+    'what? You want ALL the infractions from everyone? You forgot the target user',
     "Not judging, but you didn't set a user to read infractions from...",
-    'You forgot the targer user, so maybe YOU should have an infraction',
+    'You forgot the target user, so maybe YOU should have an infraction',
     'Forgot the target user. Wanna try again?',
     'Here I was thinking this command was easy enough. You forgot the target user',
   ];
