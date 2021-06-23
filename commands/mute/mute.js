@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   name: 'mute',
@@ -11,6 +12,8 @@ module.exports = {
     if (!status) {
       return msg.reply(err);
     }
+
+    if (!verifyReasonLength(msg.content, msg)) return;
 
     muteUser(msg, toMute, reason);
     auditLog(msg, toMute, reason);

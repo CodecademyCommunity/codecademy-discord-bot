@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 const ms = require('ms');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   name: 'tempmute',
@@ -15,6 +16,8 @@ module.exports = {
     if (!status) {
       return msg.reply(err);
     }
+
+    if (!verifyReasonLength(msg.content, msg)) return;
 
     // Mutes user.
     muteUser(msg, toTempMute, lengthOfTime, reason);
