@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   name: 'warn',
@@ -19,6 +20,8 @@ module.exports = {
         // if no reason provided, return so the bot doesn't go boom
         const warningReason = args.slice(1).join(' ');
         if (!warningReason) return msg.reply('You need to provide a reason');
+
+        if (!verifyReasonLength(msg.content, msg)) return;
 
         // Create an embed, craft it, and DM the user
         dmTheUser(msg, offendingUser, warningReason);

@@ -1,5 +1,5 @@
 const {getClient} = require('./config/client.js');
-const {collectCommands} = require('./config/commands');
+const {collectCommands} = require('./config/collectors');
 const {extendMutes} = require('./handlers/channelHandlers.js');
 const {applyMute, createMutedRole} = require('./handlers/guildHandlers.js');
 const {
