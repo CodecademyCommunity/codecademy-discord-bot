@@ -1,19 +1,30 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   name: 'kick',
   description: 'Kick a user',
   guildOnly: true,
+  kickIntro: "You've been kicked for the following reason: ```",
+  kickOutro: ' ```',
 
-  execute(msg, args, con) {
+  async execute(msg, args, con) {
     const {status, err, toKick, reason} = validKick(msg, args);
     if (!status) {
       return msg.reply(err);
     }
 
-    kickUser(msg, toKick, reason);
-    kickSQL(msg, toKick, reason, args, con);
+    const kickText = this.kickIntro + reason + this.kickOutro;
+    if (!verifyReasonLength(msg.content, msg)) return;
+
+    try {
+      await kickUser(msg, toKick, kickText);
+    } catch (error) {
+      return msg.reply(`${error.name}: ${error.message}`);
+    }
+
+    kickSQL(msg, toKick, reason, con);
     kickEmbed(msg, toKick, reason);
   },
 };
@@ -71,11 +82,9 @@ function validKick(msg, args) {
   return data;
 }
 
-function kickSQL(msg, toKick, reason, args, con) {
+function kickSQL(msg, toKick, reason, con) {
   const now = new Date();
   const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
-
-  const action = 'cc!kick ' + args.join(' ');
 
   // Inserts row into database
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
@@ -89,7 +98,7 @@ function kickSQL(msg, toKick, reason, args, con) {
     msg.author.id,
     date,
     msg.author.id,
-    action,
+    msg.content,
     reason,
   ];
 
@@ -125,12 +134,16 @@ function kickEmbed(msg, toKick, reason) {
   channel.send(kickEmbed);
 }
 
-function kickUser(msg, toKick, reason) {
+async function kickUser(msg, toKick, reason) {
   // Actual Kick
-  toKick.send(
-    "You've been kicked for the following reason: ```" + reason + ' ```'
-  );
-  toKick.kick({reason});
+  try {
+    await toKick.send(reason);
+    await msg.reply(`Message sent to ${toKick} successfully`);
+    await toKick.kick({reason});
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 
   msg.reply(`${toKick} was kicked.`);
 }

@@ -1,19 +1,31 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   name: 'ban',
   description: 'Ban a user',
   guildOnly: true,
+  banIntro: "You've been banned for the following reason: ```",
+  unbanRequest:
+    ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://forms.gle/KxTMhPbi866r2FEz5',
 
-  execute(msg, args, con) {
+  async execute(msg, args, con) {
     const {status, err, toBan, reason} = validBan(msg, args);
     if (!status) {
       return msg.reply(err);
     }
 
-    banUser(msg, toBan, reason);
-    banSQL(msg, toBan, reason, args, con);
+    const banText = this.banIntro + reason + this.unbanRequest;
+    if (!verifyReasonLength(msg.content, msg)) return;
+
+    try {
+      await banUser(msg, toBan, banText);
+    } catch (error) {
+      return msg.reply(`${error.name}: ${error.message}`);
+    }
+
+    banSQL(msg, toBan, reason, con);
     banEmbed(msg, toBan, reason);
   },
 };
@@ -62,11 +74,9 @@ function validBan(msg, args) {
   return data;
 }
 
-function banSQL(msg, toBan, reason, args, con) {
+function banSQL(msg, toBan, reason, con) {
   const now = new Date();
   const date = dateFormat(now, 'yyyy-mm-dd HH:MM:ss');
-
-  const action = 'cc!ban ' + args.join(' ');
 
   // Inserts row into database
   const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
@@ -81,7 +91,7 @@ function banSQL(msg, toBan, reason, args, con) {
     msg.author.id,
     date,
     msg.author.id,
-    action,
+    msg.content,
     reason,
   ];
   const escaped = con.format(sql, values);
@@ -116,14 +126,17 @@ function banEmbed(msg, toBan, reason) {
   channel.send(banEmbed);
 }
 
-function banUser(msg, toBan, reason) {
+async function banUser(msg, toBan, reason) {
   // Banning member and sending him a DM with a form to refute the ban and the reason
-  toBan.send(
-    "You've been banned for the following reason: ```" +
-      reason +
-      ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://docs.google.com/forms/d/e/1FAIpQLSc1sx6iE3TYgq_c4sALd0YTkL0IPcnkBXtR20swahPbREZpTA/viewform'
-  );
-  toBan.ban({reason});
+
+  try {
+    await toBan.send(reason);
+    await msg.reply(`Message sent to ${toBan} successfully`);
+    await toBan.ban({reason});
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 
   msg.reply(`${toBan} was banned.`);
 }

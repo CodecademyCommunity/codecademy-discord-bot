@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   name: 'warn',
@@ -19,6 +20,8 @@ module.exports = {
         // if no reason provided, return so the bot doesn't go boom
         const warningReason = args.slice(1).join(' ');
         if (!warningReason) return msg.reply('You need to provide a reason');
+
+        if (!verifyReasonLength(msg.content, msg)) return;
 
         // Create an embed, craft it, and DM the user
         dmTheUser(msg, offendingUser, warningReason);
@@ -127,8 +130,8 @@ function hasUserTarget(msg, offendingUser) {
   // Asortment of answers to make the bot more fun
   const failAttemptReply = [
     'Ok there bud, who are you trying to warn again?',
-    'You definitely missed the targer user there...',
-    'shoot first ask later? You forgot the targer user',
+    'You definitely missed the target user there...',
+    'shoot first ask later? You forgot the target user',
     "Not judging, but you didn't set a user to warn",
     "Without a target user I can't warn anyone but you",
     'Forgot the target user. Wanna try again?',

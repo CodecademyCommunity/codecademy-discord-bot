@@ -144,10 +144,10 @@ function hasUserTarget(msg, targetUser) {
   // Asortment of answers to make the bot more fun
   const failAttemptReply = [
     'Ok there bud, whose notes are you trying to check again?',
-    'You definitely missed the targer user there...',
-    'What? You want ALL the notes from everyone? You forgot the targer user',
+    'You definitely missed the target user there...',
+    'What? You want ALL the notes from everyone? You forgot the target user',
     "Not judging, but you didn't set a user to read notes from...",
-    'You forgot the targer user',
+    'You forgot the target user',
     'Forgot the target user. Wanna try again?',
     'Here I was thinking this command was easy enough. You forgot the target user',
   ];
