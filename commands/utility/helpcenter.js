@@ -4,7 +4,7 @@ module.exports = {
   name: 'helpcenter',
   description: "Provides commonly used links to CC's Help Centre",
   guildOnly: false,
-
+  staffOnly: false,
   execute(msg, args, con) {
     if (args == 'plaintext') {
       msg.channel.send(

@@ -4,6 +4,7 @@ module.exports = {
   name: 'help',
   description: 'Send help message',
   guildOnly: false,
+  staffOnly: false,
   execute(msg, args, con) {
     if (args[0]) {
       switch (args[0]) {
