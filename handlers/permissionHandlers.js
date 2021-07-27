@@ -15,7 +15,7 @@ function hasPermission(msg, command) {
     return false;
   }
 
-  if (!RoleEnum[highestRole] >= RoleEnum[command.minRole]) {
+  if (RoleEnum[highestRole] < RoleEnum[command.minRole]) {
     return false;
   }
 
