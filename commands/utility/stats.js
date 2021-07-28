@@ -4,6 +4,7 @@ module.exports = {
   name: 'stats',
   description: 'Basic server stats',
   guildOnly: true,
+  staffOnly: false,
   async execute(msg, args, con) {
     const Embed = new Discord.MessageEmbed();
     Embed.setTitle(`Server Stats`);
