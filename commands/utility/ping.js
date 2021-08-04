@@ -3,7 +3,12 @@ module.exports = {
   description: 'Ping!',
   guildOnly: true,
   staffOnly: false,
-  execute(message, args, con) {
-    message.channel.send('Pong.');
+  async execute(message, args, con) {
+    const response = await message.channel.send('Pinging!');
+    response.edit(
+      `Pong! I took ${
+        response.createdTimestamp - message.createdTimestamp
+      }ms to respond 🏓`
+    );
   },
 };
