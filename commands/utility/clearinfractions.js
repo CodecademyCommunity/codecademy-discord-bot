@@ -5,6 +5,8 @@ module.exports = {
   name: 'clearinfractions',
   description: 'Removes all infractions from a user',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Admin',
 
   execute(msg, args, con) {
     const {status, err, userInfraction} = validInfraction(msg, args);
@@ -22,12 +24,6 @@ function validInfraction(msg, args) {
     err: null,
     userInfraction: null,
   };
-
-  if (!msg.member.roles.cache.some((role) => role.name === 'Admin')) {
-    data.err = 'You must be an Admin to use this command.';
-    console.log(data);
-    return data;
-  }
 
   data.userInfraction =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
