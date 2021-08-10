@@ -1,8 +1,8 @@
 const {has} = require('../helpers/has');
 
 const RoleEnum = {
-  Helper: 0, // Subject to change
-  'Super User': 1,
+  'Forums Super User': 0,
+  'Code Counselor': 1,
   Moderator: 2,
   Admin: 3,
   'Super Admin': 4,
