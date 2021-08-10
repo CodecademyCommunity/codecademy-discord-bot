@@ -9,7 +9,11 @@ const client = getClient();
 const messageHandler = async (msg) => {
   if (msg.content.substring(0, 3) === 'cc!') {
     await commandParser(client, con, msg);
-  } else if (msg.author.id != client.user.id && msg.guild !== null) {
+  } else if (
+    msg.author.id != client.user.id &&
+    msg.guild !== null &&
+    !msg.webhookID
+  ) {
     await client.commands.get('filter').execute(msg);
   }
 };
