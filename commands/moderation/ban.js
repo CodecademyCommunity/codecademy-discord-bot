@@ -6,6 +6,8 @@ module.exports = {
   name: 'ban',
   description: 'Ban a user',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
   banIntro: "You've been banned for the following reason: ```",
   unbanRequest:
     ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://forms.gle/KxTMhPbi866r2FEz5',
@@ -37,15 +39,6 @@ function validBan(msg, args) {
     toBan: null,
     reason: null,
   };
-
-  if (
-    !msg.member.roles.cache.some(
-      (role) => role.name === 'Admin' || role.name === 'Moderator'
-    )
-  ) {
-    data.err = 'You must be an Admin or Moderator to use this command.';
-    return data;
-  }
 
   data.toBan =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
