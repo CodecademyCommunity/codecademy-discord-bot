@@ -5,6 +5,8 @@ module.exports = {
   name: 'removeinfraction',
   description: 'Removes a specific infraction based on the ID provided',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
 
   execute(msg, args, con) {
     const {status, err, userInfraction, infractionID} = validInfraction(
@@ -26,15 +28,6 @@ function validInfraction(msg, args) {
     userInfraction: null,
     infractionID: null,
   };
-
-  if (
-    !msg.member.roles.cache.some(
-      (role) => role.name === 'Admin' || role.name === 'Moderator'
-    )
-  ) {
-    data.err = 'You must be an Admin or Moderator to use this command.';
-    return data;
-  }
 
   data.userInfraction =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);

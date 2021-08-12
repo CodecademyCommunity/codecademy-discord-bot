@@ -5,6 +5,8 @@ module.exports = {
   name: 'removenote',
   description: 'Removes a specific note based on the note ID provided',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
 
   execute(msg, args, con) {
     const {status, err, userNote, noteID} = validNote(msg, args);
@@ -23,19 +25,6 @@ function validNote(msg, args) {
     userNote: null,
     noteID: null,
   };
-
-  if (
-    !msg.member.roles.cache.some(
-      (role) =>
-        role.name === 'Admin' ||
-        role.name === 'Moderator' ||
-        role.name === 'Super User'
-    )
-  ) {
-    data.err =
-      'You must be an Admin, Moderator, or Super User to use this command.';
-    return data;
-  }
 
   data.userNote =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
