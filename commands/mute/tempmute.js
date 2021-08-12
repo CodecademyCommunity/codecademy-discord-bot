@@ -7,6 +7,8 @@ module.exports = {
   name: 'tempmute',
   description: 'Temporarily mute a user',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
 
   execute(msg, args, con) {
     const {status, err, toTempMute, lengthOfTime, reason} = canTempMute(
@@ -42,18 +44,6 @@ function canTempMute(message, args) {
     reason: null,
   };
   // Checks if user can perform command and validates message content.
-  if (
-    !message.member.roles.cache.some(
-      (role) =>
-        role.name === 'Moderator' ||
-        role.name === 'Admin' ||
-        role.name === 'Super User'
-    )
-  ) {
-    data.err =
-      'You must be a super user, moderator, or admin to use this command.';
-    return data;
-  }
 
   const commandRegex = /((<@!?)?\d{17,}>?)\s(\d+[yhwdms])\s(.+)$/;
   if (!args.join(' ').match(commandRegex)) {

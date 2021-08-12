@@ -5,6 +5,8 @@ module.exports = {
   name: 'unmute',
   description: 'Unmute a user',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
 
   execute(msg, args, con) {
     const {status, err, toUnmute} = canUnmute(msg, args);
@@ -25,19 +27,6 @@ function canUnmute(message, args) {
     toUnmute: null,
   };
   // Checks if user can perform command and validates message content.
-  if (
-    !message.member.roles.cache.some(
-      (role) =>
-        role.name === 'Moderator' ||
-        role.name === 'Admin' ||
-        role.name === 'Super User'
-    )
-  ) {
-    data.err =
-      'You must be a super user, moderator, or admin to use this command.';
-    return data;
-  }
-
   data.toUnmute =
     message.mentions.members.first() ||
     message.guild.members.cache.get(args[0]);

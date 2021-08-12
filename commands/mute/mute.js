@@ -6,6 +6,8 @@ module.exports = {
   name: 'mute',
   description: 'Mute a user',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
 
   execute(msg, args, con) {
     const {status, err, toMute, reason} = canMute(msg, args);
@@ -30,15 +32,6 @@ function canMute(message, args) {
   };
 
   // Checks if user can perform command and validates message content.
-  if (
-    !message.member.roles.cache.some(
-      (role) => role.name === 'Moderator' || role.name === 'Admin'
-    )
-  ) {
-    data.err = 'You must be a moderator or admin to use this command.';
-    return data;
-  }
-
   data.toMute =
     message.mentions.members.first() ||
     message.guild.members.cache.get(args[0]);
