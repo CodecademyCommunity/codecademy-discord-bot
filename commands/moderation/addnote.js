@@ -104,6 +104,7 @@ function notHighRoller(msg, targetUser) {
   if (
     targetUser.roles.cache.some(
       (role) =>
+        role.name === 'Forums Super User' ||
         role.name === 'Code Counselor' ||
         role.name === 'Moderator' ||
         role.name === 'Admin'
