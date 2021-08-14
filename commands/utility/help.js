@@ -23,13 +23,15 @@ module.exports = {
         case 'cc!ban':
         case 'ban':
           msg.channel.send(
-            '`cc!ban [user] [reason]`\nBans a user. *Admin only.*'
+            '`cc!ban [user] [reason]`\nBans a user. *Moderator and above only.*'
           );
           break;
 
         case 'cc!unban':
         case 'unban':
-          msg.channel.send('`cc!unban [userid]`\nUnbans a user. *Admin only.*');
+          msg.channel.send(
+            '`cc!unban [userid]`\nUnbans a user. *Moderator and above only.*'
+          );
           break;
 
         case 'cc!tempban':
@@ -42,7 +44,7 @@ module.exports = {
         case 'cc!kick':
         case 'kick':
           msg.channel.send(
-            '`cc!kick [user] [reason]`\nKicks a user from the server. *Super User and above only.*'
+            '`cc!kick [user] [reason]`\nKicks a user from the server. *Moderator and above only.*'
           );
           break;
 
@@ -56,35 +58,35 @@ module.exports = {
         case 'cc!unmute':
         case 'unmute':
           msg.channel.send(
-            '`cc!unmute [user]`\nUnmutes a user. *Super User and above only.*'
+            '`cc!unmute [user]`\nUnmutes a user. *Moderator and above only.*'
           );
           break;
 
         case 'cc!tempmute':
         case 'tempmute':
           msg.channel.send(
-            '`cc!tempmute [user] [lengthoftime] [reason]`\nTemporarily mutes a user for a set time period. *Super User and above only.*'
+            '`cc!tempmute [user] [lengthoftime] [reason]`\nTemporarily mutes a user for a set time period. *Moderator and above only.*'
           );
           break;
 
         case 'cc!warn':
         case 'warn':
           msg.channel.send(
-            '`cc!warn [user] [reason]`\nWarns a user of an infraction and logs infraction in db. *Super User and above only.*'
+            '`cc!warn [user] [reason]`\nWarns a user of an infraction and logs infraction in db. *Moderator and above only.*'
           );
           break;
 
         case 'cc!infractions':
         case 'infractions':
           msg.channel.send(
-            '`cc!infractions [user]`\nFinds user infraction record in db and returns it to channel. *Super User and above only.*'
+            '`cc!infractions [user]`\nFinds user infraction record in db and returns it to channel. *Moderator and above only.*'
           );
           break;
 
         case 'cc!addnote':
         case 'addnote':
           msg.channel.send(
-            '`cc!addnote [user] [note]`\nAdds a note to a user. *Super User and above only.*'
+            '`cc!addnote [user] [note]`\nAdds a note to a user. *Code Counselor and above only.*'
           );
           break;
 
@@ -98,14 +100,14 @@ module.exports = {
         case 'cc!notes':
         case 'notes':
           msg.channel.send(
-            '`cc!notes [user]`\nDisplays all notes that have been added to a user. *Super User and above only.*'
+            '`cc!notes [user]`\nDisplays all notes that have been added to a user. *Code Counselor and above only.*'
           );
           break;
 
         case 'cc!removenote':
         case 'removenote':
           msg.channel.send(
-            '`cc!removenote [user] [noteid]`\nSets a single note as invalid. *Super User and above only.*'
+            '`cc!removenote [user] [noteid]`\nSets a single note as invalid. *Moderator and above only.*'
           );
           break;
 
@@ -145,12 +147,9 @@ module.exports = {
         .addField('Admin Only', 'cc!clearinfractions')
         .addField(
           'Moderator & Above Only',
-          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!removeinfraction, cc!clearmessages'
+          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!removeinfraction, cc!removenote, cc!clearmessages'
         )
-        .addField(
-          'Super User & Above Only',
-          'cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!addnote, cc!removenote, cc!notes'
-        )
+        .addField('Code Counselor & Above Only', 'cc!addnote, cc!notes')
         .addField('Everyone', 'cc!stats, cc!ping, cc!helpcenter, cc!help');
 
       msg.channel.send(commandsEmbed);
