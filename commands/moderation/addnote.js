@@ -5,31 +5,29 @@ module.exports = {
   name: 'addnote',
   description: 'write a user note and store in the db',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Code Counselor',
   execute(msg, args, con) {
     // Make sure only SU, Mods and Admin can run the command
     const targetUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
-    if (canWriteNotes(msg)) {
-      if (
-        hasUserTarget(msg, targetUser) &&
-        notSelf(msg, targetUser) &&
-        notHighRoller(msg, targetUser)
-      ) {
-        // grab the note
-        const note = args.slice(1).join(' ');
-        if (!note) return msg.reply(`You forgot to write the note.`);
-        if (note.length > 255)
-          return msg.reply(
-            `Too long! Notes can only be 255 characters or less.`
-          );
+    if (
+      hasUserTarget(msg, targetUser) &&
+      notSelf(msg, targetUser) &&
+      notHighRoller(msg, targetUser)
+    ) {
+      // grab the note
+      const note = args.slice(1).join(' ');
+      if (!note) return msg.reply(`You forgot to write the note.`);
+      if (note.length > 255)
+        return msg.reply(`Too long! Notes can only be 255 characters or less.`);
 
-        // Feedback back to the command caller
-        postEmbed(msg, targetUser, note);
+      // Feedback back to the command caller
+      postEmbed(msg, targetUser, note);
 
-        // write it to the db
-        addNoteToDB(msg, con, targetUser, note);
-      }
+      // write it to the db
+      addNoteToDB(msg, con, targetUser, note);
     }
   },
 };
@@ -80,24 +78,6 @@ function addNoteToDB(msg, con, targetUser, note) {
   });
 }
 
-function canWriteNotes(msg) {
-  if (
-    !msg.member.roles.cache.some(
-      (role) =>
-        role.name === 'Super User' ||
-        role.name === 'Moderator' ||
-        role.name === 'Admin'
-    )
-  ) {
-    msg.reply(
-      'You must be a Super User, Moderator or Admin to use this command.'
-    );
-    return false;
-  } else {
-    return true;
-  }
-}
-
 function hasUserTarget(msg, targetUser) {
   // Asortment of answers to make the bot more fun
   const failAttemptReply = [
@@ -124,13 +104,14 @@ function notHighRoller(msg, targetUser) {
   if (
     targetUser.roles.cache.some(
       (role) =>
-        role.name === 'Super User' ||
+        role.name === 'Forums Super User' ||
+        role.name === 'Code Counselor' ||
         role.name === 'Moderator' ||
         role.name === 'Admin'
     )
   ) {
     msg.reply(
-      `You cannot write a note about a super user, moderator or admin.`
+      `You cannot write a note about a Code Counselor, Moderator or Admin.`
     );
     return false;
   } else {

@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const {getClient} = require('../config/client');
 const {getConnection} = require('../config/db');
+const {hasPermission} = require('../handlers/permissionHandlers');
 
 const con = getConnection();
 const client = getClient();
@@ -8,7 +9,11 @@ const client = getClient();
 const messageHandler = async (msg) => {
   if (msg.content.substring(0, 3) === 'cc!') {
     await commandParser(client, con, msg);
-  } else if (msg.author.id != client.user.id && msg.guild !== null) {
+  } else if (
+    msg.author.id != client.user.id &&
+    msg.guild !== null &&
+    !msg.webhookID
+  ) {
     await client.commands.get('filter').execute(msg);
   }
 };
@@ -23,6 +28,10 @@ const commandParser = async (client, con, msg) => {
 
   if (command.guildOnly && msg.channel.type === 'dm') {
     return msg.reply(`I can't execute that command inside DMs!`);
+  }
+
+  if (command.staffOnly && !hasPermission(msg, command)) {
+    return msg.reply(`Sorry, you don't have permission to use that command!`);
   }
 
   try {

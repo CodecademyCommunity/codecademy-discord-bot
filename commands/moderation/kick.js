@@ -6,6 +6,8 @@ module.exports = {
   name: 'kick',
   description: 'Kick a user',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
   kickIntro: "You've been kicked for the following reason: ```",
   kickOutro: ' ```',
 
@@ -36,20 +38,6 @@ function validKick(msg, args) {
     toKick: null,
     reason: null,
   };
-
-  if (
-    !msg.member.roles.cache.some(
-      (role) =>
-        role.name === 'Admin' ||
-        role.name === 'Moderator' ||
-        role.name === 'Super User'
-    )
-  ) {
-    data.err = msg.reply(
-      'You must be an Admin, Moderator, or Super User to use this command.'
-    );
-    return data;
-  }
 
   // Grabs the user and makes sure that one was provided
   data.toKick =

@@ -5,6 +5,8 @@ module.exports = {
   name: 'unban',
   description: 'Unban a user',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
 
   async execute(msg, args, con) {
     const {status, err, toUnban} = await validUnban(msg, args);
@@ -28,15 +30,6 @@ async function validUnban(msg, args) {
     err: null,
     toUnban: null,
   };
-
-  if (
-    !msg.member.roles.cache.some(
-      (role) => role.name === 'Admin' || role.name === 'Moderator'
-    )
-  ) {
-    data.err = 'You must be an Admin or Moderator to use this command.';
-    return data;
-  }
 
   const userMention = msg.mentions.members.first();
   if (userMention) {

@@ -4,18 +4,17 @@ module.exports = {
   name: 'infractions',
   description: 'finds user infraction record in db and returns it to channel',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
   execute(msg, args, con) {
     // Make sure only SU, Mods and Admin can run the command
     const targetUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
-    if (targetUser) console.log(`targetUser is true`);
-    if (canCheckInfractions(msg)) {
-      if (hasUserTarget(msg, targetUser)) {
-        // Find all infraction records in database
-        // Because of async, call infractionLog from infractionsInDB
-        infractionsInDB(msg, con, targetUser);
-      }
+    if (hasUserTarget(msg, targetUser)) {
+      // Find all infraction records in database
+      // Because of async, call infractionLog from infractionsInDB
+      infractionsInDB(msg, con, targetUser);
     }
   },
 };
@@ -125,24 +124,6 @@ function parseInfractions(infractions) {
       );
   }
   return reasonsWithTimes;
-}
-
-function canCheckInfractions(msg) {
-  if (
-    !msg.member.roles.cache.some(
-      (role) =>
-        role.name === 'Super User' ||
-        role.name === 'Moderator' ||
-        role.name === 'Admin'
-    )
-  ) {
-    msg.reply(
-      'You must be a Super User, Moderator or Admin to use this command.'
-    );
-    return false;
-  } else {
-    return true;
-  }
 }
 
 function hasUserTarget(msg, targetUser) {
