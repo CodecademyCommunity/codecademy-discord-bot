@@ -7,6 +7,8 @@ module.exports = {
   name: 'tempban',
   description: 'Temporarily ban a user',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
   banIntro: "You've been banned for the following reason: ```",
   unbanRequest:
     ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://forms.gle/KxTMhPbi866r2FEz5',
@@ -49,15 +51,6 @@ function validTempBan(msg, args) {
     reason: null,
     timeLength: null,
   };
-
-  if (
-    !msg.member.roles.cache.some(
-      (role) => role.name === 'Admin' || role.name === 'Moderator'
-    )
-  ) {
-    data.err = 'You must be an Admin to use this command.';
-    return data;
-  }
 
   const userInformation = /((<@!?)?\d{17,}>?)\s(\d+[yhwdms])\s(.+)$/;
 

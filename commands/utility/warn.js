@@ -6,35 +6,36 @@ module.exports = {
   name: 'warn',
   description: 'warns a user of an infraction and logs infraction in db',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
   execute(msg, args, con) {
     // Make sure only SU, Mods and Admin can run the command
     const offendingUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
-    if (canWarn(msg)) {
-      if (
-        hasUserTarget(msg, offendingUser) &&
-        notSelf(msg, offendingUser) &&
-        notHighRoller(msg, offendingUser)
-      ) {
-        // Parse the reason for the warning
-        // if no reason provided, return so the bot doesn't go boom
-        const warningReason = args.slice(1).join(' ');
-        if (!warningReason) return msg.reply('You need to provide a reason');
 
-        if (!verifyReasonLength(msg.content, msg)) return;
+    if (
+      hasUserTarget(msg, offendingUser) &&
+      notSelf(msg, offendingUser) &&
+      notHighRoller(msg, offendingUser)
+    ) {
+      // Parse the reason for the warning
+      // if no reason provided, return so the bot doesn't go boom
+      const warningReason = args.slice(1).join(' ');
+      if (!warningReason) return msg.reply('You need to provide a reason');
 
-        // Create an embed, craft it, and DM the user
-        dmTheUser(msg, offendingUser, warningReason);
+      if (!verifyReasonLength(msg.content, msg)) return;
 
-        // Register call in the Audit-log channel
-        auditLog(msg, offendingUser, warningReason);
+      // Create an embed, craft it, and DM the user
+      dmTheUser(msg, offendingUser, warningReason);
 
-        // Give SU, Mod, Admin feedback on their call
-        msg.channel.send(`${msg.author} just warned ${offendingUser}`);
+      // Register call in the Audit-log channel
+      auditLog(msg, offendingUser, warningReason);
 
-        // Add the infraction to the database
-        recordInDB(msg, con, offendingUser, warningReason);
-      }
+      // Give SU, Mod, Admin feedback on their call
+      msg.channel.send(`${msg.author} just warned ${offendingUser}`);
+
+      // Add the infraction to the database
+      recordInDB(msg, con, offendingUser, warningReason);
     }
   },
 };
@@ -108,24 +109,6 @@ function recordInDB(msg, con, offendingUser, warningReason) {
   });
 }
 
-function canWarn(msg) {
-  if (
-    !msg.member.roles.cache.some(
-      (role) =>
-        role.name === 'Super User' ||
-        role.name === 'Moderator' ||
-        role.name === 'Admin'
-    )
-  ) {
-    msg.reply(
-      'You must be a Super User, Moderator or Admin to use this command.'
-    );
-    return false;
-  } else {
-    return true;
-  }
-}
-
 function hasUserTarget(msg, offendingUser) {
   // Asortment of answers to make the bot more fun
   const failAttemptReply = [
@@ -152,12 +135,12 @@ function notHighRoller(msg, offendingUser) {
   if (
     offendingUser.roles.cache.some(
       (role) =>
-        role.name === 'Super User' ||
+        role.name === 'Code Counselor' ||
         role.name === 'Moderator' ||
         role.name === 'Admin'
     )
   ) {
-    msg.reply('You cannot warn a super user, moderator or admin.');
+    msg.reply('You cannot warn a Code Counselor, Moderator or Admin.');
     return false;
   } else {
     return true;

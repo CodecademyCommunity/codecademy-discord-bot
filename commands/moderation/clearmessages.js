@@ -5,6 +5,8 @@ module.exports = {
   name: 'clearmessages',
   description: 'Clears a certain number of messages',
   guildOnly: true,
+  staffOnly: true,
+  minRole: 'Moderator',
 
   execute(msg, args, con) {
     const {status, err, numberDeleted} = validClear(msg, args);
@@ -25,15 +27,6 @@ function validClear(msg, args) {
     numberDeleted: null,
     reason: null,
   };
-
-  if (
-    !msg.member.roles.cache.some(
-      (role) => role.name === 'Admin' || role.name === 'Moderator'
-    )
-  ) {
-    data.err = 'You must be an Admin or a Moderator to use this command.';
-    return data;
-  }
 
   data.numberDeleted = args[0];
   if (isNaN(args[0])) {
