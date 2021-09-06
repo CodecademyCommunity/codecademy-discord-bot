@@ -20,4 +20,4 @@ jobs:
           git pull origin master
           git status
           npm ci
-          pm2 restart 2
+          pm2 restart 1
