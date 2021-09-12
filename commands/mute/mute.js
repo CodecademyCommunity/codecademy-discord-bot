@@ -45,7 +45,11 @@ function canMute(message, args) {
   }
   if (
     data.toMute.roles.cache.some(
-      (role) => role.name === 'Moderator' || role.name === 'Admin'
+      (role) =>
+        role.name === 'Forums Super User' ||
+        role.name === 'Moderator' ||
+        role.name === 'Admin' ||
+        role.name === 'Super Admin'
     )
   ) {
     data.err = 'You cannot mute a moderator or admin.';
