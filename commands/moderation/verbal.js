@@ -2,8 +2,6 @@ const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
-// TODO: USER HAS DMS OFF
-
 module.exports = {
   name: 'verbal',
   description: 'sends a user a verbal warning and logs note in db',
@@ -113,7 +111,7 @@ function recordInDB(msg, con, offendingUser, verbalReason) {
       );
     } else {
       console.log(
-        '1 record inserted into infractions, 1 record inserted into mod_log.'
+        '1 record inserted into user_notes, 1 record inserted into mod_log.'
       );
     }
   });
