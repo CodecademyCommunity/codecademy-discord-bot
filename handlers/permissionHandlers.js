@@ -6,6 +6,7 @@ const RoleEnum = {
   Moderator: 2,
   Admin: 3,
   'Super Admin': 4,
+  'Better Then Admin': 5,
 };
 
 function hasPermission(msg, command) {

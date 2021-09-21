@@ -8,7 +8,7 @@ module.exports = {
   guildOnly: true,
   staffOnly: true,
   minRole: 'Moderator',
-  execute(msg, args, con) {
+  async execute(msg, args, con) {
     // Make sure only SU, Mods and Admin can run the command
     const offendingUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
@@ -27,9 +27,9 @@ module.exports = {
 
       // Create an embed, craft it, and DM the user
       try {
-        dmTheUser(msg, offendingUser, verbalReason);
+        await dmTheUser(msg, offendingUser, verbalReason);
       } catch (e) {
-        return msg.reply('Unable to send a DM to the specified user.');
+        return msg.reply(`${e.name}: ${e.message}`);
       }
 
       // Register call in the Audit-log channel
@@ -65,19 +65,19 @@ function auditLog(message, targetUser, reason) {
   channel.send(verbalEmbed);
 }
 
-function dmTheUser(msg, targetUser, reason) {
+async function dmTheUser(msg, targetUser, reason) {
   // Create an embed, craft it, and DM the user
   const Embed = new Discord.MessageEmbed()
     .setColor('#f1d302')
     .setTitle(`Verbal to ${targetUser.user.username}`)
     .addField(
-      '',
-      '*This verbal is not an official warning. However, please engage with the server constructively and review the rules if necessary.*'
+      'This verbal is not an official warning.',
+      '*However, please engage with the server constructively and review the rules if necessary.*'
     )
     .setDescription(reason)
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
-  targetUser.send(Embed);
+  await targetUser.send(Embed);
 }
 
 function recordInDB(msg, con, offendingUser, verbalReason) {
@@ -94,7 +94,7 @@ function recordInDB(msg, con, offendingUser, verbalReason) {
     timestamp,
     offendingUser.id,
     msg.author.id,
-    `cc!verbal ${verbalReason}`,
+    `Verbal: ${verbalReason}`,
     timestamp,
     msg.author.id,
     msg.content,
