@@ -21,6 +21,7 @@ Every great Discord server needs a great bot, so we coded up our own. It does a 
 | `cc!tempmute`         | [user] [lengthoftime] [reason] | Admin, Mod                 | Temporarily mutes a user for a set time period.                                                 |
 | `cc!kick`             | [user] [reason]                | Admin, Mod                 | Kicks a user from the server.                                                                   |
 | `cc!warn`             | [user] [reason]                | Admin, Mod                 | Warns a user of an infraction and logs infraction in db.                                        |
+| `cc!verbal`           | [user] [reason]                | Admin, Mod                 | Sends a user a verbal through DMs and logs as a note in db.                                     |
 | `cc!infractions`      | [user]                         | Admin, Mod                 | Finds user infraction records in db and returns it to channel.                                  |
 | `cc!removenote`       | [user] [noteid]                | Admin, Mod                 | Sets a single note as invalid.                                                                  |
 | `cc!addnote`          | [user] [note]                  | Admin, Mod, Code Counselor | Adds a note to a user.                                                                          |
