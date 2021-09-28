@@ -107,7 +107,8 @@ function notHighRoller(msg, targetUser) {
         role.name === 'Forums Super User' ||
         role.name === 'Code Counselor' ||
         role.name === 'Moderator' ||
-        role.name === 'Admin'
+        role.name === 'Admin' ||
+        role.name === 'Super Admin'
     )
   ) {
     msg.reply(

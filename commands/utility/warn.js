@@ -135,9 +135,11 @@ function notHighRoller(msg, offendingUser) {
   if (
     offendingUser.roles.cache.some(
       (role) =>
+        role.name === 'Forums Super User' ||
         role.name === 'Code Counselor' ||
         role.name === 'Moderator' ||
-        role.name === 'Admin'
+        role.name === 'Admin' ||
+        role.name === 'Super Admin'
     )
   ) {
     msg.reply('You cannot warn a Code Counselor, Moderator or Admin.');
