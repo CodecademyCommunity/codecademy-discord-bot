@@ -76,6 +76,13 @@ module.exports = {
           );
           break;
 
+        case 'cc!verbal':
+        case 'verbal':
+          msg.channel.send(
+            '`cc!verbal [user] [reason]`\nSends a user a verbal through DMs and logs as a note in db. *Moderator and above only.*'
+          );
+          break;
+
         case 'cc!infractions':
         case 'infractions':
           msg.channel.send(
@@ -147,7 +154,7 @@ module.exports = {
         .addField('Admin Only', 'cc!clearinfractions')
         .addField(
           'Moderator & Above Only',
-          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!infractions, cc!removeinfraction, cc!removenote, cc!clearmessages'
+          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!verbal, cc!infractions, cc!removeinfraction, cc!removenote, cc!clearmessages'
         )
         .addField('Code Counselor & Above Only', 'cc!addnote, cc!notes')
         .addField('Everyone', 'cc!stats, cc!ping, cc!helpcenter, cc!help');
