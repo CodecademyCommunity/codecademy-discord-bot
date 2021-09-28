@@ -68,7 +68,11 @@ function canTempMute(message, args) {
   }
   if (
     data.toTempMute.roles.cache.some(
-      (role) => role.name === 'Moderator' || role.name === 'Admin'
+      (role) =>
+        role.name === 'Forums Super User' ||
+        role.name === 'Moderator' ||
+        role.name === 'Admin' ||
+        role.name === 'Super Admin'
     )
   ) {
     data.err = 'You cannot temporarily mute a moderator or admin.';

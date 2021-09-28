@@ -61,9 +61,11 @@ const isHighRoller = (msg) => {
   if (
     !msg.member.roles.cache.some(
       (role) =>
-        role.name === 'Super User' ||
+        role.name === 'Forums Super User' ||
+        role.name === 'Code Counselor' ||
         role.name === 'Moderator' ||
-        role.name === 'Admin'
+        role.name === 'Admin' ||
+        role.name === 'Super Admin'
     )
   ) {
     return true;
