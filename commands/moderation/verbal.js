@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'verbal',
@@ -14,7 +15,7 @@ module.exports = {
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
     if (
-      hasUserTarget(msg, offendingUser) &&
+      hasTargetUser(msg, offendingUser, 'verbal') &&
       notSelf(msg, offendingUser) &&
       notHighRoller(msg, offendingUser)
     ) {
@@ -115,28 +116,6 @@ function recordInDB(msg, con, offendingUser, verbalReason) {
       );
     }
   });
-}
-
-function hasUserTarget(msg, offendingUser) {
-  // Asortment of answers to make the bot more fun
-  const failAttemptReply = [
-    'Ok there bud, who are you trying to verbal again?',
-    'You definitely missed the target user there...',
-    'shoot first ask later? You forgot the target user',
-    "Not judging, but you didn't set a user to verbal",
-    "Without a target user I can't verbal anyone but you",
-    'Forgot the target user. Wanna try again?',
-    'Please tell you *do* know who to verbal? You forgot the user',
-  ];
-
-  if (offendingUser) {
-    return true;
-  } else {
-    msg.reply(
-      failAttemptReply[Math.floor(Math.random() * failAttemptReply.length)]
-    );
-    return false;
-  }
 }
 
 function notHighRoller(msg, offendingUser) {
