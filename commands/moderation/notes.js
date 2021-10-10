@@ -17,6 +17,7 @@ module.exports = {
       notesInDB(msg, con, targetUser);
     }
   },
+  notesInDB: notesInDB,
 };
 
 function notesInDB(msg, con, targetUser) {

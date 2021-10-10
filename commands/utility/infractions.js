@@ -17,6 +17,7 @@ module.exports = {
       infractionsInDB(msg, con, targetUser);
     }
   },
+  infractionsInDB: infractionsInDB,
 };
 
 function infractionsInDB(msg, con, targetUser) {
