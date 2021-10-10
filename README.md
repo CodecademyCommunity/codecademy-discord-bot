@@ -24,13 +24,13 @@ Every great Discord server needs a great bot, so we coded up our own. It does a 
 | `cc!verbal`           | [user] [reason]                | Admin, Mod                 | Sends a user a verbal through DMs and logs as a note in db.                                     |
 | `cc!infractions`      | [user]                         | Admin, Mod                 | Finds user infraction records in db and returns it to channel.                                  |
 | `cc!removenote`       | [user] [noteid]                | Admin, Mod                 | Sets a single note as invalid.                                                                  |
+| `cc!rapsheet`         | [user]                         | Admin, Mod                 | Displays all infractions and notes for a user.                                                  |
 | `cc!addnote`          | [user] [note]                  | Admin, Mod, Code Counselor | Adds a note to a user.                                                                          |
 | `cc!notes`            | [user]                         | Admin, Mod, Code Counselor | Displays all notes that have been added to a user.                                              |
 | `cc!stats`            | N/A                            | Everyone                   | Displays basic server statistics (online members, offline members, total members).              |
 | `cc!ping`             | N/A                            | Everyone                   | Displays bot latency.                                                                           |
 | `cc!helpcenter`       | {plaintext}                    | Everyone                   | Provides links to Codecademy's Help Center (either embedded or plaintext).                      |
 | `cc!help`             | {command}                      | Everyone                   | Shows information about a given command or lists all commands.                                  |
-| `cc!rapsheet`         | [user]                         | Admin, Mod                 | Displays all infractions and notes for a user.                                                  |
 
 - Parameters in square brackets are mandatory, while those in curly braces are optional.
 - `[user]` can take either a user mention or user ID.
