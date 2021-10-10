@@ -132,6 +132,13 @@ module.exports = {
           );
           break;
 
+        case 'cc!rapsheet':
+        case 'rapsheet':
+          msg.channel.send(
+            '`cc!rapsheet [user]`\nDisplays all notes and infractions from a user. *Moderator and above only.*'
+          );
+          break;
+
         case 'cc!clearmessages':
         case 'clearmessages':
           msg.channel.send(
@@ -154,7 +161,7 @@ module.exports = {
         .addField('Admin Only', 'cc!clearinfractions')
         .addField(
           'Moderator & Above Only',
-          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!verbal, cc!infractions, cc!removeinfraction, cc!removenote, cc!clearmessages'
+          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!verbal, cc!infractions, cc!removeinfraction, cc!removenote, cc!clearmessages, cc!rapsheet'
         )
         .addField('Code Counselor & Above Only', 'cc!addnote, cc!notes')
         .addField('Everyone', 'cc!stats, cc!ping, cc!helpcenter, cc!help');
