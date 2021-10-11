@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'addnote',
@@ -13,7 +14,7 @@ module.exports = {
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
     if (
-      hasUserTarget(msg, targetUser) &&
+      hasTargetUser(msg, targetUser, 'add a note to') &&
       notSelf(msg, targetUser) &&
       notHighRoller(msg, targetUser)
     ) {
@@ -76,28 +77,6 @@ function addNoteToDB(msg, con, targetUser, note) {
       console.log(`1 note added to table: user_notes`);
     }
   });
-}
-
-function hasUserTarget(msg, targetUser) {
-  // Asortment of answers to make the bot more fun
-  const failAttemptReply = [
-    `Notice how you didn't select a user? You need to mention a user.`,
-    `I was expecting a user, and you didn't provide one`,
-    `oops... you forgot to mention the user in your note`,
-    `If you don't include a user, we won't know who the note was for!`,
-    `No biggie, but you forgot your target user`,
-    `Please provide the user you are making a note about`,
-    `No user, no note. Mention a user and then we can write the note, okie?`,
-  ];
-
-  if (targetUser) {
-    return true;
-  } else {
-    msg.reply(
-      failAttemptReply[Math.floor(Math.random() * failAttemptReply.length)]
-    );
-    return false;
-  }
 }
 
 function notHighRoller(msg, targetUser) {
