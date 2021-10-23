@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'infractions',
@@ -11,7 +12,7 @@ module.exports = {
     const targetUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
-    if (hasUserTarget(msg, targetUser)) {
+    if (hasTargetUser(msg, targetUser, 'get infractions from')) {
       // Find all infraction records in database
       // Because of async, call infractionLog from infractionsInDB
       infractionsInDB(msg, con, targetUser);
@@ -124,26 +125,4 @@ function parseInfractions(infractions) {
       );
   }
   return reasonsWithTimes;
-}
-
-function hasUserTarget(msg, targetUser) {
-  // Asortment of answers to make the bot more fun
-  const failAttemptReply = [
-    'Ok there bud, whose infractions are you trying to check again?',
-    'You definitely missed the target user there...',
-    'what? You want ALL the infractions from everyone? You forgot the target user',
-    "Not judging, but you didn't set a user to read infractions from...",
-    'You forgot the target user, so maybe YOU should have an infraction',
-    'Forgot the target user. Wanna try again?',
-    'Here I was thinking this command was easy enough. You forgot the target user',
-  ];
-
-  if (targetUser) {
-    return true;
-  } else {
-    msg.reply(
-      failAttemptReply[Math.floor(Math.random() * failAttemptReply.length)]
-    );
-    return false;
-  }
 }

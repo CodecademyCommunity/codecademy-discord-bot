@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'ban',
@@ -13,22 +14,26 @@ module.exports = {
     ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://forms.gle/KxTMhPbi866r2FEz5',
 
   async execute(msg, args, con) {
-    const {status, err, toBan, reason} = validBan(msg, args);
-    if (!status) {
-      return msg.reply(err);
+    const targetUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if (hasTargetUser(msg, targetUser, 'ban')) {
+      const {status, err, toBan, reason} = validBan(msg, args);
+      if (!status) {
+        return msg.reply(err);
+      }
+
+      const banText = this.banIntro + reason + this.unbanRequest;
+      if (!verifyReasonLength(msg.content, msg)) return;
+
+      try {
+        await banUser(msg, toBan, banText);
+      } catch (error) {
+        return msg.reply(`${error.name}: ${error.message}`);
+      }
+
+      banSQL(msg, toBan, reason, con);
+      banEmbed(msg, toBan, reason);
     }
-
-    const banText = this.banIntro + reason + this.unbanRequest;
-    if (!verifyReasonLength(msg.content, msg)) return;
-
-    try {
-      await banUser(msg, toBan, banText);
-    } catch (error) {
-      return msg.reply(`${error.name}: ${error.message}`);
-    }
-
-    banSQL(msg, toBan, reason, con);
-    banEmbed(msg, toBan, reason);
   },
 };
 
@@ -42,10 +47,6 @@ function validBan(msg, args) {
 
   data.toBan =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
-  if (!data.toBan) {
-    data.err = 'Please provide a user to ban.';
-    return data;
-  }
 
   if (data.toBan.id == msg.author.id) {
     data.err = "You can't ban yourself!";

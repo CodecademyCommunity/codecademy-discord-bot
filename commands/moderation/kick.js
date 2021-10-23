@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'kick',
@@ -12,22 +13,26 @@ module.exports = {
   kickOutro: ' ```',
 
   async execute(msg, args, con) {
-    const {status, err, toKick, reason} = validKick(msg, args);
-    if (!status) {
-      return msg.reply(err);
+    const targetUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if (hasTargetUser(msg, targetUser, 'kick')) {
+      const {status, err, toKick, reason} = validKick(msg, args);
+      if (!status) {
+        return msg.reply(err);
+      }
+
+      const kickText = this.kickIntro + reason + this.kickOutro;
+      if (!verifyReasonLength(msg.content, msg)) return;
+
+      try {
+        await kickUser(msg, toKick, kickText);
+      } catch (error) {
+        return msg.reply(`${error.name}: ${error.message}`);
+      }
+
+      kickSQL(msg, toKick, reason, con);
+      kickEmbed(msg, toKick, reason);
     }
-
-    const kickText = this.kickIntro + reason + this.kickOutro;
-    if (!verifyReasonLength(msg.content, msg)) return;
-
-    try {
-      await kickUser(msg, toKick, kickText);
-    } catch (error) {
-      return msg.reply(`${error.name}: ${error.message}`);
-    }
-
-    kickSQL(msg, toKick, reason, con);
-    kickEmbed(msg, toKick, reason);
   },
 };
 

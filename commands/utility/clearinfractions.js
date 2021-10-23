@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'clearinfractions',
@@ -9,12 +10,16 @@ module.exports = {
   minRole: 'Admin',
 
   execute(msg, args, con) {
-    const {status, err, userInfraction} = validInfraction(msg, args);
-    if (!status) {
-      return msg.reply(err);
-    }
+    const targetUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if (hasTargetUser(msg, targetUser, 'clear infractions from')) {
+      const {status, err, userInfraction} = validInfraction(msg, args);
+      if (!status) {
+        return msg.reply(err);
+      }
 
-    findInfractions(msg, userInfraction, args, con);
+      findInfractions(msg, userInfraction, args, con);
+    }
   },
 };
 
@@ -27,10 +32,6 @@ function validInfraction(msg, args) {
 
   data.userInfraction =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
-  if (!data.userInfraction) {
-    data.err = 'Please provide a user to remove infractions.';
-    return data;
-  }
 
   data.status = true;
   return data;

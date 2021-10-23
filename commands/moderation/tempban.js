@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const ms = require('ms');
 const dateFormat = require('dateformat');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'tempban',
@@ -14,31 +15,35 @@ module.exports = {
     ' ``` If you wish to challenge this ban, please submit a response in this Google Form: https://forms.gle/KxTMhPbi866r2FEz5',
 
   async execute(msg, args, con) {
-    const {status, err, toTempBan, reason, timeLength} = validTempBan(
-      msg,
-      args
-    );
-    if (!status) {
-      return msg.reply(err);
+    const targetUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if (hasTargetUser(msg, targetUser, 'temp ban')) {
+      const {status, err, toTempBan, reason, timeLength} = validTempBan(
+        msg,
+        args
+      );
+      if (!status) {
+        return msg.reply(err);
+      }
+
+      const banText = this.banIntro + reason + this.unbanRequest;
+      if (!verifyReasonLength(msg.content, msg)) return;
+
+      const channel = msg.guild.channels.cache.find(
+        (channel) => channel.name === 'audit-logs'
+      );
+
+      tempSQL(msg, toTempBan, timeLength, reason, con);
+      tempEmbed(msg, toTempBan, reason, channel, timeLength);
+
+      try {
+        await tempBanUser(msg, toTempBan, banText, timeLength);
+      } catch (error) {
+        return msg.reply(`${error.name}: ${error.message}`);
+      }
+
+      await tempBan(msg, toTempBan, con, channel, timeLength);
     }
-
-    const banText = this.banIntro + reason + this.unbanRequest;
-    if (!verifyReasonLength(msg.content, msg)) return;
-
-    const channel = msg.guild.channels.cache.find(
-      (channel) => channel.name === 'audit-logs'
-    );
-
-    tempSQL(msg, toTempBan, timeLength, reason, con);
-    tempEmbed(msg, toTempBan, reason, channel, timeLength);
-
-    try {
-      await tempBanUser(msg, toTempBan, banText, timeLength);
-    } catch (error) {
-      return msg.reply(`${error.name}: ${error.message}`);
-    }
-
-    await tempBan(msg, toTempBan, con, channel, timeLength);
   },
 };
 
@@ -65,10 +70,6 @@ function validTempBan(msg, args) {
 
   data.toTempBan =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
-  if (!data.toTempBan) {
-    data.err = 'Please provide a user to temporarily ban.';
-    return data;
-  }
 
   if (data.toTempBan.id == msg.author.id) {
     data.err = "You can't temporarily ban yourself!";

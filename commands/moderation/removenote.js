@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'removenote',
@@ -9,11 +10,15 @@ module.exports = {
   minRole: 'Moderator',
 
   execute(msg, args, con) {
-    const {status, err, userNote, noteID} = validNote(msg, args);
-    if (!status) {
-      msg.reply(err);
-    } else {
-      validatenoteID(msg, userNote, args, noteID, con);
+    const targetUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if (hasTargetUser(msg, targetUser, 'remove a note from')) {
+      const {status, err, userNote, noteID} = validNote(msg, args);
+      if (!status) {
+        msg.reply(err);
+      } else {
+        validatenoteID(msg, userNote, args, noteID, con);
+      }
     }
   },
 };
@@ -28,10 +33,6 @@ function validNote(msg, args) {
 
   data.userNote =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
-  if (!data.userNote) {
-    data.err = 'Please provide a user to remove this note from.';
-    return data;
-  }
 
   if (data.userNote === msg.member) {
     data.err = 'You cannot remove a note from yourself.';

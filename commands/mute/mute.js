@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'mute',
@@ -10,16 +11,20 @@ module.exports = {
   minRole: 'Moderator',
 
   execute(msg, args, con) {
-    const {status, err, toMute, reason} = canMute(msg, args);
-    if (!status) {
-      return msg.reply(err);
+    const targetUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if (hasTargetUser(msg, targetUser, 'mute')) {
+      const {status, err, toMute, reason} = canMute(msg, args);
+      if (!status) {
+        return msg.reply(err);
+      }
+
+      if (!verifyReasonLength(msg.content, msg)) return;
+
+      muteUser(msg, toMute, reason);
+      auditLog(msg, toMute, reason);
+      recordInDB(msg, toMute, reason, con);
     }
-
-    if (!verifyReasonLength(msg.content, msg)) return;
-
-    muteUser(msg, toMute, reason);
-    auditLog(msg, toMute, reason);
-    recordInDB(msg, toMute, reason, con);
   },
 };
 
@@ -35,10 +40,6 @@ function canMute(message, args) {
   data.toMute =
     message.mentions.members.first() ||
     message.guild.members.cache.get(args[0]);
-  if (!data.toMute) {
-    data.err = 'Please provide a user to mute.';
-    return data;
-  }
   if (data.toMute === message.member) {
     data.err = 'You cannot mute yourself.';
     return data;

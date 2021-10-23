@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'unmute',
@@ -9,14 +10,18 @@ module.exports = {
   minRole: 'Moderator',
 
   execute(msg, args, con) {
-    const {status, err, toUnmute} = canUnmute(msg, args);
-    if (!status) {
-      return msg.reply(err);
-    }
+    const targetUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if (hasTargetUser(msg, targetUser, 'unmute')) {
+      const {status, err, toUnmute} = canUnmute(msg, args);
+      if (!status) {
+        return msg.reply(err);
+      }
 
-    unmuteUser(msg, toUnmute);
-    auditLog(msg, toUnmute);
-    recordInDB(msg, con);
+      unmuteUser(msg, toUnmute);
+      auditLog(msg, toUnmute);
+      recordInDB(msg, con);
+    }
   },
 };
 
@@ -30,10 +35,6 @@ function canUnmute(message, args) {
   data.toUnmute =
     message.mentions.members.first() ||
     message.guild.members.cache.get(args[0]);
-  if (!data.toUnmute) {
-    data.err = 'Please provide a user to unmute.';
-    return data;
-  }
   if (!data.toUnmute.roles.cache.some((role) => role.name === 'Muted')) {
     data.err = 'This user is already unmuted.';
     return data;

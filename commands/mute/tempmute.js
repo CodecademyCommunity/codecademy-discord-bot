@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 const ms = require('ms');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'tempmute',
@@ -11,26 +12,30 @@ module.exports = {
   minRole: 'Moderator',
 
   execute(msg, args, con) {
-    const {status, err, toTempMute, lengthOfTime, reason} = canTempMute(
-      msg,
-      args
-    );
-    if (!status) {
-      return msg.reply(err);
+    const targetUser =
+      msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if (hasTargetUser(msg, targetUser, 'temp mute')) {
+      const {status, err, toTempMute, lengthOfTime, reason} = canTempMute(
+        msg,
+        args
+      );
+      if (!status) {
+        return msg.reply(err);
+      }
+
+      if (!verifyReasonLength(msg.content, msg)) return;
+
+      // Mutes user.
+      muteUser(msg, toTempMute, lengthOfTime, reason);
+      auditLogMute(msg, toTempMute, lengthOfTime, reason);
+      recordMuteInDB(msg, toTempMute, lengthOfTime, reason, con);
+      // Unmutes user after specified time period.
+      setTimeout(() => {
+        unmuteUser(msg, toTempMute);
+        auditLogUnmute(msg, toTempMute, lengthOfTime);
+        recordUnmuteInDB(toTempMute, con);
+      }, ms(lengthOfTime));
     }
-
-    if (!verifyReasonLength(msg.content, msg)) return;
-
-    // Mutes user.
-    muteUser(msg, toTempMute, lengthOfTime, reason);
-    auditLogMute(msg, toTempMute, lengthOfTime, reason);
-    recordMuteInDB(msg, toTempMute, lengthOfTime, reason, con);
-    // Unmutes user after specified time period.
-    setTimeout(() => {
-      unmuteUser(msg, toTempMute);
-      auditLogUnmute(msg, toTempMute, lengthOfTime);
-      recordUnmuteInDB(toTempMute, con);
-    }, ms(lengthOfTime));
   },
 };
 
@@ -58,10 +63,6 @@ function canTempMute(message, args) {
   data.toTempMute =
     message.mentions.members.first() ||
     message.guild.members.cache.get(args[0]);
-  if (!data.toTempMute) {
-    data.err = 'Please provide a user to temporarily mute.';
-    return data;
-  }
   if (data.toTempMute === message.member) {
     data.err = 'You cannot temporarily mute yourself.';
     return data;
