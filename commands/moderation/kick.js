@@ -47,10 +47,6 @@ function validKick(msg, args) {
   // Grabs the user and makes sure that one was provided
   data.toKick =
     msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
-  if (!data.toKick) {
-    data.err = 'Please provide a user to kick.';
-    return data;
-  }
 
   // Prevents you from kicking yourself
   if (data.toKick.id == msg.author.id) {
