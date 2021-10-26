@@ -3,7 +3,7 @@ const {infractionsInDB} = require('../utility/infractions');
 const {notesInDB} = require('./notes');
 
 module.exports = {
-  name: 'rapsheet',
+  name: 'records',
   description:
     'Returns the notes and infractions for a user with a single command.',
   guildOnly: true,

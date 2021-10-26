@@ -132,10 +132,10 @@ module.exports = {
           );
           break;
 
-        case 'cc!rapsheet':
-        case 'rapsheet':
+        case 'cc!records':
+        case 'records':
           msg.channel.send(
-            '`cc!rapsheet [user]`\nDisplays all notes and infractions from a user. *Moderator and above only.*'
+            '`cc!records [user]`\nDisplays all notes and infractions from a user. *Moderator and above only.*'
           );
           break;
 
