@@ -24,6 +24,7 @@ Every great Discord server needs a great bot, so we coded up our own. It does a 
 | `cc!verbal`           | [user] [reason]                | Admin, Mod                 | Sends a user a verbal through DMs and logs as a note in db.                                     |
 | `cc!infractions`      | [user]                         | Admin, Mod                 | Finds user infraction records in db and returns it to channel.                                  |
 | `cc!removenote`       | [user] [noteid]                | Admin, Mod                 | Sets a single note as invalid.                                                                  |
+| `cc!records`          | [user]                         | Admin, Mod                 | Displays all infractions and notes for a user.                                                  |
 | `cc!addnote`          | [user] [note]                  | Admin, Mod, Code Counselor | Adds a note to a user.                                                                          |
 | `cc!notes`            | [user]                         | Admin, Mod, Code Counselor | Displays all notes that have been added to a user.                                              |
 | `cc!stats`            | N/A                            | Everyone                   | Displays basic server statistics (online members, offline members, total members).              |
