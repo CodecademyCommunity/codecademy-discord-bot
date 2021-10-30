@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'notes',
@@ -11,12 +12,13 @@ module.exports = {
     const targetUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
-    if (hasUserTarget(msg, targetUser)) {
+    if (hasTargetUser(msg, targetUser, 'read notes from')) {
       // Find all notes records in database
       // Because of async, call notesLog from notesInDB
       notesInDB(msg, con, targetUser);
     }
   },
+  notesInDB: notesInDB,
 };
 
 function notesInDB(msg, con, targetUser) {
@@ -120,26 +122,4 @@ function parseNotes(msg, notes) {
       );
   }
   return notesWithTimes;
-}
-
-function hasUserTarget(msg, targetUser) {
-  // Asortment of answers to make the bot more fun
-  const failAttemptReply = [
-    'Ok there bud, whose notes are you trying to check again?',
-    'You definitely missed the target user there...',
-    'What? You want ALL the notes from everyone? You forgot the target user',
-    "Not judging, but you didn't set a user to read notes from...",
-    'You forgot the target user',
-    'Forgot the target user. Wanna try again?',
-    'Here I was thinking this command was easy enough. You forgot the target user',
-  ];
-
-  if (targetUser) {
-    return true;
-  } else {
-    msg.reply(
-      failAttemptReply[Math.floor(Math.random() * failAttemptReply.length)]
-    );
-    return false;
-  }
 }

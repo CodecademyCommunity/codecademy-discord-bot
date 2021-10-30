@@ -1,6 +1,6 @@
 # Codecademy Discord Bot
 
-[![Discord](https://img.shields.io/discord/605859344243884081.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/codecademy)
+[![Discord](https://img.shields.io/discord/605859344243884081?color=5865F2&logo=discord&logoColor=white)](https://discord.gg/codecademy)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
@@ -24,6 +24,7 @@ Every great Discord server needs a great bot, so we coded up our own. It does a 
 | `cc!verbal`           | [user] [reason]                | Admin, Mod                 | Sends a user a verbal through DMs and logs as a note in db.                                     |
 | `cc!infractions`      | [user]                         | Admin, Mod                 | Finds user infraction records in db and returns it to channel.                                  |
 | `cc!removenote`       | [user] [noteid]                | Admin, Mod                 | Sets a single note as invalid.                                                                  |
+| `cc!records`          | [user]                         | Admin, Mod                 | Displays all infractions and notes for a user.                                                  |
 | `cc!addnote`          | [user] [note]                  | Admin, Mod, Code Counselor | Adds a note to a user.                                                                          |
 | `cc!notes`            | [user]                         | Admin, Mod, Code Counselor | Displays all notes that have been added to a user.                                              |
 | `cc!stats`            | N/A                            | Everyone                   | Displays basic server statistics (online members, offline members, total members).              |
