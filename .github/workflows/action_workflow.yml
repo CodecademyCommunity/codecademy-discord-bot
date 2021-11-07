@@ -20,4 +20,4 @@ jobs:
           git pull origin master
           git status
           npm ci
-          pm2 restart 1
+          NODE_ENV=production pm2 restart app --update-env
