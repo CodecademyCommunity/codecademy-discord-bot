@@ -15,14 +15,14 @@ module.exports = {
           mod(msg, 'spam', null);
         }
         logMsg(msg, 'spam', null);
-      }
-
-      const check = wordCheck(content.split(' '));
-      if (check[0]) {
-        if (check[1] === 'strong' && wordMod) {
-          mod(msg, 'word', check[0]);
+      } else {
+        const check = wordCheck(content.split(' '));
+        if (check[0]) {
+          if (check[1] === 'strong' && wordMod) {
+            mod(msg, 'word', check[0]);
+          }
+          logMsg(msg, 'word', check[0]);
         }
-        logMsg(msg, 'word', check[0]);
       }
     }
   },
