@@ -1,107 +1,76 @@
-/*  
-  List of offensive words for easy readability
-  
-    Strong Words 
-      *one of these words will trigger the filter 
-       
-       buttplug      motherfucker  
-       nigger        nigga
-       penis         vagina
-       asshole       sex
-       sexed         piss
-       pissed        condom
-       sexual        sexuality
-       bastard       clitoris
-       bitch         boobs
-       semen         sperm
-       jizzed        jizz
-       whore         prostitute
-       fornicate     fornication
-       adultery      adulter
-       adulteress    slut
-       porn          pornography
-       pornographic  shithole
-               
-       
-    Minor Words    
-       *one of these words will notify staff
-
-       hell          damn
-       goddamn       goddamned
-       goddamnit     damned
-       damnit        hell
-       sexy          fuck          
-       fucked        wtf
-       fucking       fucker
-       fuckwad       fuckin
-       shit
-      
-*/
-
 module.exports = {
   name: 'filter',
   description: 'filter a message',
   guildOnly: true,
 
   execute(msg) {
-    if (isHighRoller(msg)) {
-      const autoMod = false; // change to activate auto mod
-      const words = convertToChar(msg.content.toLowerCase()).split(' ');
-      const results = needsAction(words);
-      if (results[0] === 'auto' && autoMod) {
-        moderation(msg);
-      } else if (results[0] === 'manual' || results[0] === 'auto') {
-        logSwear(msg, results[1]);
+    if (!isHighRoller(msg)) {
+      const wordMod = false; // control auto mod
+      const spamMod = false; // control spam mod
+
+      const content = convertToChar(msg.content.toLowerCase());
+
+      if (spamCheck(content)) {
+        if (spamMod) {
+          mod(msg, 'spam', null);
+        }
+        logMsg(msg, 'spam', null);
+      } else {
+        const check = wordCheck(content.split(' '));
+        if (check[0]) {
+          if (check[1] === 'strong' && wordMod) {
+            mod(msg, 'word', check[0]);
+          }
+          logMsg(msg, 'word', check[0]);
+        }
       }
     }
   },
 };
 
 const isHighRoller = (msg) => {
-  if (
-    !msg.member.roles.cache.some(
-      (role) =>
-        role.name === 'Forums Super User' ||
-        role.name === 'Code Counselor' ||
-        role.name === 'Moderator' ||
-        role.name === 'Admin' ||
-        role.name === 'Super Admin'
-    )
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-const moderation = (msg) => {
-  msg.delete();
-
-  const logs = msg.guild.channels.cache.find(
-    (channel) => channel.name === 'audit-logs'
+  return msg.member.roles.cache.some(
+    (role) =>
+      role.name === 'Forums Super User' ||
+      role.name === 'Code Counselor' ||
+      role.name === 'Moderator' ||
+      role.name === 'Admin' ||
+      role.name === 'Super Admin'
   );
-
-  if (logs) {
-    const command = `cc!warn ${msg.author} In reference to your message in ${msg.channel}, please refrain from excessive cussing/offensive language.`;
-
-    logs.send(command);
-  }
-
-  // room for channel creation later
 };
 
-const logSwear = (msg, word) => {
+const mod = (msg, ctx, word) => {
+  const author = msg.author;
+
+  if (ctx == 'word') {
+    const message = `Your message, \n\n" + msg.context + "\n\n" + "was deleted due to language: "${word}"\nIf you believe this to be a mistake please contact ModMail with message details.`;
+    author.send(message);
+  } else {
+    const message =
+      'Your message, \n\n' +
+      msg.content +
+      '\n\n' +
+      'was deleted due to possible spam.\nIf you believe this to be a mistake please contact ModMail with message details.';
+    author.send(message);
+  }
+
+  msg.delete();
+};
+
+const logMsg = (msg, ctx, word) => {
   const logs = msg.guild.channels.cache.find(
     (channel) => channel.name === 'swear-jar'
   );
 
   if (logs) {
-    const message = `${msg.author} said "${word}" in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-
-    logs.send(message);
+    if (ctx == 'word') {
+      const message = `${msg.author} said "${word}" in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+      logs.send(message);
+    } else {
+      const message = `${msg.author} may have posted spam in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+      logs.send(message);
+    }
   }
-
-  // room for channel creation later
 };
 
 const convertToChar = (sentence) => {
@@ -131,22 +100,23 @@ const convertToChar = (sentence) => {
   return result;
 };
 
-const needsAction = (words) => {
+const wordCheck = (words) => {
   const strongWords = /^(,|\.|\?|'|"|:|;|`)?(motherfucker|nigger|nigga|penis|vagina|asshole|shithole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom|porn|pornography|pornographic)(,|\.|\?|'|"|:|;|`)?$/;
 
   const lightWords = /^(,|\.|\?|'|"|:|;|`)*?(hell|damn|goddamn|goddamned|godamn|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin|shit)(,|\.|\?|'|"|:|;|`)?$/;
 
-  let manual = false;
   let word;
 
   for (let i = 0; i < words.length; i++) {
     if (strongWords.test(words[i])) {
-      return ['auto', words[i]];
-    } else if (!manual && lightWords.test(words[i])) {
-      manual = true;
+      return [words[i], 'strong'];
+    } else if (lightWords.test(words[i])) {
       word = words[i];
     }
   }
+  return word ? [word, null] : [null, null];
+};
 
-  return manual ? ['manual', word] : ['clean', word];
+const spamCheck = (content) => {
+  return content.includes('free') && content.includes('nitro');
 };
