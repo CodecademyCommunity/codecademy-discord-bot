@@ -10,7 +10,7 @@ module.exports = {
       msg.channel.send(
         '**Codecademy Help Center:** https://help.codecademy.com/hc/en-us\n' +
           '**Bug Reporting:** To report a bug, click *Get Unstuck* in the learning environment, then click *Bugs*.\n' +
-          'All billing-related queries should be directed to the Submit A Request form linked above.'
+          'All billing-related queries should be directed to Customer Support.'
       );
     } else {
       const embed = new Discord.MessageEmbed()
