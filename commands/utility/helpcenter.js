@@ -21,15 +21,11 @@ module.exports = {
           'https://help.codecademy.com/hc/en-us'
         )
         .addField(
-          'Submit A Request',
-          'https://help.codecademy.com/hc/en-us/requests/new'
-        )
-        .addField(
           'Bug Reporting',
           'To report a bug, click *Get Unstuck* in the learning environment, then click *Bugs*.'
         )
         .setFooter(
-          'All billing-related queries should be directed to the Submit A Request form linked above.'
+          'All billing-related queries should be directed to Customer Support.'
         );
 
       msg.reply(embed);
