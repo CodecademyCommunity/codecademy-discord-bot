@@ -163,7 +163,10 @@ module.exports = {
           'Moderator & Above Only',
           'cc!ban, cc!unban, cc!tempban, cc!mute, cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!verbal, cc!infractions, cc!removeinfraction, cc!removenote, cc!clearmessages, cc!records'
         )
-        .addField('Code Counselor & Above Only', 'cc!addnote, cc!notes, cc!ping')
+        .addField(
+          'Code Counselor & Above Only',
+          'cc!addnote, cc!notes, cc!ping'
+        )
         .addField('Everyone', 'cc!stats, cc!helpcenter, cc!help');
 
       msg.channel.send(commandsEmbed);
