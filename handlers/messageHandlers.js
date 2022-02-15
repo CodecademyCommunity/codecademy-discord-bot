@@ -43,26 +43,22 @@ const commandParser = async (client, con, msg) => {
 };
 
 async function logDeletedMessages(message) {
-  if (!message.partial) {
-    // Inspired by StackOverFlow: https://stackoverflow.com/questions/53328061/finding-who-deleted-the-message
-    // Add latency as audit logs aren't instantly updated, adding a higher latency will result in slower logs, but higher accuracy.
-    await Discord.Util.delayFor(900);
+  // Inspired by StackOverFlow: https://stackoverflow.com/questions/53328061/finding-who-deleted-the-message
+  // Add latency as audit logs aren't instantly updated, adding a higher latency will result in slower logs, but higher accuracy.
+  await Discord.Util.delayFor(900);
 
-    const deletedPost = await fetchAndAudit(message);
-    // If entry exists, grab the user that deleted the message and display username + tag, if none, display 'Unknown'.
-    const executor = deletedPost
-      ? deletedPost.executor.tag
-      : message.author.tag;
+  const deletedPost = await fetchAndAudit(message);
+  // If entry exists, grab the user that deleted the message and display username + tag, if none, display 'Unknown'.
+  const executor = deletedPost ? deletedPost.executor.tag : message.author.tag;
 
-    const channel = message.guild.channels.cache.find(
-      (channel) => channel.name === 'audit-logs'
-    );
-    console.log(`message is deleted -> ${message}`);
+  const channel = message.guild.channels.cache.find(
+    (channel) => channel.name === 'audit-logs'
+  );
+  console.log(`message is deleted -> ${message}`);
 
-    const deletedMessageEmbed = buildEmbed(message, executor);
+  const deletedMessageEmbed = buildEmbed(message, executor);
 
-    channel.send(deletedMessageEmbed);
-  }
+  channel.send(deletedMessageEmbed);
 }
 
 const fetchAndAudit = async (message) => {
