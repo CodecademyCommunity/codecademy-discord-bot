@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "watch": "nodemon app.js",
     "db-recreate": "node utils/data/recreate.js",
     "addtable": "node utils/data/addTable.js",
     "addcolumn": "node utils/data/addColumn.js",
@@ -26,6 +27,7 @@
     "eslint-config-prettier": "^7.2.0",
     "husky": "^4.3.8",
     "lint-staged": "^10.5.4",
+    "nodemon": "^2.0.15",
     "prettier": "2.2.1"
   },
   "husky": {
