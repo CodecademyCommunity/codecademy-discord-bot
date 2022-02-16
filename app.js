@@ -27,7 +27,7 @@ client.on('guildMemberUpdate', applyMute);
 // Upon channel creation, mutes all users with Muted role in the new channel.
 client.on('channelCreate', extendMutes);
 
-client.on('message', messageHandler);
+client.on('messageCreate', messageHandler);
 
 client.on('messageDelete', logDeletedMessages);
 

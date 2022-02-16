@@ -169,7 +169,7 @@ module.exports = {
         )
         .addField('Everyone', 'cc!stats, cc!helpcenter, cc!help');
 
-      msg.channel.send(commandsEmbed);
+      msg.channel.send({embeds: [commandsEmbed]});
     }
   },
 };

@@ -28,7 +28,7 @@ module.exports = {
           'All billing-related queries should be directed to Customer Support.'
         );
 
-      msg.reply(embed);
+      msg.reply({embeds: [embed]});
     }
   },
 };
