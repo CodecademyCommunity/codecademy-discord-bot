@@ -11,7 +11,7 @@ module.exports = {
   async execute(msg, args, con) {
     const {status, err, toUnban} = await validUnban(msg, args);
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     const channel = msg.guild.channels.cache.find(
@@ -84,7 +84,7 @@ function unbanEmbed(msg, toUnban, channel) {
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
 
-  channel.send(unbanEmbed);
+  channel.send({embeds: [unbanEmbed]});
 }
 
 async function unbanUser(msg, toUnban) {
@@ -92,12 +92,12 @@ async function unbanUser(msg, toUnban) {
     await msg.guild.members.unban(toUnban);
   } catch (error) {
     if (error.code == 10026) {
-      return msg.reply('This user is not banned.');
+      return msg.reply({content: 'This user is not banned.'});
     }
 
     if (error.code == 50035) {
-      return msg.reply('Please incalud a valid user ID');
+      return msg.reply({content: 'Please include a valid user ID'});
     }
   }
-  msg.reply(`${toUnban} was unbanned.`);
+  msg.reply({content: `${toUnban} was unbanned.`});
 }
