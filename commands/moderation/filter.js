@@ -44,14 +44,14 @@ const mod = (msg, ctx, word) => {
 
   if (ctx == 'word') {
     const message = `Your message, \n\n" + msg.context + "\n\n" + "was deleted due to language: "${word}"\nIf you believe this to be a mistake please contact ModMail with message details.`;
-    author.send(message);
+    author.send({content: message});
   } else {
     const message =
       'Your message, \n\n' +
       msg.content +
       '\n\n' +
       'was deleted due to possible spam.\nIf you believe this to be a mistake please contact ModMail with message details.';
-    author.send(message);
+    author.send({content: message});
   }
 
   msg.delete();
@@ -65,10 +65,10 @@ const logMsg = (msg, ctx, word) => {
   if (logs) {
     if (ctx == 'word') {
       const message = `${msg.author} said "${word}" in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-      logs.send(message);
+      logs.send({content: message});
     } else {
       const message = `${msg.author} may have posted spam in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-      logs.send(message);
+      logs.send({content: message});
     }
   }
 };
