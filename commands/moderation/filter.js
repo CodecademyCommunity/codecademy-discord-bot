@@ -1,4 +1,5 @@
 const Filter = require('bad-words');
+const RoleEnum = require('../../handlers/permissionHandlers.js').RoleEnum;
 
 module.exports = {
   name: 'filter',
@@ -6,16 +7,15 @@ module.exports = {
   guildOnly: true,
 
   execute(msg) {
-    if (isHighRoller(msg)) return;
+    if (RoleEnum[msg.member.roles.highest.name]) return;
+    
     const profanity = new Filter();
     const spam = new Filter({emptyList: true});
     spam.addWords(...['nitro']);
-    
     const content = convert(msg.content);
-
     const profane = profanity.isProfane(content);
     const spammed = spam.isProfane(content);
-
+    
     if (spammed) {
       logMsg(msg, 'spam');
     } else if (profane) {
@@ -35,18 +35,6 @@ const logMsg = (msg, ctx) => {
 
     logs.send({content: reply});
   }
-};
-
-
-const isHighRoller = (msg) => {
-  return msg.member.roles.cache.some(
-    (role) =>
-      role.name === 'Forums Super User' ||
-      role.name === 'Code Counselor' ||
-      role.name === 'Moderator' ||
-      role.name === 'Admin' ||
-      role.name === 'Super Admin'
-  );
 };
 
 
