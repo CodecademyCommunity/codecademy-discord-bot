@@ -39,27 +39,24 @@ const logMsg = (msg, ctx) => {
 
 
 const convert = (sentence) => {
-  let result = '';
-  for (let i = 0; i < sentence.length; i++) {
-    if (sentence[i] === '@' || sentence[i] === '4') {
-      result += 'a';
-    } else if (
-      sentence[i] === '1' ||
-      sentence[i] === '|' ||
-      sentence[i] === '!'
-    ) {
-      result += 'i';
-    } else if (sentence[i] === '$') {
-      result += 's';
-    } else if (sentence[i] === '0') {
-      result += 'o';
-    } else if (sentence[i] === '7') {
-      result += 't';
-    } else if (sentence[i] === '3') {
-      result += 'e';
-    } else {
-      result += sentence[i];
-    }
+  const map = {
+    '@': 'a',
+    '4': 'a',
+
+    '1': 'i',
+    '|': 'i',
+    '!': 'i',
+
+    '$': 's',
+    '0': 'o',
+    '7': 't',
+    '3': 'e',
   }
-  return result;
+
+  sentence = sentence.split("").map(
+    (char) => {
+      return map[char] ? map[char] : char;
+    }  
+  ).join("");
+  return sentence;
 };
