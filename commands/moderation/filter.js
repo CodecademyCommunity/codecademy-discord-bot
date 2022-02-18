@@ -1,30 +1,22 @@
+const Filter = require('bad-words');
+
 module.exports = {
   name: 'filter',
   description: 'filter a message',
   guildOnly: true,
 
   execute(msg) {
-    if (!isHighRoller(msg)) {
-      const wordMod = false; // control auto mod
-      const spamMod = false; // control spam mod
+    if (isHighRoller(msg)) return;
+    const profanity = new Filter();
+    const spam = new Filter({emptyList: true});
+    spam.addWords(...['nitro']);
+    
+    const content = convert(msg.content);
 
-      const content = convertToChar(msg.content.toLowerCase());
+    const profane = profanity.isProfane(content);
+    const spammed = spam.isProfane(content);
 
-      if (spamCheck(content)) {
-        if (spamMod) {
-          mod(msg, 'spam', null);
-        }
-        logMsg(msg, 'spam', null);
-      } else {
-        const check = wordCheck(content.split(' '));
-        if (check[0]) {
-          if (check[1] === 'strong' && wordMod) {
-            mod(msg, 'word', check[0]);
-          }
-          logMsg(msg, 'word', check[0]);
-        }
-      }
-    }
+    console.log(profane, spammed);
   },
 };
 
@@ -73,7 +65,7 @@ const logMsg = (msg, ctx, word) => {
   }
 };
 
-const convertToChar = (sentence) => {
+const convert = (sentence) => {
   let result = '';
 
   for (let i = 0; i < sentence.length; i++) {
@@ -98,23 +90,6 @@ const convertToChar = (sentence) => {
     }
   }
   return result;
-};
-
-const wordCheck = (words) => {
-  const strongWords = /^(,|\.|\?|'|"|:|;|`)?(motherfucker|nigger|nigga|penis|vagina|asshole|shithole|sex|sexed|piss|pissed|sexual|sexuality|bastard|bitch|boobs|semen|sperm|jizz|jizzed|whore|prostitute|fornicate|fornication|adultery|adulter|adulteress|slut|buttplug|clitoris|condom|porn|pornography|pornographic)(,|\.|\?|'|"|:|;|`)?$/;
-
-  const lightWords = /^(,|\.|\?|'|"|:|;|`)*?(hell|damn|goddamn|goddamned|godamn|damned|damnit|sexy|fuck|fucked|fucking|fucker|fuckwad|wtf|fuckin|shit)(,|\.|\?|'|"|:|;|`)?$/;
-
-  let word;
-
-  for (let i = 0; i < words.length; i++) {
-    if (strongWords.test(words[i])) {
-      return [words[i], 'strong'];
-    } else if (lightWords.test(words[i])) {
-      word = words[i];
-    }
-  }
-  return word ? [word, null] : [null, null];
 };
 
 const spamCheck = (content) => {
