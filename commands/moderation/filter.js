@@ -31,7 +31,7 @@ const logMsg = (msg, ctx) => {
   );
 
   if (logs) {
-    let reply = `${msg.author}'s message in ${msg.channel} has been flagged for ${ctx}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+    let reply = `${msg.author}'s message in ${msg.channel} has been flagged for possible ${ctx}:\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
 
     logs.send({content: reply});
   }
