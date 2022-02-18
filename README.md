@@ -9,14 +9,14 @@ Every great Discord server needs a great bot, so we coded up our own. It does a 
 ## Current Commands
 
 | Command               | Arguments             | Permission                 | Description                                                                                     |
-| :-------------------- | :-------------------- | :------------------------- | :---------------------------------------------------------------------------------------------- | --- |
+| :-------------------- | :-------------------- | :------------------------- | :---------------------------------------------------------------------------------------------- |
 | `cc!clearinfractions` | [user]                | Admin                      | Sets all the specified user's infractions as invalid.                                           |
 | `cc!removeinfraction` | [user] [infractionid] | Admin, Mod                 | Sets a single infraction as invalid.                                                            |
 | `cc!clearmessages`    | [numberofmessages]    | Admin, Mod                 | Clears the specified number of messages in the channel where the command is used.               |
 | `cc!ban`              | [user] [reason]       | Admin, Mod                 | Bans a user.                                                                                    |
-| `cc!unban`            | [userid]              | Admin, Mod                 | Unbans a user.                                                                                  |     |
+| `cc!unban`            | [userid]              | Admin, Mod                 | Unbans a user.                                                                                  |
 | `cc!mute`             | [user] [reason]       | Admin, Mod                 | Mutes a user by assigning them a _Muted_ role (denies message sending and reacting privileges). |
-| `cc!unmute`           | [user]                | Admin, Mod                 | Unmutes a user.                                                                                 |     |
+| `cc!unmute`           | [user]                | Admin, Mod                 | Unmutes a user.                                                                                 |
 | `cc!kick`             | [user] [reason]       | Admin, Mod                 | Kicks a user from the server.                                                                   |
 | `cc!warn`             | [user] [reason]       | Admin, Mod                 | Warns a user of an infraction and logs infraction in db.                                        |
 | `cc!verbal`           | [user] [reason]       | Admin, Mod                 | Sends a user a verbal through DMs and logs as a note in db.                                     |
