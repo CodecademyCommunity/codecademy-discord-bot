@@ -16,9 +16,27 @@ module.exports = {
     const profane = profanity.isProfane(content);
     const spammed = spam.isProfane(content);
 
-    console.log(profane, spammed);
+    if (spammed) {
+      logMsg(msg, 'spam');
+    } else if (profane) {
+      logMsg(msg, 'profanity');
+    }
   },
 };
+
+
+const logMsg = (msg, ctx) => {
+  const logs = msg.guild.channels.cache.find(
+    (channel) => channel.name === 'swear-jar'
+  );
+
+  if (logs) {
+    let reply = `${msg.author}'s message in ${msg.channel} has been flagged for ${ctx}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+
+    logs.send({content: reply});
+  }
+};
+
 
 const isHighRoller = (msg) => {
   return msg.member.roles.cache.some(
@@ -31,43 +49,9 @@ const isHighRoller = (msg) => {
   );
 };
 
-const mod = (msg, ctx, word) => {
-  const author = msg.author;
-
-  if (ctx == 'word') {
-    const message = `Your message, \n\n" + msg.context + "\n\n" + "was deleted due to language: "${word}"\nIf you believe this to be a mistake please contact ModMail with message details.`;
-    author.send({content: message});
-  } else {
-    const message =
-      'Your message, \n\n' +
-      msg.content +
-      '\n\n' +
-      'was deleted due to possible spam.\nIf you believe this to be a mistake please contact ModMail with message details.';
-    author.send({content: message});
-  }
-
-  msg.delete();
-};
-
-const logMsg = (msg, ctx, word) => {
-  const logs = msg.guild.channels.cache.find(
-    (channel) => channel.name === 'swear-jar'
-  );
-
-  if (logs) {
-    if (ctx == 'word') {
-      const message = `${msg.author} said "${word}" in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-      logs.send({content: message});
-    } else {
-      const message = `${msg.author} may have posted spam in ${msg.channel}\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
-      logs.send({content: message});
-    }
-  }
-};
 
 const convert = (sentence) => {
   let result = '';
-
   for (let i = 0; i < sentence.length; i++) {
     if (sentence[i] === '@' || sentence[i] === '4') {
       result += 'a';
@@ -90,8 +74,4 @@ const convert = (sentence) => {
     }
   }
   return result;
-};
-
-const spamCheck = (content) => {
-  return content.includes('free') && content.includes('nitro');
 };
