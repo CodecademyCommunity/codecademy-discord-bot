@@ -13,17 +13,16 @@ module.exports = {
     const spam = new Filter({emptyList: true});
     spam.addWords(...['nitro']);
     const content = convert(msg.content);
-    const profane = profanity.isProfane(content);
-    const spammed = spam.isProfane(content);
+    const isProfane = profanity.isProfane(content);
+    const isSpam = spam.isProfane(content);
     
-    if (spammed) {
+    if (isSpam) {
       logMsg(msg, 'spam');
-    } else if (profane) {
+    } else if (isProfane) {
       logMsg(msg, 'profanity');
     }
   },
 };
-
 
 const logMsg = (msg, ctx) => {
   const logs = msg.guild.channels.cache.find(
@@ -36,7 +35,6 @@ const logMsg = (msg, ctx) => {
     logs.send({content: reply});
   }
 };
-
 
 const convert = (sentence) => {
   const map = {
