@@ -37,25 +37,26 @@ const logMsg = (msg, ctx) => {
 };
 
 const convert = (sentence) => {
-  const map = {
-    '@': 'a',
-    '4': 'a',
+  const map = new Map([
+    ['@', 'a'],
+    ['4', 'a'],
 
-    '1': 'i',
-    '|': 'i',
-    '!': 'i',
+    ['1', 'i'],
+    ['|', 'i'],
+    ['!', 'i'],
 
-    '$': 's',
-    '0': 'o',
-    '7': 't',
-    '3': 'e',
-  };
+    ['$', 's'],
+    ['0', 'o'],
+    ['7', 't'],
+    ['3', 'e']
+  ]);
 
   sentence = sentence
     .split('')
     .map((char) => {
-      return map[char] ? map[char] : char;
+      return map.get(char) ? map.get(char) : char;
     })
     .join('');
+  console.log(sentence);
   return sentence;
 };
