@@ -8,7 +8,7 @@ module.exports = {
 
   execute(msg) {
     if (RoleEnum[msg.member.roles.highest.name]) return;
-    
+
     const profanity = new Filter();
     const spam = new Filter({emptyList: true});
     spam.addWords(...['nitro']);
@@ -30,7 +30,7 @@ const logMsg = (msg, ctx) => {
   );
 
   if (logs) {
-    let reply = `${msg.author}'s message in ${msg.channel} has been flagged for possible ${ctx}:\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
+    const reply = `${msg.author}'s message in ${msg.channel} has been flagged for possible ${ctx}:\nhttps://discordapp.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`;
 
     logs.send({content: reply});
   }
@@ -49,12 +49,13 @@ const convert = (sentence) => {
     '0': 'o',
     '7': 't',
     '3': 'e',
-  }
+  };
 
-  sentence = sentence.split("").map(
-    (char) => {
+  sentence = sentence
+    .split('')
+    .map((char) => {
       return map[char] ? map[char] : char;
-    }  
-  ).join("");
+    })
+    .join('');
   return sentence;
 };
