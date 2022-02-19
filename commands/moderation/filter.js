@@ -1,5 +1,5 @@
-const Filter = require('bad-words');
 const RoleEnum = require('../../handlers/permissionHandlers.js').RoleEnum;
+const Filters = require('../../config/filters.js');
 
 module.exports = {
   name: 'filter',
@@ -9,9 +9,8 @@ module.exports = {
   execute(msg) {
     if (RoleEnum[msg.member.roles.highest.name]) return;
 
-    const profanity = new Filter();
-    const spam = new Filter({emptyList: true});
-    spam.addWords(...['nitro']);
+    const profanity = Filters.getProfanity();
+    const spam = Filters.getSpam();
     const content = convert(msg.content);
     const isProfane = profanity.isProfane(content);
     const isSpam = spam.isProfane(content);
@@ -37,19 +36,7 @@ const logMsg = (msg, ctx) => {
 };
 
 const convert = (sentence) => {
-  const map = new Map([
-    ['@', 'a'],
-    ['4', 'a'],
-
-    ['1', 'i'],
-    ['|', 'i'],
-    ['!', 'i'],
-
-    ['$', 's'],
-    ['0', 'o'],
-    ['7', 't'],
-    ['3', 'e']
-  ]);
+  const map = Filters.getMap();
 
   sentence = sentence
     .split('')
@@ -57,6 +44,5 @@ const convert = (sentence) => {
       return map.get(char) ? map.get(char) : char;
     })
     .join('');
-  console.log(sentence);
   return sentence;
 };
