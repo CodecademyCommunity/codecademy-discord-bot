@@ -39,16 +39,16 @@ const logMsg = (msg, ctx) => {
 const convert = (sentence) => {
   const map = {
     '@': 'a',
-    4: 'a',
+    '4': 'a',
 
-    1: 'i',
+    '1': 'i',
     '|': 'i',
     '!': 'i',
 
-    $: 's',
-    0: 'o',
-    7: 't',
-    3: 'e',
+    '$': 's',
+    '0': 'o',
+    '7': 't',
+    '3': 'e',
   };
 
   sentence = sentence
