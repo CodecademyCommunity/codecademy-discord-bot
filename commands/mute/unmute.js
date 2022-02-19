@@ -11,7 +11,7 @@ module.exports = {
   execute(msg, args, con) {
     const {status, err, toUnmute} = canUnmute(msg, args);
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     unmuteUser(msg, toUnmute);
@@ -48,10 +48,10 @@ function unmuteUser(message, toUnmute) {
   toUnmute.roles.remove(
     message.guild.roles.cache.find((role) => role.name === 'Muted')
   );
-  message.channel.send(`${toUnmute} was unmuted.`);
+  message.channel.send({content: `${toUnmute} was unmuted.`});
 
   // Sends user a DM notifying them of their unmuted status.
-  toUnmute.send("You've been unmuted.");
+  toUnmute.send({content: "You've been unmuted."});
 }
 
 function auditLog(message, toUnmute) {
@@ -71,7 +71,7 @@ function auditLog(message, toUnmute) {
     .setTimestamp()
     .setFooter(`${message.guild.name}`);
 
-  channel.send(unmuteEmbed);
+  channel.send({embeds: [unmuteEmbed]});
 }
 
 function recordInDB(message, connection) {

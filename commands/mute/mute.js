@@ -12,7 +12,7 @@ module.exports = {
   execute(msg, args, con) {
     const {status, err, toMute, reason} = canMute(msg, args);
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     if (!verifyReasonLength(msg.content, msg)) return;
@@ -75,14 +75,15 @@ function muteUser(message, toMute, reason) {
   toMute.roles.add(
     message.guild.roles.cache.find((role) => role.name === 'Muted')
   );
-  message.channel.send(
-    `${toMute} was muted by ${message.member}.\nReason: ${reason}`
-  );
+  message.channel.send({
+    content: `${toMute} was muted by ${message.member}.\nReason: ${reason}`,
+  });
 
   // Sends user a DM notifying them of their muted status.
-  toMute.send(
-    "You've been muted for the following reason: ```" + reason + ' ```'
-  );
+  toMute.send({
+    content:
+      "You've been muted for the following reason: ```" + reason + ' ```',
+  });
 }
 
 function auditLog(message, toMute, reason) {
@@ -103,7 +104,7 @@ function auditLog(message, toMute, reason) {
     .setTimestamp()
     .setFooter(`${message.guild.name}`);
 
-  channel.send(muteEmbed);
+  channel.send({embeds: [muteEmbed]});
 }
 
 function recordInDB(message, toMute, reason, connection) {
