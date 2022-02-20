@@ -14,7 +14,7 @@ module.exports = {
     const content = convert(msg.content);
     const isProfane = profanity.isProfane(content);
     const isSpam = spam.isProfane(content);
-    
+
     if (isSpam) {
       logMsg(msg, 'spam');
     } else if (isProfane) {

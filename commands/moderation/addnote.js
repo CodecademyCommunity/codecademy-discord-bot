@@ -55,7 +55,7 @@ function postEmbed(msg, targetUser, note) {
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
 
-  msg.channel.send(embed);
+  msg.channel.send({embeds: [embed]});
 }
 
 function addNoteToDB(msg, con, targetUser, note) {

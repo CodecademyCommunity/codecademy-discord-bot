@@ -14,7 +14,7 @@ const map = new Map([
   ['$', 's'],
   ['0', 'o'],
   ['7', 't'],
-  ['3', 'e']
+  ['3', 'e'],
 ]);
 
 module.exports = {

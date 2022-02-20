@@ -62,11 +62,11 @@ function notesLog(msg, targetUser, notes) {
       )
       .setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
       .addField(`Total`, `${totalNotes}`)
-      .addField(`Latest Notes: `, listOfNotes)
+      .addField(`Latest Notes: `, listOfNotes.join('\n'))
       .setTimestamp()
       .setFooter(`${msg.guild.name}`);
 
-    msg.channel.send(notesEmbed);
+    msg.channel.send({embeds: [notesEmbed]});
   } else {
     msg.reply(
       `${targetUser.user.username}#${targetUser.user.discriminator} doesn't have any notes`
