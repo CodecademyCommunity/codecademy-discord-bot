@@ -58,7 +58,7 @@ async function logDeletedMessages(message) {
 
   const deletedMessageEmbed = buildEmbed(message, executor);
 
-  channel.send(deletedMessageEmbed);
+  channel.send({embeds: [deletedMessageEmbed]});
 }
 
 const fetchAndAudit = async (message) => {

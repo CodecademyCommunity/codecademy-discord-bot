@@ -11,7 +11,7 @@ module.exports = {
   execute(msg, args, con) {
     const {status, err, numberDeleted} = validClear(msg, args);
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     clearMessage(msg, numberDeleted);
@@ -36,6 +36,11 @@ function validClear(msg, args) {
 
   if (args[0] > 100) {
     data.err = 'You can only delete a max of a hundred messages';
+    return data;
+  }
+
+  if (args[0] < 1) {
+    data.err = 'The number of messages you have entered is less than 1';
     return data;
   }
 
@@ -73,7 +78,7 @@ function clearEmbed(msg, numberDeleted) {
     (channel) => channel.name === 'audit-logs'
   );
 
-  const banEmbed = new Discord.MessageEmbed()
+  const clearMsgEmbed = new Discord.MessageEmbed()
     .setColor('#0099ff')
     .setTitle(
       `${msg.author.tag} deleted ${numberDeleted} messages in #${msg.channel.name}`
@@ -84,11 +89,11 @@ function clearEmbed(msg, numberDeleted) {
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
 
-  channel.send(banEmbed);
+  channel.send({embeds: [clearMsgEmbed]});
 }
 
 function clearMessage(msg, numberDeleted) {
   msg.channel.bulkDelete(parseInt(numberDeleted) + 1);
 
-  msg.channel.send(`${numberDeleted} messages were deleted.`);
+  msg.channel.send({content: `${numberDeleted} messages were deleted.`});
 }
