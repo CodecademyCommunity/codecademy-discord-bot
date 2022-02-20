@@ -10,7 +10,7 @@ module.exports = {
   staffOnly: true,
   minRole: 'Moderator',
   async execute(msg, args, con) {
-    // Make sure only SU, Mods and Admin can run the command
+    // Make sure only Mods and Admins can run the command
     const offendingUser =
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
@@ -33,11 +33,13 @@ module.exports = {
         return msg.reply(`${e.name}: ${e.message}`);
       }
 
-      // Register call in the Audit-log channel
+      // Register call in the audit-log channel
       auditLog(msg, offendingUser, verbalReason);
 
-      // Give SU, Mod, Admin feedback on their call
-      msg.channel.send(`${msg.author} just verballed ${offendingUser}`);
+      // Give Mod or Admin feedback on their call
+      msg.channel.send({
+        content: `${msg.author} just verballed ${offendingUser}`,
+      });
 
       // Add the infraction to the database
       recordInDB(msg, con, offendingUser, verbalReason);
@@ -63,12 +65,12 @@ function auditLog(message, targetUser, reason) {
     .setTimestamp()
     .setFooter(`${message.guild.name}`);
 
-  channel.send(verbalEmbed);
+  channel.send({embeds: [verbalEmbed]});
 }
 
 async function dmTheUser(msg, targetUser, reason) {
   // Create an embed, craft it, and DM the user
-  const Embed = new Discord.MessageEmbed()
+  const dmEmbed = new Discord.MessageEmbed()
     .setColor('#f1d302')
     .setTitle(`Verbal to ${targetUser.user.username}`)
     .addField(
@@ -78,7 +80,7 @@ async function dmTheUser(msg, targetUser, reason) {
     .setDescription(reason)
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
-  await targetUser.send(Embed);
+  await targetUser.send({embeds: [dmEmbed]});
 }
 
 function recordInDB(msg, con, offendingUser, verbalReason) {
@@ -107,9 +109,9 @@ function recordInDB(msg, con, offendingUser, verbalReason) {
     if (err) {
       console.log(err);
       // Include a warning in case something goes wrong writing to the db
-      msg.channel.send(
-        `I verballed ${offendingUser} but writing to the db failed!`
-      );
+      msg.channel.send({
+        content: `I verballed ${offendingUser} but writing to the db failed!`,
+      });
     } else {
       console.log(
         '1 record inserted into user_notes, 1 record inserted into mod_log.'
@@ -128,7 +130,9 @@ function notHighRoller(msg, offendingUser) {
         role.name === 'Super Admin'
     )
   ) {
-    msg.reply('You cannot verbal a Code Counselor, Moderator or Admin.');
+    msg.reply({
+      content: 'You cannot verbal a Code Counselor, Moderator or Admin.',
+    });
     return false;
   } else {
     return true;
@@ -137,7 +141,7 @@ function notHighRoller(msg, offendingUser) {
 
 function notSelf(msg, offendingUser) {
   if (offendingUser.id == msg.author.id) {
-    msg.reply('Did you just try to verbal yourself?');
+    msg.reply({content: 'Did you just try to verbal yourself?'});
     return false;
   } else {
     return true;
