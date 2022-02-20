@@ -7,7 +7,7 @@ const con = getConnection();
 const client = getClient();
 
 const messageHandler = async (msg) => {
-  if (msg.webhookID) return; // Will be webhookId in v13
+  if (msg.webhookId) return;
 
   if (msg.content.substring(0, 3) === 'cc!') {
     await commandParser(client, con, msg);
