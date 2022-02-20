@@ -116,7 +116,7 @@ function noteEmbed(msg, userNote, noteID) {
     .setTimestamp()
     .setFooter(`${msg.guild.name}`);
 
-  channel.send(userNoteEmbed);
+  channel.send({embeds: userNoteEmbed});
 }
 
 function noteResponse(msg, userNote, noteID) {
