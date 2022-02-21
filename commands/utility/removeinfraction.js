@@ -57,7 +57,7 @@ function validateInfractionID(msg, userInfraction, args, infractionID, con) {
     if (err) {
       console.log(err);
     } else {
-      if (result[0].user !== userInfraction.id) {
+      if (result[0] && result[0].user !== userInfraction.id) {
         msg.reply({
           content: 'The specified infraction does not belong to that user.',
         });
