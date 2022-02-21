@@ -31,4 +31,20 @@ client.on('messageCreate', messageHandler);
 
 client.on('messageDelete', logDeletedMessages);
 
+process.on('unhandledRejection', async (error) => {
+  try {
+    console.error('Unhandled promise rejection:', error);
+    const channel = client.channels.cache.find(
+      (channel) => channel.name === 'audit-logs'
+    );
+    if (channel) {
+      await channel.send(
+        `UnhandledRejection error. Check logs for more info. Type: ${error.name} Message: ${error.message}`
+      );
+    }
+  } catch (rejectionHandlerErr) {
+    console.error('Error in unhandledRejection handler:', rejectionHandlerErr);
+  }
+});
+
 client.login(process.env.DISCORD_SECRET_KEY);
