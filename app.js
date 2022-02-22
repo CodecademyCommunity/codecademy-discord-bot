@@ -2,6 +2,7 @@ const {getClient} = require('./config/client.js');
 const {collectCommands} = require('./config/collectors');
 const {extendMutes} = require('./handlers/channelHandlers.js');
 const {applyMute, createMutedRole} = require('./handlers/guildHandlers.js');
+const {unhandledRejectionHandler} = require('./handlers/errorHandlers');
 const {
   messageHandler,
   logDeletedMessages,
@@ -30,5 +31,8 @@ client.on('channelCreate', extendMutes);
 client.on('messageCreate', messageHandler);
 
 client.on('messageDelete', logDeletedMessages);
+
+// Handles unhandled promise rejections which terminate the node process since node v15.
+process.on('unhandledRejection', unhandledRejectionHandler);
 
 client.login(process.env.DISCORD_SECRET_KEY);
