@@ -2,33 +2,32 @@ function createMutedRole(guild) {
   if (guild.available) {
     guild.roles
       .create({
-        data: {
-          name: 'Muted',
-          color: 'DARK_BUT_NOT_BLACK',
-          permissions: [],
-        },
+        name: 'Muted',
+        color: 'DARK_BUT_NOT_BLACK',
+        permissions: [],
       })
       .then(console.log)
       .catch(console.error);
   }
 }
 
-function applyMute(oldMember, newMember) {
-  const muted = newMember.guild.roles.cache.find(
-    (role) => role.name === 'Muted'
-  );
-  newMember.guild.channels.cache.forEach((channel) => {
-    if (
-      channel.type === 'text' &&
-      newMember === channel.members.find((member) => member.id === newMember.id)
-    ) {
-      channel.updateOverwrite(muted.id, {
-        ADD_REACTIONS: false,
-        SEND_MESSAGES: false,
-        SEND_TTS_MESSAGES: false,
-      });
-    }
-  });
+function applyMute(role) {
+  if (role.name == 'Muted') {
+    role.guild.channels.cache.forEach((channel) => {
+      if (channel.isText()) {
+        channel.permissionOverwrites.edit(role.id, {
+          ADD_REACTIONS: false,
+          ATTACH_FILES: false,
+          CREATE_PUBLIC_THREADS: false,
+          CREATE_PRIVATE_THREADS: false,
+          SEND_MESSAGES: false,
+          SEND_MESSAGES_IN_THREADS: false,
+          SEND_TTS_MESSAGES: false,
+          USE_APPLICATION_COMMANDS: false,
+        });
+      }
+    });
+  }
 }
 
 module.exports = {

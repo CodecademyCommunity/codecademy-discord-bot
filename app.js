@@ -23,7 +23,7 @@ client.on('ready', () => {
 client.on('guildCreate', createMutedRole);
 
 // Denies reacting and message sending permissions for users with Muted role.
-client.on('guildMemberUpdate', applyMute);
+client.on('roleCreate', applyMute);
 
 // Upon channel creation, mutes all users with Muted role in the new channel.
 client.on('channelCreate', extendMutes);
