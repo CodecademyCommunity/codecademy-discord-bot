@@ -1,8 +1,8 @@
 function createMutedRole(guild) {
-  if (guild.available) {
+  if (guild.available && !guild.roles.cache.has('On Mute')) {
     guild.roles
       .create({
-        name: 'Muted',
+        name: 'On Mute',
         color: 'DARK_BUT_NOT_BLACK',
         permissions: [],
       })
@@ -12,7 +12,7 @@ function createMutedRole(guild) {
 }
 
 function applyMute(role) {
-  if (role.name == 'Muted') {
+  if (role.name == 'On Mute') {
     role.guild.channels.cache.forEach((channel) => {
       if (channel.isText()) {
         channel.permissionOverwrites.edit(role.id, {

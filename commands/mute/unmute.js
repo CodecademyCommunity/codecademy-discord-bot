@@ -34,7 +34,7 @@ function canUnmute(message, args) {
     data.err = 'Please provide a user to unmute.';
     return data;
   }
-  if (!data.toUnmute.roles.cache.some((role) => role.name === 'Muted')) {
+  if (!data.toUnmute.roles.cache.some((role) => role.name === 'On Mute')) {
     data.err = 'This user is already unmuted.';
     return data;
   }
@@ -46,7 +46,7 @@ function canUnmute(message, args) {
 function unmuteUser(message, toUnmute) {
   // Removes Muted role from user.
   toUnmute.roles.remove(
-    message.guild.roles.cache.find((role) => role.name === 'Muted')
+    message.guild.roles.cache.find((role) => role.name === 'On Mute')
   );
   message.channel.send({content: `${toUnmute} was unmuted.`});
 
