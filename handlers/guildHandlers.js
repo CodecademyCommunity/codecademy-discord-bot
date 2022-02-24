@@ -1,5 +1,8 @@
 function createMutedRole(guild) {
-  if (guild.available && !guild.roles.cache.has('On Mute')) {
+  if (
+    guild.available &&
+    !guild.roles.cache.find((role) => role.name === 'On Mute')
+  ) {
     guild.roles
       .create({
         name: 'On Mute',
