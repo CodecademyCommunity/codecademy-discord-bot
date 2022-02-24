@@ -1,7 +1,7 @@
-function createMutedRole(guild) {
+function createOnMuteRole(guild) {
   if (
     guild.available &&
-    !guild.roles.cache.find((role) => role.name === 'On Mute')
+    !guild.roles.cache.some((role) => role.name === 'On Mute')
   ) {
     guild.roles
       .create({
@@ -34,6 +34,6 @@ function applyMute(role) {
 }
 
 module.exports = {
-  createMutedRole: createMutedRole,
+  createOnMuteRole: createOnMuteRole,
   applyMute: applyMute,
 };

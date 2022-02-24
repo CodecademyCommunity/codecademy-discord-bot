@@ -1,7 +1,7 @@
 const {getClient} = require('./config/client.js');
 const {collectCommands} = require('./config/collectors');
 const {extendMutes} = require('./handlers/channelHandlers.js');
-const {applyMute, createMutedRole} = require('./handlers/guildHandlers.js');
+const {applyMute, createOnMuteRole} = require('./handlers/guildHandlers.js');
 const {unhandledRejectionHandler} = require('./handlers/errorHandlers');
 const {
   messageHandler,
@@ -20,7 +20,7 @@ client.on('ready', () => {
 });
 
 // Adds a Muted role when the bot joins a server
-client.on('guildCreate', createMutedRole);
+client.on('guildCreate', createOnMuteRole);
 
 // Denies reacting and message sending permissions for users with Muted role.
 client.on('roleCreate', applyMute);
