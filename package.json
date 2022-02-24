@@ -16,7 +16,7 @@
   "dependencies": {
     "bad-words": "^3.0.4",
     "dateformat": "^4.6.3",
-    "discord.js": "^13.3.1",
+    "discord.js": "^13.6.0",
     "dotenv": "^8.6.0",
     "mysql": "^2.18.1"
   },
