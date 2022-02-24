@@ -87,7 +87,7 @@ function clearEmbed(msg, numberDeleted) {
       `https://cdn.discordapp.com/avatars/${msg.author.id}/${msg.author.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
   channel.send({embeds: [clearMsgEmbed]});
 }

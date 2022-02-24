@@ -114,7 +114,7 @@ function banEmbed(msg, toBan, reason) {
       `https://cdn.discordapp.com/avatars/${toBan.user.id}/${toBan.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
   channel.send({embeds: [banEmbed]});
 }

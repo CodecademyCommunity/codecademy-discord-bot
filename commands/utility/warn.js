@@ -57,7 +57,7 @@ function auditLog(message, targetUser, reason) {
       `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${message.guild.name}`);
+    .setFooter({text: `${message.guild.name}`});
 
   channel.send({embeds: [warnEmbed]});
 }
@@ -69,7 +69,7 @@ function dmTheUser(msg, targetUser, reason) {
     .setTitle(`Warning to ${targetUser.user.username}`)
     .setDescription(reason)
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
   targetUser.send({embeds: [Embed]});
 }
 

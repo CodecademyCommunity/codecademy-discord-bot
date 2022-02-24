@@ -58,15 +58,15 @@ function infractionLog(msg, targetUser, infractions) {
 
   if (totalInfractions) {
     const infractionsEmbed = new Discord.MessageEmbed()
-      .setAuthor(
-        `${targetUser.user.username}#${targetUser.user.discriminator}'s infractions`,
-        `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`
-      )
+      .setAuthor({
+        name: `${targetUser.user.username}#${targetUser.user.discriminator}'s infractions`,
+        iconURL: `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`,
+      })
       .setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
       .addField(`Total`, `${totalInfractions}`)
       .addField(`Latest infractions: `, listOfInfractions.join('\n'))
       .setTimestamp()
-      .setFooter(`${msg.guild.name}`);
+      .setFooter({text: `${msg.guild.name}`});
 
     msg.channel.send({embeds: [infractionsEmbed]});
   } else {

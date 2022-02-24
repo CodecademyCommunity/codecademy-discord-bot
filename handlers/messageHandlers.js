@@ -96,7 +96,7 @@ const buildEmbed = (message, executor) => {
         `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
       )
       .setTimestamp()
-      .setFooter(`${message.guild.name}`)
+      .setFooter({text: `${message.guild.name}`})
   );
 };
 

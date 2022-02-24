@@ -82,7 +82,7 @@ function unbanEmbed(msg, toUnban, channel) {
     .setColor('#0099ff')
     .setTitle(`${toUnban} was unbanned by ${msg.author.tag}:`)
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
   channel.send({embeds: [unbanEmbed]});
 }

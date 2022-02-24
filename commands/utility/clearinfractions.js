@@ -96,7 +96,7 @@ function clearInfractionEmbed(msg, userInfraction) {
       `https://cdn.discordapp.com/avatars/${userInfraction.user.id}/${userInfraction.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
   channel.send({embeds: [userInfractionEmbed]});
 }

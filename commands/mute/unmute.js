@@ -69,7 +69,7 @@ function auditLog(message, toUnmute) {
       `https://cdn.discordapp.com/avatars/${toUnmute.user.id}/${toUnmute.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${message.guild.name}`);
+    .setFooter({text: `${message.guild.name}`});
 
   channel.send({embeds: [unmuteEmbed]});
 }
