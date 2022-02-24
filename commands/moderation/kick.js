@@ -117,7 +117,7 @@ function kickEmbed(msg, toKick, reason) {
       `https://cdn.discordapp.com/avatars/${toKick.user.id}/${toKick.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
   channel.send({embeds: [kickEmbed]});
 }

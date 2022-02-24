@@ -45,15 +45,15 @@ function postEmbed(msg, targetUser, note) {
   ];
 
   const embed = new Discord.MessageEmbed()
-    .setAuthor(
-      `${targetUser.user.username}#${targetUser.user.discriminator}`,
-      `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`
-    )
+    .setAuthor({
+      name: `${targetUser.user.username}#${targetUser.user.discriminator}`,
+      iconURL: `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`,
+    })
     .setTitle(`New note`)
     .setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
     .addField(`Note:`, `${note}`)
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
   msg.channel.send({embeds: [embed]});
 }

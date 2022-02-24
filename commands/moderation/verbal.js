@@ -63,7 +63,7 @@ function auditLog(message, targetUser, reason) {
       `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${message.guild.name}`);
+    .setFooter({text: `${message.guild.name}`});
 
   channel.send({embeds: [verbalEmbed]});
 }
@@ -79,7 +79,7 @@ async function dmTheUser(msg, targetUser, reason) {
     )
     .setDescription(reason)
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
   await targetUser.send({embeds: [dmEmbed]});
 }
 

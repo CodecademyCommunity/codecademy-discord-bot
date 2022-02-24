@@ -102,7 +102,7 @@ function auditLog(message, toMute, reason) {
       `https://cdn.discordapp.com/avatars/${toMute.user.id}/${toMute.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${message.guild.name}`);
+    .setFooter({text: `${message.guild.name}`});
 
   channel.send({embeds: [muteEmbed]});
 }

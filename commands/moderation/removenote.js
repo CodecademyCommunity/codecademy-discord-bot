@@ -114,7 +114,7 @@ function noteEmbed(msg, userNote, noteID) {
       `https://cdn.discordapp.com/avatars/${userNote.user.id}/${userNote.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
   channel.send({embeds: [userNoteEmbed]});
 }
