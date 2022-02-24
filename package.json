@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "engines": {
+    "node": ">=16.6.0"
+  },
   "scripts": {
     "start": "node app.js",
     "watch": "nodemon app.js",
@@ -12,11 +15,11 @@
     "droptable": "node utils/data/dropTable.js"
   },
   "author": "StevenC",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bad-words": "^3.0.4",
     "dateformat": "^4.6.3",
-    "discord.js": "^13.3.1",
+    "discord.js": "^13.6.0",
     "dotenv": "^8.6.0",
     "mysql": "^2.18.1"
   },
