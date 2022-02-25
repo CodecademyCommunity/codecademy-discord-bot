@@ -55,7 +55,7 @@ function canMute(message, args) {
     data.err = 'You cannot mute a moderator or admin.';
     return data;
   }
-  if (data.toMute.roles.cache.some((role) => role.name === 'Muted')) {
+  if (data.toMute.roles.cache.some((role) => role.name === 'On Mute')) {
     data.err = 'This user is already muted.';
     return data;
   }
@@ -73,7 +73,7 @@ function canMute(message, args) {
 function muteUser(message, toMute, reason) {
   // Adds Muted role to user.
   toMute.roles.add(
-    message.guild.roles.cache.find((role) => role.name === 'Muted')
+    message.guild.roles.cache.find((role) => role.name === 'On Mute')
   );
   message.channel.send({
     content: `${toMute} was muted by ${message.member}.\nReason: ${reason}`,
