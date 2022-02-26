@@ -11,12 +11,12 @@ function createOnMuteRole(guild) {
         .catch(console.error);
     } else {
       const onMute = guild.roles.cache.find((role) => role.name === 'On Mute');
-      applyMute(onMute);
+      applyMuteRestrictionsToOnMuteRole(onMute);
     }
   }
 }
 
-function applyMute(role) {
+function applyMuteRestrictionsToOnMuteRole(role) {
   if (role.name == 'On Mute') {
     role.guild.channels.cache.forEach((channel) => {
       if (channel.isText()) {
@@ -37,5 +37,5 @@ function applyMute(role) {
 
 module.exports = {
   createOnMuteRole: createOnMuteRole,
-  applyMute: applyMute,
+  applyMuteRestrictionsToOnMuteRole: applyMuteRestrictionsToOnMuteRole,
 };
