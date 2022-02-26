@@ -1,9 +1,9 @@
 const extendMutes = (channel) => {
   if (channel.guild != null && channel.isText()) {
-    const muted = channel.guild.roles.cache.find(
+    const onMute = channel.guild.roles.cache.find(
       (role) => role.name === 'On Mute'
     );
-    channel.permissionOverwrites.edit(muted.id, {
+    channel.permissionOverwrites.edit(onMute.id, {
       ADD_REACTIONS: false,
       ATTACH_FILES: false,
       CREATE_PUBLIC_THREADS: false,
