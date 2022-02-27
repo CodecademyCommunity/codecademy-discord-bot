@@ -17,6 +17,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd codecademy-discord-bot
+          git checkout master
           git pull origin master
           git status
           npm ci
