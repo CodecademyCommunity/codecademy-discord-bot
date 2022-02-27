@@ -1,7 +1,10 @@
 const {getClient} = require('./config/client.js');
 const {collectCommands} = require('./config/collectors');
 const {extendMutes} = require('./handlers/channelHandlers.js');
-const {applyMute, createOnMuteRole} = require('./handlers/guildHandlers.js');
+const {
+  applyMuteRestrictionsToOnMuteRole,
+  createOnMuteRole,
+} = require('./handlers/guildHandlers.js');
 const {unhandledRejectionHandler} = require('./handlers/errorHandlers');
 const {
   messageHandler,
@@ -23,7 +26,7 @@ client.on('ready', () => {
 client.on('guildCreate', createOnMuteRole);
 
 // Denies reacting and message sending permissions for users with Muted role.
-client.on('roleCreate', applyMute);
+client.on('roleCreate', applyMuteRestrictionsToOnMuteRole);
 
 // Upon channel creation, mutes all users with Muted role in the new channel.
 client.on('channelCreate', extendMutes);

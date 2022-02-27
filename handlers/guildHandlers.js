@@ -1,20 +1,22 @@
 function createOnMuteRole(guild) {
-  if (
-    guild.available &&
-    !guild.roles.cache.some((role) => role.name === 'On Mute')
-  ) {
-    guild.roles
-      .create({
-        name: 'On Mute',
-        color: 'DARK_BUT_NOT_BLACK',
-        permissions: [],
-      })
-      .then(console.log)
-      .catch(console.error);
+  if (guild.available) {
+    if (!guild.roles.cache.some((role) => role.name === 'On Mute')) {
+      guild.roles
+        .create({
+          name: 'On Mute',
+          color: 'DARK_BUT_NOT_BLACK',
+          permissions: [],
+        })
+        .then(console.log)
+        .catch(console.error);
+    } else {
+      const onMute = guild.roles.cache.find((role) => role.name === 'On Mute');
+      applyMuteRestrictionsToOnMuteRole(onMute);
+    }
   }
 }
 
-function applyMute(role) {
+function applyMuteRestrictionsToOnMuteRole(role) {
   if (role.name == 'On Mute') {
     role.guild.channels.cache.forEach((channel) => {
       if (channel.isText()) {
@@ -35,5 +37,5 @@ function applyMute(role) {
 
 module.exports = {
   createOnMuteRole: createOnMuteRole,
-  applyMute: applyMute,
+  applyMuteRestrictionsToOnMuteRole: applyMuteRestrictionsToOnMuteRole,
 };
