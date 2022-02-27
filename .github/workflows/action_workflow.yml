@@ -11,10 +11,10 @@ jobs:
     - name: testing server ssh connection
       uses: appleboy/ssh-action@master
       with: 
-        host: 159.89.94.61
-        username: root
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SECRET_SSH_KEY }}
-        port: 22
+        port: ${{ secrets.PORT }}
         script: |
           cd codecademy-discord-bot
           git pull origin master
