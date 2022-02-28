@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const {setTimeout} = require('timers/promises');
 const {getClient} = require('../config/client');
 const {getConnection} = require('../config/db');
 const {hasPermission} = require('../handlers/permissionHandlers');
@@ -45,7 +46,8 @@ const commandParser = async (client, con, msg) => {
 async function logDeletedMessages(message) {
   // Inspired by StackOverFlow: https://stackoverflow.com/questions/53328061/finding-who-deleted-the-message
   // Add latency as audit logs aren't instantly updated, adding a higher latency will result in slower logs, but higher accuracy.
-  await Discord.Util.delayFor(900);
+  // Replaced Discord.Util.delayFor(900) with node timer in conversion to discord.js v13.
+  await setTimeout(900);
 
   const deletedPost = await fetchAndAudit(message);
   // If entry exists, grab the user that deleted the message and display username + tag, if none, display 'Unknown'.
