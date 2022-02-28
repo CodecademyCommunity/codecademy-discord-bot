@@ -5,9 +5,7 @@ const {MessageEmbed} = require('discord.js');
 async function unhandledRejectionHandler(error) {
   try {
     console.error('Unhandled promise rejection:', error);
-    const channel = client.channels.cache.find(
-      (channel) => channel.name === process.env.BOT_ERROR_CHANNEL
-    );
+    const channel = client.channels.cache.get(process.env.BOT_ERROR_CHANNEL_ID);
     if (channel) {
       const errorEmbed = new MessageEmbed()
         .setTitle('UnhandledRejection error')
