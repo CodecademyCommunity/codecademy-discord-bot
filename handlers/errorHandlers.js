@@ -6,7 +6,7 @@ async function unhandledRejectionHandler(error) {
   try {
     console.error('Unhandled promise rejection:', error);
     const channel = client.channels.cache.find(
-      (channel) => channel.name === 'audit-logs'
+      (channel) => channel.name === process.env.BOT_ERROR_CHANNEL
     );
     if (channel) {
       const errorEmbed = new MessageEmbed()
