@@ -24,11 +24,12 @@ module.exports = {
           'Bug Reporting',
           'To report a bug, click *Get Unstuck* in the learning environment, then click *Bugs*.'
         )
-        .setFooter(
-          'All billing-related queries should be directed to Customer Support.'
-        );
+        .setFooter({
+          text:
+            'All billing-related queries should be directed to Customer Support.',
+        });
 
-      msg.reply(embed);
+      msg.reply({embeds: [embed]});
     }
   },
 };

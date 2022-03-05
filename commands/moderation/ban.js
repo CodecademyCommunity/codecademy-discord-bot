@@ -15,7 +15,7 @@ module.exports = {
   async execute(msg, args, con) {
     const {status, err, toBan, reason} = validBan(msg, args);
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     const banText = this.banIntro + reason + this.unbanRequest;
@@ -24,7 +24,7 @@ module.exports = {
     try {
       await banUser(msg, toBan, banText);
     } catch (error) {
-      return msg.reply(`${error.name}: ${error.message}`);
+      return msg.reply({content: `${error.name}: ${error.message}`});
     }
 
     banSQL(msg, toBan, reason, con);
@@ -52,7 +52,7 @@ function validBan(msg, args) {
     return data;
   }
 
-  if (data.toBan.hasPermission('BAN_MEMBERS')) {
+  if (data.toBan.permissions.has('BAN_MEMBERS')) {
     data.err = 'This user also has ban privileges.';
     return data;
   }
@@ -114,22 +114,22 @@ function banEmbed(msg, toBan, reason) {
       `https://cdn.discordapp.com/avatars/${toBan.user.id}/${toBan.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
-  channel.send(banEmbed);
+  channel.send({embeds: [banEmbed]});
 }
 
 async function banUser(msg, toBan, reason) {
   // Banning member and sending him a DM with a form to refute the ban and the reason
 
   try {
-    await toBan.send(reason);
-    await msg.reply(`Message sent to ${toBan} successfully`);
+    await toBan.send({content: reason});
+    await msg.reply({content: `Message sent to ${toBan} successfully`});
     await toBan.ban({reason});
   } catch (error) {
     console.error(error);
     throw error;
   }
 
-  msg.reply(`${toBan} was banned.`);
+  msg.reply({content: `${toBan} was banned.`});
 }

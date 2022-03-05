@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const dateFormat = require('dateformat');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
+const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
   name: 'warn',
@@ -14,7 +15,7 @@ module.exports = {
       msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
 
     if (
-      hasUserTarget(msg, offendingUser) &&
+      hasTargetUser(msg, offendingUser, 'warn') &&
       notSelf(msg, offendingUser) &&
       notHighRoller(msg, offendingUser)
     ) {
@@ -32,7 +33,7 @@ module.exports = {
       auditLog(msg, offendingUser, warningReason);
 
       // Give SU, Mod, Admin feedback on their call
-      msg.channel.send(`${msg.author} just warned ${offendingUser}`);
+      msg.channel.send({content: `${msg.author} just warned ${offendingUser}`});
 
       // Add the infraction to the database
       recordInDB(msg, con, offendingUser, warningReason);
@@ -56,9 +57,9 @@ function auditLog(message, targetUser, reason) {
       `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${message.guild.name}`);
+    .setFooter({text: `${message.guild.name}`});
 
-  channel.send(warnEmbed);
+  channel.send({embeds: [warnEmbed]});
 }
 
 function dmTheUser(msg, targetUser, reason) {
@@ -68,8 +69,8 @@ function dmTheUser(msg, targetUser, reason) {
     .setTitle(`Warning to ${targetUser.user.username}`)
     .setDescription(reason)
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
-  targetUser.send(Embed);
+    .setFooter({text: `${msg.guild.name}`});
+  targetUser.send({embeds: [Embed]});
 }
 
 function recordInDB(msg, con, offendingUser, warningReason) {
@@ -98,37 +99,15 @@ function recordInDB(msg, con, offendingUser, warningReason) {
     if (err) {
       console.log(err);
       // Include a warning in case something goes wrong writing to the db
-      msg.channel.send(
-        `I warned ${offendingUser} but writing to the db failed!`
-      );
+      msg.channel.send({
+        content: `I warned ${offendingUser} but writing to the db failed!`,
+      });
     } else {
       console.log(
         '1 record inserted into infractions, 1 record inserted into mod_log.'
       );
     }
   });
-}
-
-function hasUserTarget(msg, offendingUser) {
-  // Asortment of answers to make the bot more fun
-  const failAttemptReply = [
-    'Ok there bud, who are you trying to warn again?',
-    'You definitely missed the target user there...',
-    'shoot first ask later? You forgot the target user',
-    "Not judging, but you didn't set a user to warn",
-    "Without a target user I can't warn anyone but you",
-    'Forgot the target user. Wanna try again?',
-    'Please tell you *do* know who to warn? You forgot the user',
-  ];
-
-  if (offendingUser) {
-    return true;
-  } else {
-    msg.reply(
-      failAttemptReply[Math.floor(Math.random() * failAttemptReply.length)]
-    );
-    return false;
-  }
 }
 
 function notHighRoller(msg, offendingUser) {
@@ -151,7 +130,7 @@ function notHighRoller(msg, offendingUser) {
 
 function notSelf(msg, offendingUser) {
   if (offendingUser.id == msg.author.id) {
-    msg.reply('Did you just try to warn yourself?');
+    msg.reply({content: 'Did you just try to warn yourself?'});
     return false;
   } else {
     return true;

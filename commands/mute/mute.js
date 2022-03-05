@@ -12,7 +12,7 @@ module.exports = {
   execute(msg, args, con) {
     const {status, err, toMute, reason} = canMute(msg, args);
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     if (!verifyReasonLength(msg.content, msg)) return;
@@ -55,7 +55,7 @@ function canMute(message, args) {
     data.err = 'You cannot mute a moderator or admin.';
     return data;
   }
-  if (data.toMute.roles.cache.some((role) => role.name === 'Muted')) {
+  if (data.toMute.roles.cache.some((role) => role.name === 'On Mute')) {
     data.err = 'This user is already muted.';
     return data;
   }
@@ -73,16 +73,17 @@ function canMute(message, args) {
 function muteUser(message, toMute, reason) {
   // Adds Muted role to user.
   toMute.roles.add(
-    message.guild.roles.cache.find((role) => role.name === 'Muted')
+    message.guild.roles.cache.find((role) => role.name === 'On Mute')
   );
-  message.channel.send(
-    `${toMute} was muted by ${message.member}.\nReason: ${reason}`
-  );
+  message.channel.send({
+    content: `${toMute} was muted by ${message.member}.\nReason: ${reason}`,
+  });
 
   // Sends user a DM notifying them of their muted status.
-  toMute.send(
-    "You've been muted for the following reason: ```" + reason + ' ```'
-  );
+  toMute.send({
+    content:
+      "You've been muted for the following reason: ```" + reason + ' ```',
+  });
 }
 
 function auditLog(message, toMute, reason) {
@@ -101,9 +102,9 @@ function auditLog(message, toMute, reason) {
       `https://cdn.discordapp.com/avatars/${toMute.user.id}/${toMute.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${message.guild.name}`);
+    .setFooter({text: `${message.guild.name}`});
 
-  channel.send(muteEmbed);
+  channel.send({embeds: [muteEmbed]});
 }
 
 function recordInDB(message, toMute, reason, connection) {

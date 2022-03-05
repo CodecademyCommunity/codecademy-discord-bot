@@ -14,7 +14,7 @@ module.exports = {
       args
     );
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     validateInfractionID(msg, userInfraction, args, infractionID, con);
@@ -57,14 +57,16 @@ function validateInfractionID(msg, userInfraction, args, infractionID, con) {
     if (err) {
       console.log(err);
     } else {
-      if (result[0].user !== userInfraction.id) {
-        msg.reply('The specified infraction does not belong to that user.');
+      if (result[0] && result[0].user !== userInfraction.id) {
+        msg.reply({
+          content: 'The specified infraction does not belong to that user.',
+        });
       } else if (result[0] && result[0].valid == 0) {
-        msg.reply('Please include a valid infraction ID');
+        msg.reply({content: 'Please include a valid infraction ID'});
       } else if (result[0] && result[0].valid != 0) {
         infractionSQL(msg, userInfraction, infractionID, args, con);
       } else {
-        msg.reply('Please include a valid infraction ID');
+        msg.reply({content: 'Please include a valid infraction ID'});
       }
     }
   });
@@ -111,11 +113,13 @@ function infractionEmbed(msg, userInfraction, infractionID) {
       `https://cdn.discordapp.com/avatars/${userInfraction.user.id}/${userInfraction.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
-  channel.send(userInfractionEmbed);
+  channel.send({embeds: [userInfractionEmbed]});
 }
 
 function infractionResponse(msg, userInfraction, infractionID) {
-  msg.reply(`Infraction #${infractionID} was removed from ${userInfraction}.`);
+  msg.reply({
+    content: `Infraction #${infractionID} was removed from ${userInfraction}.`,
+  });
 }

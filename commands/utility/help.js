@@ -34,13 +34,6 @@ module.exports = {
           );
           break;
 
-        case 'cc!tempban':
-        case 'tempban':
-          msg.channel.send(
-            '`cc!tempban [user] [lengthoftime] [reason]`\nTemporarily bans a user for a set time period. *Moderator and above only.*'
-          );
-          break;
-
         case 'cc!kick':
         case 'kick':
           msg.channel.send(
@@ -59,13 +52,6 @@ module.exports = {
         case 'unmute':
           msg.channel.send(
             '`cc!unmute [user]`\nUnmutes a user. *Moderator and above only.*'
-          );
-          break;
-
-        case 'cc!tempmute':
-        case 'tempmute':
-          msg.channel.send(
-            '`cc!tempmute [user] [lengthoftime] [reason]`\nTemporarily mutes a user for a set time period. *Moderator and above only.*'
           );
           break;
 
@@ -161,7 +147,7 @@ module.exports = {
         .addField('Admin Only', 'cc!clearinfractions')
         .addField(
           'Moderator & Above Only',
-          'cc!ban, cc!unban, cc!tempban, cc!mute, cc!unmute, cc!tempmute, cc!kick, cc!warn, cc!verbal, cc!infractions, cc!removeinfraction, cc!removenote, cc!clearmessages, cc!records'
+          'cc!ban, cc!unban, cc!mute, cc!unmute, cc!kick, cc!warn, cc!verbal, cc!infractions, cc!removeinfraction, cc!removenote, cc!clearmessages, cc!records'
         )
         .addField(
           'Code Counselor & Above Only',
@@ -169,7 +155,7 @@ module.exports = {
         )
         .addField('Everyone', 'cc!stats, cc!helpcenter, cc!help');
 
-      msg.channel.send(commandsEmbed);
+      msg.channel.send({embeds: [commandsEmbed]});
     }
   },
 };
