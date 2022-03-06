@@ -61,8 +61,8 @@ function notesLog(msg, targetUser, notes) {
         iconURL: `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`,
       })
       .setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
-      .addField(`Total`, `${totalNotes}`)
-      .addField(`Latest Notes: `, listOfNotes.join('\n'))
+      .setDescription(`Total: ${totalNotes}`)
+      .addFields(...listOfNotes)
       .setTimestamp()
       .setFooter({text: `${msg.guild.name}`});
 
@@ -115,11 +115,12 @@ function parseNotes(msg, notes) {
   const notesWithTimes = [];
   for (let i = 0; i < moderatorList.length; i++) {
     if (validList[i])
-      notesWithTimes.push(
-        `**ID: ${idList[i]}** • ${msg.guild.members.cache.get(
-          moderatorList[i]
-        )}: *${noteList[i]}* • ${timeSinceNote[i]} *ago*`
-      );
+      notesWithTimes.push({
+        name: `ID: ${idList[i]}   ${timeSinceNote[i]} ago`,
+        value: `${msg.guild.members.cache.get(moderatorList[i])}: ${
+          noteList[i]
+        }`,
+      });
   }
   return notesWithTimes;
 }
