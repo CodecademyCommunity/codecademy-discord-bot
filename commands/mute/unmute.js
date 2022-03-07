@@ -11,7 +11,7 @@ module.exports = {
   execute(msg, args, con) {
     const {status, err, toUnmute} = canUnmute(msg, args);
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     unmuteUser(msg, toUnmute);
@@ -34,7 +34,7 @@ function canUnmute(message, args) {
     data.err = 'Please provide a user to unmute.';
     return data;
   }
-  if (!data.toUnmute.roles.cache.some((role) => role.name === 'Muted')) {
+  if (!data.toUnmute.roles.cache.some((role) => role.name === 'On Mute')) {
     data.err = 'This user is already unmuted.';
     return data;
   }
@@ -46,12 +46,12 @@ function canUnmute(message, args) {
 function unmuteUser(message, toUnmute) {
   // Removes Muted role from user.
   toUnmute.roles.remove(
-    message.guild.roles.cache.find((role) => role.name === 'Muted')
+    message.guild.roles.cache.find((role) => role.name === 'On Mute')
   );
-  message.channel.send(`${toUnmute} was unmuted.`);
+  message.channel.send({content: `${toUnmute} was unmuted.`});
 
   // Sends user a DM notifying them of their unmuted status.
-  toUnmute.send("You've been unmuted.");
+  toUnmute.send({content: "You've been unmuted."});
 }
 
 function auditLog(message, toUnmute) {
@@ -69,9 +69,9 @@ function auditLog(message, toUnmute) {
       `https://cdn.discordapp.com/avatars/${toUnmute.user.id}/${toUnmute.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${message.guild.name}`);
+    .setFooter({text: `${message.guild.name}`});
 
-  channel.send(unmuteEmbed);
+  channel.send({embeds: [unmuteEmbed]});
 }
 
 function recordInDB(message, connection) {

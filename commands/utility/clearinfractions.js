@@ -11,7 +11,7 @@ module.exports = {
   execute(msg, args, con) {
     const {status, err, userInfraction} = validInfraction(msg, args);
     if (!status) {
-      return msg.reply(err);
+      return msg.reply({content: err});
     }
 
     findInfractions(msg, userInfraction, args, con);
@@ -50,7 +50,7 @@ function findInfractions(msg, userInfraction, args, con) {
       if (result[0]['COUNT(id)'] > 0) {
         clearInfractionSQL(msg, userInfraction, args, con);
       } else {
-        msg.reply('This user does not have any infractions');
+        msg.reply({content: 'This user does not have any infractions'});
       }
     }
   });
@@ -96,11 +96,11 @@ function clearInfractionEmbed(msg, userInfraction) {
       `https://cdn.discordapp.com/avatars/${userInfraction.user.id}/${userInfraction.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
-  channel.send(userInfractionEmbed);
+  channel.send({embeds: [userInfractionEmbed]});
 }
 
 function clearInfractionResponse(msg, userInfraction) {
-  msg.reply(`All infractions were removed from ${userInfraction}.`);
+  msg.reply({content: `All infractions were removed from ${userInfraction}.`});
 }

@@ -9,11 +9,11 @@ const connection = mysql.createConnection({
   multipleStatements: true,
 });
 
-const destoryConnection = async () => {
+const destroyConnection = async () => {
   await connection.destroy();
 };
 
 module.exports = {
   getConnection: () => connection,
-  destroyConnection: destoryConnection,
+  destroyConnection: destroyConnection,
 };

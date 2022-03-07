@@ -60,7 +60,7 @@ function validatenoteID(msg, userNote, args, noteID, con) {
     if (err) {
       console.log(err);
     } else {
-      if (result[0].user !== userNote.id) {
+      if (result[0] && result[0].user !== userNote.id) {
         msg.reply('The specified note does not belong to the user.');
       } else if (result[0] && result[0].valid == 0) {
         msg.reply('This note has already been removed.');
@@ -114,9 +114,9 @@ function noteEmbed(msg, userNote, noteID) {
       `https://cdn.discordapp.com/avatars/${userNote.user.id}/${userNote.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
-  channel.send(userNoteEmbed);
+  channel.send({embeds: [userNoteEmbed]});
 }
 
 function noteResponse(msg, userNote, noteID) {

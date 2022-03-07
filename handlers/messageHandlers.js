@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const {setTimeout} = require('timers/promises');
 const {getClient} = require('../config/client');
 const {getConnection} = require('../config/db');
 const {hasPermission} = require('../handlers/permissionHandlers');
@@ -7,7 +8,7 @@ const con = getConnection();
 const client = getClient();
 
 const messageHandler = async (msg) => {
-  if (msg.webhookID) return; // Will be webhookId in v13
+  if (msg.webhookId) return;
 
   if (msg.content.substring(0, 3) === 'cc!') {
     await commandParser(client, con, msg);
@@ -45,7 +46,8 @@ const commandParser = async (client, con, msg) => {
 async function logDeletedMessages(message) {
   // Inspired by StackOverFlow: https://stackoverflow.com/questions/53328061/finding-who-deleted-the-message
   // Add latency as audit logs aren't instantly updated, adding a higher latency will result in slower logs, but higher accuracy.
-  await Discord.Util.delayFor(900);
+  // Replaced Discord.Util.delayFor(900) with node timer in conversion to discord.js v13.
+  await setTimeout(900);
 
   const deletedPost = await fetchAndAudit(message);
   // If entry exists, grab the user that deleted the message and display username + tag, if none, display 'Unknown'.
@@ -58,7 +60,7 @@ async function logDeletedMessages(message) {
 
   const deletedMessageEmbed = buildEmbed(message, executor);
 
-  channel.send(deletedMessageEmbed);
+  channel.send({embeds: [deletedMessageEmbed]});
 }
 
 const fetchAndAudit = async (message) => {
@@ -96,7 +98,7 @@ const buildEmbed = (message, executor) => {
         `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`
       )
       .setTimestamp()
-      .setFooter(`${message.guild.name}`)
+      .setFooter({text: `${message.guild.name}`})
   );
 };
 

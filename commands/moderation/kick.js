@@ -54,7 +54,7 @@ function validKick(msg, args) {
   }
 
   // Checks that the person who is getting kicked doesn't have kick privileges
-  if (data.toKick.hasPermission('KICK_MEMBERS')) {
+  if (data.toKick.permissions.has('KICK_MEMBERS')) {
     data.err = 'This user also has kick privileges.';
     return data;
   }
@@ -117,9 +117,9 @@ function kickEmbed(msg, toKick, reason) {
       `https://cdn.discordapp.com/avatars/${toKick.user.id}/${toKick.user.avatar}.png`
     )
     .setTimestamp()
-    .setFooter(`${msg.guild.name}`);
+    .setFooter({text: `${msg.guild.name}`});
 
-  channel.send(kickEmbed);
+  channel.send({embeds: [kickEmbed]});
 }
 
 async function kickUser(msg, toKick, reason) {

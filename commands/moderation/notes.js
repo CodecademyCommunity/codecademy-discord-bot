@@ -56,17 +56,17 @@ function notesLog(msg, targetUser, notes) {
 
   if (totalNotes) {
     const notesEmbed = new Discord.MessageEmbed()
-      .setAuthor(
-        `${targetUser.user.username}#${targetUser.user.discriminator}'s notes`,
-        `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`
-      )
+      .setAuthor({
+        name: `${targetUser.user.username}#${targetUser.user.discriminator}'s notes`,
+        iconURL: `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`,
+      })
       .setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
       .addField(`Total`, `${totalNotes}`)
-      .addField(`Latest Notes: `, listOfNotes)
+      .addField(`Latest Notes: `, listOfNotes.join('\n'))
       .setTimestamp()
-      .setFooter(`${msg.guild.name}`);
+      .setFooter({text: `${msg.guild.name}`});
 
-    msg.channel.send(notesEmbed);
+    msg.channel.send({embeds: [notesEmbed]});
   } else {
     msg.reply(
       `${targetUser.user.username}#${targetUser.user.discriminator} doesn't have any notes`
