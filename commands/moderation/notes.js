@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const {hasTargetUser} = require('../../helpers/hasTargetUser');
+const {formatDistanceToNow} = require('date-fns');
 
 module.exports = {
   name: 'notes',
@@ -89,26 +90,7 @@ function parseNotes(msg, notes) {
   const noteList = allNotes.map((note) => note[3]);
   const validList = allNotes.map((note) => note[4]);
 
-  // Format timestamps to work backwards from current time
-  // First convert to millisecs, then compare with current time
-  timestampList.forEach((time, idx) => (timestampList[idx] = Date.parse(time)));
-  const now = Date.now();
-  const timeSinceNote = timestampList.map((time) => now - time); // elapsed time
-  timeSinceNote.forEach((time, idx) => {
-    const seconds = time / 1000;
-    const minutes = seconds / 60;
-    const hours = minutes / 60;
-    const days = hours / 24;
-    if (Math.floor(days) > 0) {
-      timeSinceNote[idx] = [`${Math.floor(days)}d ${Math.round(days % 24)}h`];
-    } else if (Math.floor(hours) > 0) {
-      timeSinceNote[idx] = [`${Math.floor(hours)}h ${Math.round(hours % 60)}m`];
-    } else {
-      timeSinceNote[idx] = [
-        `${Math.floor(minutes)}m ${Math.round(minutes % 60)}s`,
-      ];
-    }
-  });
+  const timeSinceNote = timestampList.map((time) => formatDistanceToNow(time));
 
   // Join noteList with timeSinceNote
   // This lets us print out the embedded message so much better
