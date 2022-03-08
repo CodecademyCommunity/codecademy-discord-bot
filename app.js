@@ -1,6 +1,7 @@
 const {getClient} = require('./config/client.js');
 const {collectCommands} = require('./config/collectors');
 const {extendMutes} = require('./handlers/channelHandlers.js');
+const {Collection} = require('discord.js');
 const {
   applyMuteRestrictionsToOnMuteRole,
   createOnMuteRole,
@@ -10,13 +11,42 @@ const {
   messageHandler,
   logDeletedMessages,
 } = require('./handlers/messageHandlers');
+const fs = require('fs');
 
 require('dotenv').config();
 
 const client = getClient();
+client.commands = new Collection();
+
 const commandsDir = `${__dirname}/commands`;
 
 collectCommands(client, commandsDir);
+
+// Loads slash commands and related events
+const slashCommandsDir = `${__dirname}/commands/slash`;
+const eventsDir = `${__dirname}/events`;
+
+const slashCommandFiles = fs
+  .readdirSync(slashCommandsDir)
+  .filter((file) => file.endsWith('.js'));
+
+for (const file of slashCommandFiles) {
+  const slashCommand = require(`${slashCommandsDir}/${file}`);
+  client.commands.set(slashCommand.data.name, slashCommand);
+}
+
+const eventFiles = fs
+  .readdirSync(eventsDir)
+  .filter((file) => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+  const event = require(`${eventsDir}/${file}`);
+  if (event.once) {
+    client.once(event.name, (...args) => event.execute(...args));
+  } else {
+    client.on(event.name, (...args) => event.execute(...args));
+  }
+}
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);

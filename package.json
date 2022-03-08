@@ -17,8 +17,10 @@
   "author": "StevenC",
   "license": "MIT",
   "dependencies": {
+    "@discordjs/rest": "^0.3.0",
     "bad-words": "^3.0.4",
     "dateformat": "^4.6.3",
+    "discord-api-types": "^0.28.0",
     "discord.js": "^13.6.0",
     "dotenv": "^8.6.0",
     "mysql": "^2.18.1"
