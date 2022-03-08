@@ -14,7 +14,7 @@ function collect(dir, collection) {
       .filter((file) => file.endsWith('.js'));
     for (const file of files) {
       const item = require(`${dir}/${folder}/${file}`);
-      collection.set(item.name, item);
+      collection.set(item.data ? item.data.name : item.name, item);
     }
   }
 }
