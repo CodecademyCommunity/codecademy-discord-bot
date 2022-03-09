@@ -55,7 +55,6 @@ function infractionLog(msg, targetUser, infractions) {
     '#d3b99f',
     '#6e6a6f',
   ];
-
   if (totalInfractions) {
     const infractionsEmbed = new Discord.MessageEmbed()
       .setAuthor({
@@ -63,8 +62,8 @@ function infractionLog(msg, targetUser, infractions) {
         iconURL: `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`,
       })
       .setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
-      .addField(`Total`, `${totalInfractions}`)
-      .addField(`Latest infractions: `, listOfInfractions.join('\n'))
+      .setDescription(`Total: ${totalInfractions}`)
+      .addFields(...listOfInfractions)
       .setTimestamp()
       .setFooter({text: `${msg.guild.name}`});
 
@@ -121,9 +120,10 @@ function parseInfractions(infractions) {
   const reasonsWithTimes = [];
   for (let i = 0; i < reasonsList.length; i++) {
     if (validList[i])
-      reasonsWithTimes.push(
-        `**ID: ${idList[i]}** • ${actionList[i]} • *${reasonsList[i]}* • ${timeSinceInfraction[i]} *ago*`
-      );
+      reasonsWithTimes.push({
+        name: `ID: ${idList[i]}   ${actionList[i]}   ${timeSinceInfraction[i]} ago`,
+        value: `${reasonsList[i]}`,
+      });
   }
   return reasonsWithTimes;
 }
