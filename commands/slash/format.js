@@ -5,6 +5,7 @@ const {codeBlock} = require('@discordjs/builders');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('slash-format')
+    .setDefaultPermission(false)
     .setDescription('Format a code block')
     .addStringOption((option) =>
       option

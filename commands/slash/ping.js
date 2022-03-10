@@ -3,6 +3,7 @@ const {SlashCommandBuilder} = require('@discordjs/builders');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('slash-ping')
+    .setDefaultPermission(false)
     .setDescription('Replies with Pong!'),
   async execute(interaction) {
     const sent = await interaction.reply({

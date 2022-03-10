@@ -36,10 +36,6 @@ for (const file of eventFiles) {
   }
 }
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
-
 // Adds a Muted role when the bot joins a server
 client.on('guildCreate', createOnMuteRole);
 
