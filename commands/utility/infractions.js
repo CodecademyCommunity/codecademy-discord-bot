@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const {formatDistanceToNow} = require('date-fns');
 const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
@@ -55,7 +56,6 @@ function infractionLog(msg, targetUser, infractions) {
     '#d3b99f',
     '#6e6a6f',
   ];
-
   if (totalInfractions) {
     const infractionsEmbed = new Discord.MessageEmbed()
       .setAuthor({
@@ -63,8 +63,8 @@ function infractionLog(msg, targetUser, infractions) {
         iconURL: `https://cdn.discordapp.com/avatars/${targetUser.user.id}/${targetUser.user.avatar}.png`,
       })
       .setColor(embedFlair[Math.floor(Math.random() * embedFlair.length)])
-      .addField(`Total`, `${totalInfractions}`)
-      .addField(`Latest infractions: `, listOfInfractions.join('\n'))
+      .setDescription(`Total: ${totalInfractions}`)
+      .addFields(...listOfInfractions)
       .setTimestamp()
       .setFooter({text: `${msg.guild.name}`});
 
@@ -91,39 +91,19 @@ function parseInfractions(infractions) {
   const actionList = infractionsList.map((infraction) => infraction[3]);
   const validList = infractionsList.map((infraction) => infraction[4]);
 
-  // Format timestamps to work backwards from current time
-  // First convert to millisecs, then compare with current time
-  timestampList.forEach((time, idx) => (timestampList[idx] = Date.parse(time)));
-  const now = Date.now();
-  const timeSinceInfraction = timestampList.map((time) => now - time); // elapsed time
-  timeSinceInfraction.forEach((time, idx) => {
-    const seconds = time / 1000;
-    const minutes = seconds / 60;
-    const hours = minutes / 60;
-    const days = hours / 24;
-    if (Math.floor(days) > 0) {
-      timeSinceInfraction[idx] = [
-        `${Math.floor(days)}d ${Math.round(days % 24)}h`,
-      ];
-    } else if (Math.floor(hours) > 0) {
-      timeSinceInfraction[idx] = [
-        `${Math.floor(hours)}h ${Math.round(hours % 60)}m`,
-      ];
-    } else {
-      timeSinceInfraction[idx] = [
-        `${Math.floor(minutes)}m ${Math.round(minutes % 60)}s`,
-      ];
-    }
-  });
+  const timeSinceInfraction = timestampList.map((time) =>
+    formatDistanceToNow(time)
+  );
 
   // Join reasonsList with timeSinceInfraction
   // This lets us print out the embedded message so much better
   const reasonsWithTimes = [];
   for (let i = 0; i < reasonsList.length; i++) {
     if (validList[i])
-      reasonsWithTimes.push(
-        `**ID: ${idList[i]}** • ${actionList[i]} • *${reasonsList[i]}* • ${timeSinceInfraction[i]} *ago*`
-      );
+      reasonsWithTimes.push({
+        name: `ID: ${idList[i]}   ${actionList[i]}   ${timeSinceInfraction[i]} ago`,
+        value: `${reasonsList[i]}`,
+      });
   }
   return reasonsWithTimes;
 }
