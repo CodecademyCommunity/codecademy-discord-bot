@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const {formatDistanceToNow} = require('date-fns');
 const {hasTargetUser} = require('../../helpers/hasTargetUser');
 
 module.exports = {
@@ -90,30 +91,9 @@ function parseInfractions(infractions) {
   const actionList = infractionsList.map((infraction) => infraction[3]);
   const validList = infractionsList.map((infraction) => infraction[4]);
 
-  // Format timestamps to work backwards from current time
-  // First convert to millisecs, then compare with current time
-  timestampList.forEach((time, idx) => (timestampList[idx] = Date.parse(time)));
-  const now = Date.now();
-  const timeSinceInfraction = timestampList.map((time) => now - time); // elapsed time
-  timeSinceInfraction.forEach((time, idx) => {
-    const seconds = time / 1000;
-    const minutes = seconds / 60;
-    const hours = minutes / 60;
-    const days = hours / 24;
-    if (Math.floor(days) > 0) {
-      timeSinceInfraction[idx] = [
-        `${Math.floor(days)}d ${Math.round(days % 24)}h`,
-      ];
-    } else if (Math.floor(hours) > 0) {
-      timeSinceInfraction[idx] = [
-        `${Math.floor(hours)}h ${Math.round(hours % 60)}m`,
-      ];
-    } else {
-      timeSinceInfraction[idx] = [
-        `${Math.floor(minutes)}m ${Math.round(minutes % 60)}s`,
-      ];
-    }
-  });
+  const timeSinceInfraction = timestampList.map((time) =>
+    formatDistanceToNow(time)
+  );
 
   // Join reasonsList with timeSinceInfraction
   // This lets us print out the embedded message so much better
