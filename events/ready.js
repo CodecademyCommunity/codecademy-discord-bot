@@ -14,16 +14,19 @@ module.exports = {
         ?.commands.fetch();
 
       const fullPermissions = [...commands.values()].map((command) => {
-        if (commandRoles.has(command.name)) {
-          return {
-            id: command.id,
-            permissions: commandRoles.get(command.name).map((roleId) => ({
-              id: roleId,
-              type: 'ROLE',
-              permission: true,
-            })),
-          };
-        }
+        return commandRoles.has(command.name)
+          ? {
+              id: command.id,
+              permissions: commandRoles.get(command.name).map((roleId) => ({
+                id: roleId,
+                type: 'ROLE',
+                permission: true,
+              })),
+            }
+          : {
+              id: command.id,
+              permissions: [],
+            };
       });
 
       // Set role permissions by bulk method.
