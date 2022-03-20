@@ -4,14 +4,17 @@ const {Routes} = require('discord-api-types/v9');
 require('dotenv').config();
 
 const commands = [];
-const commandsDir = `${__dirname}/commands/slash`;
-const commandFiles = fs
-  .readdirSync(commandsDir)
-  .filter((file) => file.endsWith('.js'));
+const commandsDir = `${__dirname}/slash-commands`;
 
-for (const file of commandFiles) {
-  const command = require(`${commandsDir}/${file}`);
-  commands.push(command.data.toJSON());
+const folders = fs.readdirSync(commandsDir);
+for (const folder of folders) {
+  const commandFiles = fs
+    .readdirSync(`${commandsDir}/${folder}`)
+    .filter((file) => file.endsWith('.js'));
+  for (const file of commandFiles) {
+    const command = require(`${commandsDir}/${folder}/${file}`);
+    commands.push(command.data.toJSON());
+  }
 }
 
 const rest = new REST({version: '9'}).setToken(process.env.DISCORD_SECRET_KEY);

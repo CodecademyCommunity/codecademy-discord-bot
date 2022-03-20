@@ -3,8 +3,7 @@ const {MessageEmbed} = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('slash-helpcenter')
-    .setDefaultPermission(false)
+    .setName('helpcenter')
     .setDescription('Provides information to access the helpcenter!')
     .addBooleanOption((option) =>
       option

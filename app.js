@@ -16,9 +16,10 @@ require('dotenv').config();
 
 const client = getClient();
 
-const commandsDir = `${__dirname}/commands`;
-
-collectCommands(client, commandsDir);
+// Load commands
+const regularCommandsDir = `${__dirname}/commands`;
+const slashCommandsDir = `${__dirname}/slash-commands`;
+collectCommands({client, regularCommandsDir, slashCommandsDir});
 
 // Load events
 const eventsDir = `${__dirname}/events`;

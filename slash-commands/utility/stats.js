@@ -3,7 +3,7 @@ const {MessageEmbed} = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('slash-stats')
+    .setName('stats')
     .setDefaultPermission(false)
     .setDescription('Display basic server stats.'),
 

@@ -1,9 +1,12 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-function collectCommands(client, commandsDir) {
+function collectCommands({client, regularCommandsDir, slashCommandsDir}) {
   client.commands = new Discord.Collection();
-  collect(commandsDir, client.commands);
+  collect(regularCommandsDir, client.commands);
+
+  client.slashCommands = new Discord.Collection();
+  collect(slashCommandsDir, client.slashCommands);
 }
 
 function collect(dir, collection) {

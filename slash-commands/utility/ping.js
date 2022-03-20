@@ -2,7 +2,7 @@ const {SlashCommandBuilder} = require('@discordjs/builders');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('slash-ping')
+    .setName('ping')
     .setDefaultPermission(false)
     .setDescription('Replies with Pong!'),
   async execute(interaction) {
