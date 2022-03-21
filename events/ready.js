@@ -13,7 +13,7 @@ module.exports = {
         .get(process.env.GUILD_ID)
         ?.commands.fetch();
 
-      const fullPermissions = [...commands.values()].map((command) => {
+      const fullPermissions = commands.map((command) => {
         return commandRoles.has(command.name)
           ? {
               id: command.id,
