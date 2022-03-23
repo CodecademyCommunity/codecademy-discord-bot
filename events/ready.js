@@ -1,4 +1,6 @@
-const {commandRoles} = require('../config/slashCommandPermissions');
+const {
+  getDiscordJsFullPermissions,
+} = require('../config/slashCommandPermissions');
 
 module.exports = {
   name: 'ready',
@@ -13,21 +15,7 @@ module.exports = {
         .get(process.env.GUILD_ID)
         ?.commands.fetch();
 
-      const fullPermissions = commands.map((command) => {
-        return commandRoles.has(command.name)
-          ? {
-              id: command.id,
-              permissions: commandRoles.get(command.name).map((roleId) => ({
-                id: roleId,
-                type: 'ROLE',
-                permission: true,
-              })),
-            }
-          : {
-              id: command.id,
-              permissions: [],
-            };
-      });
+      const fullPermissions = getDiscordJsFullPermissions(commands);
 
       // Set role permissions by bulk method.
       // Docs: https://discordjs.guide/interactions/slash-commands.html#bulk-update-permissions
