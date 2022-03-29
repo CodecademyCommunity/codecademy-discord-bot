@@ -10,7 +10,6 @@ const {
   messageHandler,
   logDeletedMessages,
 } = require('./handlers/messageHandlers');
-const fs = require('fs');
 
 require('dotenv').config();
 
@@ -22,20 +21,7 @@ const slashCommandsDir = `${__dirname}/slash-commands`;
 collectCommands({client, regularCommandsDir, slashCommandsDir});
 
 // Load events
-const eventsDir = `${__dirname}/events`;
-
-const eventFiles = fs
-  .readdirSync(eventsDir)
-  .filter((file) => file.endsWith('.js'));
-
-for (const file of eventFiles) {
-  const event = require(`${eventsDir}/${file}`);
-  if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args));
-  } else {
-    client.on(event.name, (...args) => event.execute(...args));
-  }
-}
+require('./config/loadEvents');
 
 // Adds a Muted role when the bot joins a server
 client.on('guildCreate', createOnMuteRole);
