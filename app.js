@@ -1,5 +1,6 @@
 const {getClient} = require('./config/client.js');
-const {collectCommands} = require('./config/collectors');
+const {collectCommands} = require('./collectors/collectCommands');
+const {collectEvents} = require('./collectors/collectEvents');
 const {extendMutes} = require('./handlers/channelHandlers.js');
 const {
   applyMuteRestrictionsToOnMuteRole,
@@ -21,7 +22,8 @@ const slashCommandsDir = `${__dirname}/slash-commands`;
 collectCommands({client, regularCommandsDir, slashCommandsDir});
 
 // Load events
-require('./config/loadEvents');
+const eventsDir = `${__dirname}/events`;
+collectEvents({client, eventsDir});
 
 // Adds a Muted role when the bot joins a server
 client.on('guildCreate', createOnMuteRole);

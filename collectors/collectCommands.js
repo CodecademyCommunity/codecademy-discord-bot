@@ -24,5 +24,4 @@ function collect(dir, collection) {
 
 module.exports = {
   collectCommands,
-  collect,
 };
