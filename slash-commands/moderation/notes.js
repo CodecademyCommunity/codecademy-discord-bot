@@ -12,12 +12,11 @@ module.exports = {
     .setDefaultPermission(false)
     .setDescription('Finds user notes record in db and returns it to channel')
     .addUserOption((option) =>
-      option.setName('target').setDescription('The user')
+      option.setName('target').setDescription('The user').setRequired(true)
     ),
 
   async execute(interaction) {
     const targetUser = await interaction.options.getUser('target');
-
     notesInDB(interaction, con, targetUser);
   },
 };
@@ -68,32 +67,17 @@ function notesLog(interaction, targetUser, notes) {
 
 function parseNotes(interaction, notes) {
   // parse notes into an array
-  const allNotes = notes.map((note) => [
-    note.timestamp,
-    note.moderator,
-    note.id,
-    note.note,
-    note.valid,
-  ]);
-  const timestampList = allNotes.map((note) => note[0]);
-  const moderatorList = allNotes.map((note) => note[1]);
-  const idList = allNotes.map((note) => note[2]);
-  const noteList = allNotes.map((note) => note[3]);
-  const validList = allNotes.map((note) => note[4]);
-
-  const timeSinceNote = timestampList.map((time) => formatDistanceToNow(time));
-
-  // Join noteList with timeSinceNote
-  // This lets us print out the embedded message so much better
-  const notesWithTimes = [];
-  for (let i = 0; i < moderatorList.length; i++) {
-    if (validList[i])
-      notesWithTimes.push({
-        name: `ID: ${idList[i]}   ${timeSinceNote[i]} ago`,
-        value: `${interaction.guild.members.cache.get(moderatorList[i])}: ${
-          noteList[i]
-        }`,
+  return notes.reduce((validNotes, currentNote) => {
+    if (currentNote.valid) {
+      validNotes.push({
+        name: `ID: ${currentNote.id}   ${formatDistanceToNow(
+          currentNote.timestamp
+        )} ago`,
+        value: `${interaction.guild.members.cache.get(
+          currentNote.moderator
+        )}: ${currentNote.note}`,
       });
-  }
-  return notesWithTimes;
+    }
+    return validNotes;
+  }, []);
 }
