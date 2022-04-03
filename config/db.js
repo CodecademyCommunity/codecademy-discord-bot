@@ -1,19 +1,17 @@
-const mysql = require('mysql');
-require('dotenv').config();
+const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
-  user: process.env.DB_USER,
+const pool = mysql.createPool({
   host: process.env.DB_HOST,
+  user: process.env.DB_USER,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   multipleStatements: true,
 });
 
-const destroyConnection = async () => {
-  await connection.destroy();
-};
+// Promise wrapped instance of the pool
+const promisePool = pool.promise();
 
 module.exports = {
-  getConnection: () => connection,
-  destroyConnection: destroyConnection,
+  promisePool,
+  getConnection: () => pool,
 };
