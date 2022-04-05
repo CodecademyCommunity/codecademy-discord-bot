@@ -1,10 +1,8 @@
 const Discord = require('discord.js');
 const {SlashCommandBuilder} = require('@discordjs/builders');
-const {getConnection} = require('../../config/db');
 const {formatDistanceToNow} = require('date-fns');
 const {getEmbedHexFlairColor} = require('../../helpers/design');
-
-const con = getConnection();
+const {promisePool} = require('../../config/db');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -16,33 +14,29 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    const targetUser = await interaction.options.getUser('target');
-    notesInDB(interaction, con, targetUser);
+    try {
+      const targetUser = await interaction.options.getUser('target');
+      const notes = await getNotesFromDB(targetUser);
+      await displayNotesLog(interaction, targetUser, notes);
+    } catch (err) {
+      console.error(err);
+      interaction.reply(`There was an error reading the notes.`);
+    }
   },
 };
 
-function notesInDB(interaction, con, targetUser) {
-  // Find notes in table user_notes
-  const sqlNotes = `SELECT timestamp,moderator,id,note,valid FROM user_notes WHERE user = '${targetUser.id}';`;
-
-  con.query(`${sqlNotes}`, function (err, result) {
-    if (err) {
-      console.log(err);
-      // Include a warning in case something goes wrong writing to the db
-      interaction.channel.send(
-        `I couldn't read ${targetUser}'s notes from the db!`
-      );
-    } else {
-      console.log('Found note records.');
-      notesLog(interaction, targetUser, result);
-    }
-  });
+async function getNotesFromDB(targetUser) {
+  try {
+    const sqlNotes = `SELECT timestamp,moderator,id,note,valid FROM user_notes WHERE user = ?`;
+    const [notes] = await promisePool.execute(`${sqlNotes}`, [targetUser.id]);
+    return notes;
+  } catch (err) {
+    throw new Error(err.message);
+  }
 }
 
-function notesLog(interaction, targetUser, notes) {
+async function displayNotesLog(interaction, targetUser, notes) {
   const listOfNotes = parseNotes(interaction, notes);
-
-  // Get properties from the list
   const totalNotes = listOfNotes.length;
 
   if (totalNotes) {
@@ -57,16 +51,15 @@ function notesLog(interaction, targetUser, notes) {
       .setTimestamp()
       .setFooter({text: `${interaction.guild.name}`});
 
-    interaction.channel.send({embeds: [notesEmbed]});
+    return await interaction.reply({embeds: [notesEmbed]});
   } else {
-    interaction.reply(
+    return await interaction.reply(
       `${targetUser.username}#${targetUser.discriminator} doesn't have any notes`
     );
   }
 }
 
 function parseNotes(interaction, notes) {
-  // parse notes into an array
   return notes.reduce((validNotes, currentNote) => {
     if (currentNote.valid) {
       validNotes.push({

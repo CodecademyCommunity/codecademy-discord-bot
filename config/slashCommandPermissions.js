@@ -6,6 +6,7 @@ const commandRoles = new Map([
   ['ping', [ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
   ['notes', [ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
   ['addnote', [ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
+  ['removenote', [ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
 ]);
 
 /**
