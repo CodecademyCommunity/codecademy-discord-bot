@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node app.js",
+    "deploy:commands": "node deployCommands.js",
     "watch": "nodemon app.js",
     "db-recreate": "node utils/data/recreate.js",
     "addtable": "node utils/data/addTable.js",

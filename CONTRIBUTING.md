@@ -39,7 +39,7 @@ $ npm install
 
 ### Add Secret Keys
 
-1. The cloned repo includes a file named sample.env which contain the environmental variables. Copy this file to another file named .env by running the command below in the project main directory. Several of these variables need to be kept secret so this file is not commited to github.
+1. The cloned repo includes a file named sample.env which contains the environmental variables. Copy this file to another file named .env by running the command below in the project main directory. Several of these variables need to be kept secret so the .env is not commited to github.
    `cp sample.env .env`
 2. Replace the sample values for the environmental variables in the .env file with values you obtain from the Discord Developer Portal, your local database connection, and Discord IDs associated with roles and channels in the development Discord server.
    The instructions below describe how the variable values are obtained.
@@ -63,7 +63,13 @@ Visit our [wiki page](https://github.com/CodecademyCommunity/codecademy-discord-
 
 ### Run the Bot
 
-1. Navigate to your local repo and enter the following command into your terminal:
+1. Navigate to your local repo and enter the following command which deploys the Discord application-commands. This script will also need to be run after any code modifications to the commands:
+
+```
+npm run deploy:commands
+```
+
+2. Enter the following command into your terminal:
 
 ```
 $ npm start
