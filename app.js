@@ -1,3 +1,4 @@
+require('dotenv').config();
 const {getClient} = require('./config/client.js');
 const {collectCommands} = require('./collectors/collectCommands');
 const {collectEvents} = require('./collectors/collectEvents');
@@ -11,8 +12,6 @@ const {
   messageHandler,
   logDeletedMessages,
 } = require('./handlers/messageHandlers');
-
-require('dotenv').config();
 
 const client = getClient();
 
