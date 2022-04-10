@@ -14,7 +14,7 @@ async function isServerStaff(interaction, targetUser) {
 
 async function sendNoTargetStaffReply(interaction) {
   return await interaction.reply(
-    `You cannot user this command on a Code Counselor, Moderator or Admin.`
+    `You cannot use this command on a Code Counselor, Moderator or Admin.`
   );
 }
 
