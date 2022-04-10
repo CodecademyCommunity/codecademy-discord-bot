@@ -1,5 +1,5 @@
-const Discord = require('discord.js');
 const {SlashCommandBuilder} = require('@discordjs/builders');
+const {sendToAuditLogsChannel} = require('../../helpers/sendToAuditLogs');
 const {promisePool} = require('../../config/db');
 
 module.exports = {
@@ -22,7 +22,11 @@ module.exports = {
         return interaction.reply(msg);
       }
       await deactivateNoteDB(interaction, noteId, targetUser);
-      await displayNoteEmbed(interaction, noteId, targetUser);
+      await sendToAuditLogsChannel(interaction, {
+        color: '#0099ff',
+        titleMsg: `${interaction.user.tag} removed a note from ${targetUser.username}#${targetUser.discriminator}`,
+        description: `Note #${noteId}`,
+      });
       await noteResponse(interaction, noteId, targetUser);
     } catch (err) {
       console.error(err);
@@ -67,27 +71,6 @@ async function deactivateNoteDB(interaction, noteId, targetUser) {
   } catch (err) {
     throw new Error(err.message);
   }
-}
-
-async function displayNoteEmbed(interaction, noteId, targetUser) {
-  // Sends Audit Log Embed
-  const channel = interaction.guild.channels.cache.find(
-    (channel) => channel.name === 'audit-logs'
-  );
-
-  const userNoteEmbed = new Discord.MessageEmbed()
-    .setColor('#0099ff')
-    .setTitle(
-      `${interaction.user.tag} removed an note from ${targetUser.username}#${targetUser.discriminator}`
-    )
-    .setDescription('Note #' + noteId)
-    .setThumbnail(
-      `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`
-    )
-    .setTimestamp()
-    .setFooter({text: `${interaction.guild.name}`});
-
-  channel.send({embeds: [userNoteEmbed]});
 }
 
 async function noteResponse(interaction, noteId, targetUser) {
