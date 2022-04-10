@@ -4,6 +4,7 @@ const {ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN} = process.env;
 
 const commandRoles = new Map([
   ['ping', [ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
+  ['clearmessages', [ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
 ]);
 
 /**
