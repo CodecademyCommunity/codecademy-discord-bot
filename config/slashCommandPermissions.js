@@ -2,11 +2,19 @@ const {ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN} = process.env;
 
 // Commands with .setDefaultPermission(false) need to be enabled by adding role IDs to array.
 
+const allStaffRoles = [
+  ID_CODE_COUNSELOR,
+  ID_MODERATOR,
+  ID_ADMIN,
+  ID_SUPER_ADMIN,
+];
+const moderatorRoles = [ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN];
+
 const commandRoles = new Map([
-  ['ping', [ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
-  ['notes', [ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
-  ['addnote', [ID_CODE_COUNSELOR, ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
-  ['removenote', [ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN]],
+  ['ping', allStaffRoles],
+  ['notes', allStaffRoles],
+  ['addnote', allStaffRoles],
+  ['removenote', moderatorRoles],
 ]);
 
 /**
