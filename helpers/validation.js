@@ -7,9 +7,7 @@ async function isServerStaff(interaction, targetUser) {
       process.env.ID_ADMIN,
       process.env.ID_SUPER_ADMIN,
     ].includes(role.id)
-  )
-    ? true
-    : false;
+  );
 }
 
 async function sendNoTargetStaffReply(interaction) {
