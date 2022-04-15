@@ -16,6 +16,7 @@ const commandRoles = new Map([
   ['addnote', allStaffRoles],
   ['removenote', moderatorRoles],
   ['clearmessages', moderatorRoles],
+  ['verbal', moderatorRoles],
 ]);
 
 /**
