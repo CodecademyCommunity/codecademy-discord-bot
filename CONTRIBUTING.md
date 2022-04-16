@@ -29,7 +29,7 @@ $ git clone pasteURLYouJustCopied
 
 ### Node.js and npm
 
-1. Install Node.js; it can be downloaded from [here](https://nodejs.org/en/).
+1. Install Node.js; it can be downloaded from [here](https://nodejs.org/en/). Version 16.6 or higher is required.
 2. On the command line, navigate to the cloned repo.
 3. Use the following command to install all necessary packages:
 
