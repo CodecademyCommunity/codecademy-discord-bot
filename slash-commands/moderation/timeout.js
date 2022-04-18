@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const ms = require('ms');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
-const {sendToAuditLogs} = require('../../helpers/sendToAuditLogs');
+const {sendToAuditLogsChannel} = require('../../helpers/sendToAuditLogs');
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const {promisePool} = require('../../config/db');
 
@@ -113,10 +113,11 @@ async function timeoutUser(interaction, toTimeout, duration, reason) {
 
 // Sends message to #audit-logs.
 async function auditLogTimeout(interaction, toTimeout, duration, reason) {
-  const color = '#0099ff';
-  const title = `${toTimeout.user.username}#${toTimeout.user.discriminator} was timed out by ${interaction.member.user.tag} for ${duration}.`;
-  const description = `**Reason:** ${reason}`;
-  sendToAuditLogs(interaction, {color, title, description});
+  await sendToAuditLogsChannel(interaction, {
+    color: '#0099ff',
+    titleMsg: `${toTimeout.user.username}#${toTimeout.user.discriminator} was timed out by ${interaction.member.user.tag} for ${duration}.`,
+    description: `**Reason:** ${reason}`,
+  });
 }
 
 // Records timeout in infractions and mod_log tables.
