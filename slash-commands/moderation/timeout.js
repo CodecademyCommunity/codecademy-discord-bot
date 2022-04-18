@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
-const dateformat = require('dateformat');
 const ms = require('ms');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
+const {sendToAuditLogs} = require('../../helpers/sendToAuditLogs');
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const {promisePool} = require('../../config/db');
 
@@ -113,40 +113,24 @@ async function timeoutUser(interaction, toTimeout, duration, reason) {
 
 // Sends message to #audit-logs.
 async function auditLogTimeout(interaction, toTimeout, duration, reason) {
-  const auditLogEmbed = new Discord.MessageEmbed()
-    .setColor('#0099ff')
-    .setTitle(
-      `${toTimeout.user.username}#${toTimeout.user.discriminator} was timed out by ${interaction.member.user.tag} for ${duration}.`
-    )
-    .addField('Reason', reason)
-    .setTimestamp()
-    .setFooter({text: `${interaction.guild.name}`})
-    .setThumbnail(
-      `https://cdn.discordapp.com/avatars/${toTimeout.user.id}/${toTimeout.user.avatar}.png`
-    );
-
-  await interaction.guild.channels.cache
-    .find((channel) => channel.name === 'audit-logs')
-    .send({embeds: [auditLogEmbed]});
+  const color = '#0099ff';
+  const title = `${toTimeout.user.username}#${toTimeout.user.discriminator} was timed out by ${interaction.member.user.tag} for ${duration}.`;
+  const description = `**Reason:** ${reason}`;
+  sendToAuditLogs(interaction, {color, title, description});
 }
 
 // Records timeout in infractions and mod_log tables.
 async function recordTimeoutInDB(interaction, toTimeout, duration, reason) {
-  const now = new Date();
-  const timestamp = dateformat(now, 'yyyy-mm-dd HH:MM:ss');
-
-  const infractionsSQL = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES (?, ?, 'timeout', ?, ?, true, ?);`;
+  const infractionsSQL = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES (now(), ?, 'timeout', ?, ?, true, ?);`;
   const infractionsValues = [
-    timestamp,
     toTimeout.user.id,
     duration,
     reason,
     interaction.member.user.id,
   ];
 
-  const modLogSQL = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES (?, ?, ?, ?, ?);`;
+  const modLogSQL = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES (now(), ?, ?, ?, ?);`;
   const modLogValues = [
-    timestamp,
     interaction.member.user.id,
     `timed out user ${toTimeout.user.id}`,
     duration,

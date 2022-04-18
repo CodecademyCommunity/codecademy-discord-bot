@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const dateformat = require('dateformat');
 const ms = require('ms');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
@@ -126,20 +125,15 @@ function auditLogTimeout(msg, toTimeout, duration, reason) {
 
 // Records timeout in infractions and mod_log tables.
 function recordTimeoutInDB(msg, toTimeout, duration, reason, con) {
-  const now = new Date();
-  const timestamp = dateformat(now, 'yyyy-mm-dd HH:MM:ss');
-
-  const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES (?, ?, 'timeout', ?, ?, true, ?);
+  const sql = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES (now(), ?, 'timeout', ?, ?, true, ?);
   INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason)
-  VALUES (?, ?, ?, ?, ?);`;
+  VALUES (now(), ?, ?, ?, ?);`;
 
   const values = [
-    timestamp,
     toTimeout.id,
     duration,
     reason,
     msg.author.id,
-    timestamp,
     msg.author.id,
     msg.content,
     duration,
