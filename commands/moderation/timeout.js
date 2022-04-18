@@ -74,7 +74,7 @@ function canTimeout(msg, args) {
     data.err = 'Please provide a duration.';
     return data;
   }
-  if (!data.duration.match(/^\d+.?\d*[smhdw]$/)) {
+  if (!data.duration.match(/^\d+\.?\d*[smhdw]$/)) {
     data.err =
       'Please provide a valid duration. Format should be `<number><s|m|h|d|w>`.';
     return data;
@@ -143,7 +143,7 @@ function recordTimeoutInDB(msg, toTimeout, duration, reason, con) {
 
   con.query(escaped, function (err, result) {
     if (err) {
-      console.log(err);
+      console.error(err);
       msg.channel.send({
         content: `I timed out ${toTimeout} but writing to the db failed!`,
       });

@@ -16,13 +16,26 @@ module.exports = {
         .setDescription('The user to timeout')
         .setRequired(true)
     )
-    .addStringOption((option) =>
+    .addIntegerOption((option) =>
       option
-        .setName('duration')
+        .setName('durationinteger')
         .setDescription(
-          'How long the user should be timed out as <number><s|m|h|d|w>'
+          'Integer part of how long the user should be timed out for'
         )
         .setRequired(true)
+    )
+    .addStringOption((option) =>
+      option
+        .setName('durationunit')
+        .setDescription(
+          'Unit part of how long the user should be timed out for'
+        )
+        .setRequired(true)
+        .addChoice('seconds', 's')
+        .addChoice('minutes', 'm')
+        .addChoice('hours', 'h')
+        .addChoice('days', 'd')
+        .addChoice('weeks', 'w')
     )
     .addStringOption((option) =>
       option
@@ -36,14 +49,19 @@ module.exports = {
     interaction.guild.members
       .fetch(await interaction.options.getUser('user'))
       .then((result) => (toTimeout = result));
-    const duration = await interaction.options.getString('duration');
+    const durationInteger = await interaction.options.getInteger(
+      'durationinteger'
+    );
+    const durationUnit = await interaction.options.getString('durationunit');
     const reason = await interaction.options.getString('reason');
+
+    const duration = durationInteger + durationUnit;
 
     if (canTimeout(interaction, toTimeout, duration, reason)) {
       try {
         await timeoutUser(interaction, toTimeout, duration, reason);
       } catch (e) {
-        console.log(e);
+        console.error(e);
         interaction.reply(
           'Something went wrong while trying to timeout the user.'
         );
@@ -53,7 +71,7 @@ module.exports = {
       try {
         await dmTheUser(interaction, toTimeout, duration, reason);
       } catch (e) {
-        console.log(e);
+        console.error(e);
         interaction.reply(`${e.name}: ${e.message}`);
       }
     }
@@ -86,13 +104,7 @@ function canTimeout(interaction, toTimeout, duration, reason) {
   }
 
   // Check if duration is valid.
-  if (!duration.match(/^\d+.?\d*[smhdw]$/)) {
-    interaction.reply(
-      'Please provide a valid duration. Format should be `<number><s|m|h|d|w>`.'
-    );
-    return false;
-  }
-  if (ms(duration) > ms('28d')) {
+  if (ms(duration) > ms('28d') - 1) {
     interaction.reply('Please enter a duration less than 28 days.');
     return false;
   }
@@ -108,14 +120,20 @@ async function timeoutUser(interaction, toTimeout, duration, reason) {
   const durationInMs = ms(duration);
   toTimeout.timeout(durationInMs, reason);
 
-  await interaction.reply(`${toTimeout} has been timed out for ${duration}.`);
+  await interaction.reply(
+    `${toTimeout} has been timed out for ${ms(ms(duration), {long: true})}.`
+  );
 }
 
 // Sends message to #audit-logs.
 async function auditLogTimeout(interaction, toTimeout, duration, reason) {
   await sendToAuditLogsChannel(interaction, {
     color: '#0099ff',
-    titleMsg: `${toTimeout.user.username}#${toTimeout.user.discriminator} was timed out by ${interaction.member.user.tag} for ${duration}.`,
+    titleMsg: `${toTimeout.user.username}#${
+      toTimeout.user.discriminator
+    } was timed out by ${interaction.member.user.tag} for ${ms(ms(duration), {
+      long: true,
+    })}.`,
     description: `**Reason:** ${reason}`,
   });
 }
