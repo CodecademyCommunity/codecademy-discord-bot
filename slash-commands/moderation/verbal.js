@@ -6,6 +6,7 @@ const {
   isServerStaff,
   sendNoTargetStaffReply,
 } = require('../../helpers/validation');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -26,11 +27,8 @@ module.exports = {
       return await sendNoTargetStaffReply(interaction);
     }
 
-    if (reason.length > 255) {
-      return await interaction.reply(
-        `Too long! The reason can only be 255 characters or less.`
-      );
-    }
+    // Reason limited to 245 to stay below 255 with extra text added for user_notes
+    if (!verifyReasonLength(reason, interaction, 245)) return false;
 
     try {
       await dmTheUser(interaction, targetUser, reason);

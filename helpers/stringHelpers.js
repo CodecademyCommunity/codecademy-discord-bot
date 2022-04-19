@@ -15,7 +15,7 @@ function verifyReasonLength(text, msg, maxLength = 255) {
   const amountOver = isTooLong(text, maxLength);
   if (amountOver) {
     msg.reply(
-      `The reason you provided is over the 255 character limit by ${amountOver}. Please shorten and retry.`
+      `The reason you provided is over the ${maxLength} character limit by ${amountOver}. Please shorten and retry.`
     );
     return false;
   }
