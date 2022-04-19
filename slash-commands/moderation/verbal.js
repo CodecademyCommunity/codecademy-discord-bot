@@ -44,6 +44,11 @@ module.exports = {
         content: `${interaction.user} just verballed ${targetUser}`,
       });
     } catch (err) {
+      if (err.code === Discord.Constants.APIErrors.CANNOT_MESSAGE_USER) {
+        return await interaction.reply(
+          'The user cannot be messaged. It is likely that DMs are turned off.'
+        );
+      }
       console.error(err);
       return await interaction.reply(`${err.name}: ${err.message}`);
     }
