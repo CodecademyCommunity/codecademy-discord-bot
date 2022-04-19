@@ -61,7 +61,7 @@ module.exports = {
         await timeoutUser(interaction, toTimeout, duration, reason);
       } catch (e) {
         console.error(e);
-        interaction.reply(
+        return interaction.reply(
           'Something went wrong while trying to timeout the user.'
         );
       }
