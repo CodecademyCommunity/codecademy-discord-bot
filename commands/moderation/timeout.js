@@ -79,6 +79,10 @@ function canTimeout(msg, args) {
       'Please provide a valid duration. Format should be `<number><s|m|h|d|w>`.';
     return data;
   }
+  if (ms(data.duration) <= 0) {
+    data.err = 'You must specify a duration greater than 0.';
+    return data;
+  }
   if (ms(data.duration) > ms('28d')) {
     data.err = 'Please enter a duration less than 28 days.';
     return data;

@@ -104,6 +104,10 @@ function canTimeout(interaction, toTimeout, duration, reason) {
   }
 
   // Check if duration is valid.
+  if (ms(duration) <= 0) {
+    interaction.reply('You must specify a duration greater than 0.');
+    return false;
+  }
   if (ms(duration) > ms('28d') - 1) {
     interaction.reply('Please enter a duration less than 28 days.');
     return false;
