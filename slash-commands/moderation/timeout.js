@@ -45,10 +45,9 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    let toTimeout;
-    interaction.guild.members
-      .fetch(await interaction.options.getUser('user'))
-      .then((result) => (toTimeout = result));
+    const toTimeout = await interaction.guild.members.fetch(
+      await interaction.options.getUser('user')
+    );
     const durationInteger = await interaction.options.getInteger(
       'durationinteger'
     );
