@@ -28,7 +28,7 @@ module.exports = {
     }
 
     // Reason limited to 245 to stay below 255 with extra text added for user_notes
-    if (!verifyReasonLength(reason, interaction, 245)) return false;
+    if (!verifyReasonLength(reason, interaction, 245)) return;
 
     try {
       await dmTheUser(interaction, targetUser, reason);
