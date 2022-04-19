@@ -70,8 +70,7 @@ module.exports = {
       try {
         await dmTheUser(interaction, toTimeout, duration, reason);
       } catch (e) {
-        console.error(e);
-        interaction.reply(`${e.name}: ${e.message}`);
+        interaction.channel.send(`${e.name}: ${e.message}`);
       }
     }
   },

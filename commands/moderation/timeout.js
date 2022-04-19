@@ -23,7 +23,7 @@ module.exports = {
     try {
       await dmTheUser(msg, toTimeout, duration, reason);
     } catch (e) {
-      return msg.reply(`${e.name}: ${e.message}`);
+      return msg.channel.send(`${e.name}: ${e.message}`);
     }
   },
 };
