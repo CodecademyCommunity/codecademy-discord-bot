@@ -27,8 +27,8 @@ module.exports = {
       return await sendNoTargetStaffReply(interaction);
     }
 
-    // Reason limited to 245 to stay below 255 with extra text added for user_notes
-    if (!verifyReasonLength(reason, interaction, 245)) return;
+    // Reason limited to 247 to stay within 255 with extra text added for user_notes
+    if (!verifyReasonLength(reason, interaction, 247)) return;
 
     try {
       await dmTheUser(interaction, targetUser, reason);
@@ -43,9 +43,7 @@ module.exports = {
       });
     } catch (err) {
       if (err.code === Discord.Constants.APIErrors.CANNOT_MESSAGE_USER) {
-        return await interaction.reply(
-          'The user cannot be messaged. It is likely that DMs are turned off.'
-        );
+        return await interaction.reply('The user cannot be messaged.');
       }
       console.error(err);
       return await interaction.reply(`${err.name}: ${err.message}`);
