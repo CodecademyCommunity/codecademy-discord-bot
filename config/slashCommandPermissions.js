@@ -17,6 +17,7 @@ const commandRoles = new Map([
   ['removenote', moderatorRoles],
   ['clearmessages', moderatorRoles],
   ['verbal', moderatorRoles],
+  ['timeout', moderatorRoles],
 ]);
 
 /**
