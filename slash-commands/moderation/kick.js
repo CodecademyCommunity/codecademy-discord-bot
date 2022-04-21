@@ -87,6 +87,7 @@ async function recordKickInDB(interaction, targetUser, reason) {
     await promisePool.execute(kickSQL, kickValues);
     await promisePool.execute(modlogSQL, modlogValues);
   } catch (err) {
-    throw new Error(err.message);
+    await interaction.channel.send('There was an error when writing to the DB');
+    console.error(err);
   }
 }
