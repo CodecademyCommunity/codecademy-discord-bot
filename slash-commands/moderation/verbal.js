@@ -37,6 +37,7 @@ module.exports = {
         color: '#f1d302',
         titleMsg: `${targetUser.tag} was verballed by ${interaction.user.tag}:`,
         description: reason,
+        targetUser,
       });
       return await interaction.reply({
         content: `${interaction.user} just verballed ${targetUser}`,

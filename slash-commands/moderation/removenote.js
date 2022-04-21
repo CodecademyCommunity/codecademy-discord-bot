@@ -26,6 +26,7 @@ module.exports = {
         color: '#0099ff',
         titleMsg: `${interaction.user.tag} removed a note from ${targetUser.username}#${targetUser.discriminator}`,
         description: `Note #${noteId}`,
+        targetUser,
       });
       await noteResponse(interaction, noteId, targetUser);
     } catch (err) {

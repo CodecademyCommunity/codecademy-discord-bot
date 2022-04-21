@@ -137,6 +137,7 @@ async function auditLogTimeout(interaction, toTimeout, duration, reason) {
       long: true,
     })}.`,
     description: `**Reason:** ${reason}`,
+    targetUser: toTimeout.user,
   });
 }
 
