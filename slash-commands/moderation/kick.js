@@ -8,6 +8,9 @@ const {
 } = require('../../helpers/validation');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
+const kickIntro = "You've been kicked for the following reason: ```";
+const kickOutro = ' ```';
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('kick')
@@ -34,9 +37,11 @@ module.exports = {
     const reason = await interaction.options.getString('reason');
     if (!verifyReasonLength(reason, interaction)) return;
 
+    const kickText = kickIntro + reason + kickOutro;
+
     try {
-      await dmUser(interaction, targetUser, reason);
-      await targetUser.kick(reason);
+      await dmUser(interaction, targetUser, kickText);
+      await targetUser.kick(kickText);
       await interaction.channel.send(`${targetUser} was kicked`);
       await recordKickInDB(interaction, targetUser, reason);
       await sendToAuditLogsChannel(interaction, {
