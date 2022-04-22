@@ -36,7 +36,7 @@ module.exports = {
 
     try {
       await dmUser(interaction, targetUser, reason);
-      await kickUser(targetUser, reason);
+      await targetUser.kick(reason);
       await interaction.channel.send(`${targetUser} was kicked`);
       await recordKickInDB(interaction, targetUser, reason);
       await sendToAuditLogsChannel(interaction, {
@@ -48,7 +48,9 @@ module.exports = {
       await interaction.reply(`Kick command was successful`);
     } catch (err) {
       console.error(err);
-      return await interaction.reply(`${err.name}: ${err.message}`);
+      return await interaction.reply(
+        `There was an error while executing the command`
+      );
     }
   },
 };
@@ -65,14 +67,6 @@ async function dmUser(interaction, targetUser, reason) {
     } else {
       throw new Error(err.message);
     }
-  }
-}
-
-async function kickUser(toKick, reason) {
-  try {
-    await toKick.kick({reason});
-  } catch (err) {
-    throw new Error(err.message);
   }
 }
 
