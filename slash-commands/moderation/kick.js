@@ -46,7 +46,7 @@ module.exports = {
       await recordKickInDB(interaction, targetUser, reason);
       await sendToAuditLogsChannel(interaction, {
         color: '#0099ff',
-        titleMsg: `${targetUser.user.username}#${targetUser.user.discriminator} was kicked by ${interaction.user.tag}:`,
+        titleMsg: `${targetUser.user.tag} was kicked by ${interaction.user.tag}:`,
         description: reason,
         targetUser: targetUser.user,
       });
@@ -60,9 +60,9 @@ module.exports = {
   },
 };
 
-async function dmUser(interaction, targetUser, reason) {
+async function dmUser(interaction, targetUser, kickText) {
   try {
-    await targetUser.send(reason);
+    await targetUser.send(kickText);
     await interaction.channel.send(
       `Message regarding kick was sent to ${targetUser} successfully`
     );
@@ -77,7 +77,7 @@ async function dmUser(interaction, targetUser, reason) {
 
 async function recordKickInDB(interaction, targetUser, reason) {
   const kickSQL = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
-  (now(), ?, 'cc!kick', NULL, ?, true, ?)`;
+  (now(), ?, 'kick', NULL, ?, true, ?)`;
   const kickValues = [targetUser.id, reason, interaction.user.id];
 
   const modlogSQL = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES (now(), ?, ?, NULL, ?)`;
