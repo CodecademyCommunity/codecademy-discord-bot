@@ -8,7 +8,8 @@ const {
 } = require('../../helpers/validation');
 const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
-const kickIntro = "You've been kicked for the following reason: ```";
+const kickIntro =
+  "You've been kicked from the Codecademy Community server for the following reason: ```";
 const kickOutro = ' ```';
 
 module.exports = {
