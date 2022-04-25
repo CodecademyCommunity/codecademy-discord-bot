@@ -85,6 +85,6 @@ async function recordRemoveTimeoutInDB(interaction, toRemoveTimeout, reason) {
     interaction.channel.send({
       content: `Writing to the mod_log table failed!`,
     });
-    throw new Error(e.message);
+    console.error(e);
   }
 }
