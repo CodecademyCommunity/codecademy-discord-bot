@@ -169,7 +169,7 @@ async function recordTimeoutInDB(interaction, toTimeout, duration, reason) {
     interaction.channel.send({
       content: `I timed out ${toTimeout} but writing to the db failed!`,
     });
-    throw new Error(err.message);
+    console.error(err);
   }
 }
 
