@@ -11,7 +11,6 @@ const {verifyReasonLength} = require('../../helpers/stringHelpers');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('verbal')
-    .setDefaultPermission(false)
     .setDescription('Sends a user a verbal warning and logs note in db')
     .addUserOption((option) =>
       option.setName('target').setDescription('The user').setRequired(true)

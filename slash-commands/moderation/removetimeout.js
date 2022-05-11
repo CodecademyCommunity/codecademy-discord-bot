@@ -6,7 +6,6 @@ const {promisePool} = require('../../config/db');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('removetimeout')
-    .setDefaultPermission(false)
     .setDescription('Remove timeout from a user')
     .addUserOption((option) =>
       option

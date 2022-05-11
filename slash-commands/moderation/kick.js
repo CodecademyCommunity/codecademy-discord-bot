@@ -15,7 +15,6 @@ const kickOutro = ' ```';
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('kick')
-    .setDefaultPermission(false)
     .setDescription('Kick a user')
     .addUserOption((option) =>
       option.setName('target').setDescription('The user').setRequired(true)

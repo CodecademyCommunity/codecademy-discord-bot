@@ -5,7 +5,6 @@ const {promisePool} = require('../../config/db');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('removenote')
-    .setDefaultPermission(false)
     .setDescription('Removes a specific note based on the note ID provided')
     .addUserOption((option) =>
       option.setName('user').setDescription('The user').setRequired(true)

@@ -5,7 +5,6 @@ const {sendToAuditLogsChannel} = require('../../helpers/sendToAuditLogs');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('clearmessages')
-    .setDefaultPermission(false)
     .setDescription('Clears a certain number of messages')
     .addIntegerOption((option) =>
       option
