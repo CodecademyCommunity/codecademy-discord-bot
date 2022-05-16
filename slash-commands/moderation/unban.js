@@ -5,6 +5,7 @@ const {
   isServerStaff,
   sendNoTargetStaffReply,
 } = require('../../helpers/validation');
+const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,6 +14,9 @@ module.exports = {
     .setDescription('Unbans a user')
     .addUserOption((option) =>
       option.setName('target').setDescription('The user').setRequired(true)
+    )
+    .addStringOption((option) =>
+      option.setName('reason').setDescription('The reason for removing the ban')
     ),
 
   async execute(interaction) {
@@ -27,13 +31,17 @@ module.exports = {
       return await interaction.reply('The user is not banned');
     }
 
+    const reason = await interaction.options.getString('reason');
+    if (!verifyReasonLength(reason, interaction)) return;
+
     try {
       await interaction.guild.bans.remove(targetUser);
       await interaction.channel.send(`${targetUser} was unbanned`);
-      await recordUnbanInDB(interaction, targetUser);
+      await recordUnbanInDB(interaction, targetUser, reason);
       await sendToAuditLogsChannel(interaction, {
         color: '#0099ff',
         titleMsg: `${targetUser.tag} was unbanned by ${interaction.user.tag}:`,
+        description: `Reason: ${reason || 'No reason provided.'}`,
         targetUser: targetUser,
       });
       await interaction.reply(`Unban command was successful`);
@@ -46,10 +54,14 @@ module.exports = {
   },
 };
 
-async function recordUnbanInDB(interaction, targetUser) {
+async function recordUnbanInDB(interaction, targetUser, reason) {
   const modlogSQL = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
-  (now(), ?, ?, NULL, NULL)`;
-  const modlogValues = [interaction.user.id, `Unban: ${targetUser.id}`];
+  (now(), ?, ?, NULL, ?)`;
+  const modlogValues = [
+    interaction.user.id,
+    `Unban: ${targetUser.id}`,
+    reason || 'No reason provided',
+  ];
 
   try {
     await promisePool.execute(modlogSQL, modlogValues);
