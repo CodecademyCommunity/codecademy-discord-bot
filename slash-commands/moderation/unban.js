@@ -32,7 +32,7 @@ module.exports = {
     }
 
     const reason = await interaction.options.getString('reason');
-    if (!verifyReasonLength(reason, interaction)) return;
+    if (reason && !verifyReasonLength(reason, interaction)) return;
 
     try {
       await interaction.guild.bans.remove(targetUser);

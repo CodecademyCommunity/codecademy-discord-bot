@@ -25,11 +25,19 @@ module.exports = {
     )
     .addIntegerOption((option) =>
       option
-        .setName('days')
+        .setName('delete_msg_days')
         .setDescription(
-          'Number of days of messages to delete (between 0 and 7, inclusive)'
+          'Number of days of messages to delete (between 0 and 7)'
         )
         .setRequired(true)
+        .addChoice('0 days', 0)
+        .addChoice('1 day', 1)
+        .addChoice('2 days', 2)
+        .addChoice('3 days', 3)
+        .addChoice('4 days', 4)
+        .addChoice('5 days', 5)
+        .addChoice('6 days', 6)
+        .addChoice('7 days', 7)
     ),
   async execute(interaction) {
     const targetUser = await interaction.options.getUser('target');
@@ -46,12 +54,7 @@ module.exports = {
     const reason = interaction.options.getString('reason');
     if (!verifyReasonLength(reason, interaction)) return;
 
-    const days = interaction.options.getInteger('days');
-    if (days < 0 || days > 7) {
-      return await interaction.reply(
-        'The number of days are not between 0 and 7, inclusive'
-      );
-    }
+    const days = interaction.options.getInteger('delete_msg_days');
 
     const banText = banIntro + reason + unbanRequest;
 
