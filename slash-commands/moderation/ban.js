@@ -27,7 +27,7 @@ module.exports = {
       option
         .setName('days')
         .setDescription(
-          'Number of days of messages to delete (between 0 and 7)'
+          'Number of days of messages to delete (between 0 and 7, inclusive)'
         )
         .setRequired(true)
     ),
@@ -49,7 +49,7 @@ module.exports = {
     const days = interaction.options.getInteger('days');
     if (days < 0 || days > 7) {
       return await interaction.reply(
-        'The number of days are not between 0 and 7'
+        'The number of days are not between 0 and 7, inclusive'
       );
     }
 
