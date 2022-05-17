@@ -16,8 +16,6 @@ const commandRoles = new Map([
   ['ping', allStaffRoles],
   ['notes', allStaffRoles],
   ['addnote', allStaffRoles],
-  ['notes', allStaffRoles],
-  ['ping', allStaffRoles],
   ['ban', moderatorRoles],
   ['clearmessages', moderatorRoles],
   ['kick', moderatorRoles],
