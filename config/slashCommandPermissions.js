@@ -16,12 +16,16 @@ const commandRoles = new Map([
   ['ping', allStaffRoles],
   ['notes', allStaffRoles],
   ['addnote', allStaffRoles],
-  ['removenote', moderatorRoles],
+  ['notes', allStaffRoles],
+  ['ping', allStaffRoles],
+  ['ban', moderatorRoles],
   ['clearmessages', moderatorRoles],
   ['kick', moderatorRoles],
-  ['verbal', moderatorRoles],
-  ['timeout', moderatorRoles],
+  ['removenote', moderatorRoles],
   ['removetimeout', moderatorRoles],
+  ['timeout', moderatorRoles],
+  ['unban', moderatorRoles],
+  ['verbal', moderatorRoles],
 ]);
 
 module.exports = {
