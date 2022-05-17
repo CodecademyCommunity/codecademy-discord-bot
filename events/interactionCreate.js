@@ -2,13 +2,10 @@ const {commandRoles} = require('../config/slashCommandPermissions');
 
 function isAuthorized(interaction, commandRoles) {
   const allowedRoles = commandRoles.get(interaction.commandName);
-  if (
+  return (
     allowedRoles[0] === '@everyone' ||
     interaction.member.roles.cache.some((r) => allowedRoles.includes(r.id))
-  ) {
-    return true;
-  }
-  return false;
+  );
 }
 
 module.exports = {
@@ -18,7 +15,7 @@ module.exports = {
 
     if (!isAuthorized(interaction, commandRoles)) {
       return await interaction.reply({
-        content: `You don't have permissions for this command`,
+        content: `You don't have permission to use this command.`,
         ephemeral: true,
       });
     }
