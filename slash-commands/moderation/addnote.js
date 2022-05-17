@@ -10,7 +10,6 @@ const {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('addnote')
-    .setDefaultPermission(false)
     .setDescription('Write a user note and store in the db')
     .addUserOption((option) =>
       option.setName('target').setDescription('The user').setRequired(true)

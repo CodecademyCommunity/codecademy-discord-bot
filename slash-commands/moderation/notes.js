@@ -7,7 +7,6 @@ const {promisePool} = require('../../config/db');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('notes')
-    .setDefaultPermission(false)
     .setDescription('Finds user notes record in db and returns it to channel')
     .addUserOption((option) =>
       option.setName('target').setDescription('The user').setRequired(true)
