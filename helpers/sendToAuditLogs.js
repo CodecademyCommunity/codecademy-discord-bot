@@ -28,7 +28,7 @@ async function sendToAuditLogsChannel(
     )
     .setDescription(description)
     .setTimestamp()
-    .setFooter({text: `${interaction.guild.name}`});
+    .setFooter({text: interaction.guild.name});
 
   await channel.send({embeds: [clearMsgEmbed]});
 }

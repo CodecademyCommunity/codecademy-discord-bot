@@ -30,14 +30,15 @@ module.exports = {
           'Number of days of messages to delete (between 0 and 7)'
         )
         .setRequired(true)
-        .addChoice('0 days', 0)
-        .addChoice('1 day', 1)
-        .addChoice('2 days', 2)
-        .addChoice('3 days', 3)
-        .addChoice('4 days', 4)
-        .addChoice('5 days', 5)
-        .addChoice('6 days', 6)
-        .addChoice('7 days', 7)
+        .addChoices(
+          {name: '0 days', value: 0},
+          {name: '1 day', value: 1},
+          {name: '2 days', value: 2},
+          {name: '3 days', value: 3},
+          {name: '4 days', value: 4},
+          {name: '5 days', value: 5},
+          {name: '6 days', value: 6}
+        )
     ),
   async execute(interaction) {
     const targetUser = await interaction.options.getUser('target');
@@ -97,7 +98,7 @@ async function dmUser(interaction, targetUser, banText) {
 }
 
 async function recordBanInDB(interaction, targetUser, reason) {
-  const banSQL = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES 
+  const banSQL = `INSERT INTO infractions (timestamp, user, action, length_of_time, reason, valid, moderator) VALUES
   (now(), ?, 'ban', NULL, ?, true, ?)`;
   const banValues = [targetUser.id, reason, interaction.user.id];
 

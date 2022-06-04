@@ -55,13 +55,14 @@ async function dmTheUser(interaction, targetUser, reason) {
   const dmEmbed = new Discord.MessageEmbed()
     .setColor('#f1d302')
     .setTitle(`Verbal to ${targetUser.username}`)
-    .addField(
-      'This verbal is not an official warning.',
-      '*However, please engage with the server constructively and review the rules if necessary.*'
-    )
+    .addFields({
+      name: 'This verbal is not an official warning.',
+      value:
+        '*However, please engage with the server constructively and review the rules if necessary.*',
+    })
     .setDescription(reason)
     .setTimestamp()
-    .setFooter({text: `${interaction.guild.name}`});
+    .setFooter({text: interaction.guild.name});
   return await targetUser.send({embeds: [dmEmbed]});
 }
 
