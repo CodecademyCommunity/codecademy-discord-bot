@@ -18,6 +18,7 @@ const commandRoles = new Map([
   ['addnote', allStaffRoles],
   ['ban', moderatorRoles],
   ['clearmessages', moderatorRoles],
+  ['infractions', moderatorRoles],
   ['kick', moderatorRoles],
   ['removenote', moderatorRoles],
   ['removetimeout', moderatorRoles],
