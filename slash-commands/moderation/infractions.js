@@ -48,7 +48,7 @@ async function displayInfractionsLog(interaction, targetUser, infractions) {
   if (totalInfractions) {
     const infractionsEmbed = new Discord.MessageEmbed()
       .setAuthor({
-        name: `${targetUser.username}#${targetUser.discriminator}'s infractions`,
+        name: `${targetUser.tag}'s infractions`,
         iconURL: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,
       })
       .setColor(getEmbedHexFlairColor())
@@ -60,7 +60,7 @@ async function displayInfractionsLog(interaction, targetUser, infractions) {
     return await interaction.reply({embeds: [infractionsEmbed]});
   } else {
     return await interaction.reply(
-      `${targetUser.username}#${targetUser.discriminator} doesn't have any infractions`
+      `${targetUser.tag} doesn't have any infractions`
     );
   }
 }
