@@ -24,6 +24,7 @@ const commandRoles = new Map([
   ['timeout', moderatorRoles],
   ['unban', moderatorRoles],
   ['verbal', moderatorRoles],
+  ['warn', moderatorRoles],
 ]);
 
 module.exports = {
