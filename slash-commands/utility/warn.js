@@ -59,7 +59,7 @@ async function dmTheUser(interaction, targetUser, reason) {
     .setTitle(`Warning to ${targetUser.username}`)
     .setDescription(reason)
     .setTimestamp()
-    .setFooter({text: `${interaction.guild.name}`});
+    .setFooter({text: interaction.guild.name});
   return await targetUser.send({embeds: [dmEmbed]});
 }
 
