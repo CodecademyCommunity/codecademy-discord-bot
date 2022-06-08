@@ -25,21 +25,21 @@ module.exports = {
       const HelpCenterMessage = new MessageEmbed()
         .setTitle('Codecademy Help Center Resources')
         .setColor('DARK_NAVY')
-        .addField(
-          'Codecademy Help Center',
-          'https://help.codecademy.com/hc/en-us'
+        .addFields(
+          {
+            name: 'Codecademy Help Center',
+            value: 'https://help.codecademy.com/hc/en-us',
+          },
+          {
+            name: 'Bug Reporting',
+            value:
+              'To report a bug, click *Get Unstuck* in the learning environment, then click *Bugs*.',
+          }
         )
-        .addField(
-          'Submit A Request',
-          'https://help.codecademy.com/hc/en-us/requests/new'
-        )
-        .addField(
-          'Bug Reporting',
-          'To report a bug, click *Get Unstuck* in the learning environment, then click *Bugs*.'
-        )
-        .setFooter(
-          'All billing-related queries should be directed to the Submit A Request form linked above.'
-        );
+        .setFooter({
+          text:
+            'All billing-related queries should be directed to the Submit A Request form linked above.',
+        });
 
       interaction.reply({embeds: [HelpCenterMessage]});
     }

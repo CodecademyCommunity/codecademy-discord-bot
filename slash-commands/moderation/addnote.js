@@ -50,9 +50,9 @@ async function displayNoteEmbed(interaction, targetUser, note) {
     })
     .setTitle(`New note`)
     .setColor(getEmbedHexFlairColor())
-    .addField(`Note:`, `${note}`)
+    .addFields({name: 'Note:', value: note})
     .setTimestamp()
-    .setFooter({text: `${interaction.guild.name}`});
+    .setFooter({text: interaction.guild.name});
 
   await interaction.reply({embeds: [embed]});
 }

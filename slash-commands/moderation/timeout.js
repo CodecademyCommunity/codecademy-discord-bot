@@ -30,11 +30,13 @@ module.exports = {
           'Unit part of how long the user should be timed out for'
         )
         .setRequired(true)
-        .addChoice('seconds', 's')
-        .addChoice('minutes', 'm')
-        .addChoice('hours', 'h')
-        .addChoice('days', 'd')
-        .addChoice('weeks', 'w')
+        .addChoices(
+          {name: 'seconds', value: 's'},
+          {name: 'minutes', value: 'm'},
+          {name: 'hours', value: 'h'},
+          {name: 'days', value: 'd'},
+          {name: 'weeks', value: 'w'}
+        )
     )
     .addStringOption((option) =>
       option
@@ -177,9 +179,9 @@ async function dmTheUser(interaction, toTimeout, duration, reason) {
   const verbalEmbed = new Discord.MessageEmbed()
     .setColor('#0099ff')
     .setTitle(`You have been timed out for ${ms(ms(duration), {long: true})}.`)
-    .addField('Reason', reason)
+    .addFields({name: 'Reason', value: reason})
     .setTimestamp()
-    .setFooter({text: `${interaction.guild.name}`})
+    .setFooter({text: interaction.guild.name})
     .setThumbnail(interaction.guild.iconURL({dynamic: true}));
 
   await toTimeout.user.send({embeds: [verbalEmbed]});

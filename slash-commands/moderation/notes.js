@@ -48,7 +48,7 @@ async function displayNotesLog(interaction, targetUser, notes) {
       .setDescription(`Total: ${totalNotes}`)
       .addFields(...listOfNotes)
       .setTimestamp()
-      .setFooter({text: `${interaction.guild.name}`});
+      .setFooter({text: interaction.guild.name});
 
     return await interaction.reply({embeds: [notesEmbed]});
   } else {
