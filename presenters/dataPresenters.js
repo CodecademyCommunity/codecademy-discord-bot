@@ -7,9 +7,7 @@ function notesPresenter(interaction, notes) {
         name: `ID: ${currentNote.id}   ${formatDistanceToNow(
           currentNote.timestamp
         )} ago`,
-        value: `${interaction.guild.members.cache.get(
-          currentNote.moderator
-        )}: ${currentNote.note}`,
+        value: `<@${currentNote.moderator}>: ${currentNote.note}`,
       });
     }
     return validNotes;

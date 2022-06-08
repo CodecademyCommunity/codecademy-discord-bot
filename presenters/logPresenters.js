@@ -11,11 +11,11 @@ async function displayRecordsLog({interaction, targetUser, recordCollections}) {
     const totalRecords = collection.records.length;
 
     if (!totalRecords) {
-      payload.content += `\n${targetUser.username}#${targetUser.discriminator} doesn't have any ${collection.name}`;
+      payload.content += `\n${targetUser.tag} doesn't have any ${collection.name}`;
     } else {
       const recordsEmbed = new Discord.MessageEmbed()
         .setAuthor({
-          name: `${targetUser.username}#${targetUser.discriminator}'s ${collection.name}`,
+          name: `${targetUser.tag}'s ${collection.name}`,
           iconURL: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,
         })
         .setColor(getEmbedHexFlairColor())
