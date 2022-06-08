@@ -31,10 +31,6 @@ module.exports = {
             value: 'https://help.codecademy.com/hc/en-us',
           },
           {
-            name: 'Submit A Request',
-            value: 'https://help.codecademy.com/hc/en-us/requests/new',
-          },
-          {
             name: 'Bug Reporting',
             value:
               'To report a bug, click *Get Unstuck* in the learning environment, then click *Bugs*.',
