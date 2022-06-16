@@ -22,5 +22,5 @@ jobs:
           git status
           nvm use
           npm ci
-          npm run deploy:commands
+          npm run deploy-commands
           NODE_ENV=production pm2 restart app --update-env
