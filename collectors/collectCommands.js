@@ -1,9 +1,12 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 
-function collectCommands(client, commandsDir) {
+function collectCommands({client, regularCommandsDir, slashCommandsDir}) {
   client.commands = new Discord.Collection();
-  collect(commandsDir, client.commands);
+  collect(regularCommandsDir, client.commands);
+
+  client.slashCommands = new Discord.Collection();
+  collect(slashCommandsDir, client.slashCommands);
 }
 
 function collect(dir, collection) {
@@ -14,12 +17,11 @@ function collect(dir, collection) {
       .filter((file) => file.endsWith('.js'));
     for (const file of files) {
       const item = require(`${dir}/${folder}/${file}`);
-      collection.set(item.name, item);
+      collection.set(item.data ? item.data.name : item.name, item);
     }
   }
 }
 
 module.exports = {
   collectCommands,
-  collect,
 };

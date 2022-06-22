@@ -8,7 +8,7 @@ Please review the _issues_ tab and self-assign one if you want to try to help in
 
 - [Initial Setup](#initial-setup)
 - [Advanced Setup](#advanced-setup-optional) (optional)
-- [Typical Git Workflow](#typical-git-workflow)
+- [Typical Git Workflow](#repository-git-workflow)
 - [Report Issues](#report-issues)
 
 ## Initial Setup
@@ -29,7 +29,7 @@ $ git clone pasteURLYouJustCopied
 
 ### Node.js and npm
 
-1. Install Node.js; it can be downloaded from [here](https://nodejs.org/en/).
+1. Install Node.js; it can be downloaded from [here](https://nodejs.org/en/). Version 16.6 or higher is required.
 2. On the command line, navigate to the cloned repo.
 3. Use the following command to install all necessary packages:
 
@@ -39,8 +39,8 @@ $ npm install
 
 ### Add Secret Keys
 
-1. In the cloned repo, create a file named `.env`. This will store environment variables you may want to keep secret.
-2. Create a variable named `DISCORD_SECRET_KEY` (you will assign this a value later on).
+1. The cloned repo includes a file named sample.env which contains a list of the environmental variables required to run this application. Create a new filed named _.env_. Copy the contents of sample.env your .env file. Several of these variables need to be kept secret so the .env is not commited to GitHub.
+2. Replace the sample values for the environmental variables in the .env file with values you obtain from the Discord Developer Portal, your local database connection, and Discord IDs associated with roles and channels in a Discord server. The instructions below describe how the variable values are obtained.
 
 ### Set Up Database
 
@@ -51,13 +51,24 @@ Visit our [wiki page](https://github.com/CodecademyCommunity/codecademy-discord-
 1. Head to the **Applications** section of the [Discord Developer Portal](https://discord.com/developers/applications) and create a new application.
 2. Navigate to the **Bot** section and click "Add Bot". You can add an icon and name for your bot.
 3. Copy the bot token and paste it into the `DISCORD_SECRET_KEY` field in your `.env` file.
-4. Navigate to the **OAuth2** section, check the _bot_ checkbox under _Scopes_, and grant your bot the desired permissions under _Bot Permissions_.
-5. Copy the URL under _Scopes_, paste it into your browser, and add your bot into your desired server.
-6. You should now be able to see the bot in your server (it will appear Offline).
+4. Navigate to the **OAuth2** section, then to the **URL Generator** subsection.
+5. Check the _bot_ and _applications.commands_ checkboxes under _Scopes_, and grant your bot the required permissions under _Bot Permissions_.
+6. Copy the URL under _Scopes_, paste it into your browser, and add your bot into your desired server.
+7. Find the `CLIENT_ID` on the Discord Developer portal OAuth2 page and copy in into your .env file.
+8. Enter the `GUILD_ID` in the .env. You can find it by right-clicking on your Discord server's name and selecting Copy ID.
+9. Enter the `ID_ADMIN`, `ID_CODE_COUNSELOR`, `ID_MODERATOR`, `ID_SUPER_ADMIN` values into the .env. They can be found by right-clicking on the name of each role in your server's role settings and selecting Copy ID.
+10. Enter the `BOT_ERROR_CHANNEL_ID` variable. In the development Discord server, you can get the ID for the the #bot-errors channel by right-clicking on the channel and selecting Copy ID.
+11. You should now be able to see the bot in your server (it will appear Offline).
 
 ### Run the Bot
 
-1. Navigate to your local repo and enter the following command into your terminal:
+1. Navigate to your local repo and enter the following command which deploys the Discord application commands. This script will also need to be run after any modifications are made to the code for the commands:
+
+```
+npm run deploy:commands
+```
+
+2. Enter the following command into your terminal:
 
 ```
 $ npm start

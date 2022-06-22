@@ -1,5 +1,7 @@
+require('dotenv').config();
 const {getClient} = require('./config/client.js');
-const {collectCommands} = require('./config/collectors');
+const {collectCommands} = require('./collectors/collectCommands');
+const {collectEvents} = require('./collectors/collectEvents');
 const {extendMutes} = require('./handlers/channelHandlers.js');
 const {
   applyMuteRestrictionsToOnMuteRole,
@@ -11,16 +13,16 @@ const {
   logDeletedMessages,
 } = require('./handlers/messageHandlers');
 
-require('dotenv').config();
-
 const client = getClient();
-const commandsDir = `${__dirname}/commands`;
 
-collectCommands(client, commandsDir);
+// Load commands
+const regularCommandsDir = `${__dirname}/commands`;
+const slashCommandsDir = `${__dirname}/slash-commands`;
+collectCommands({client, regularCommandsDir, slashCommandsDir});
 
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+// Load events
+const eventsDir = `${__dirname}/events`;
+collectEvents({client, eventsDir});
 
 // Adds a Muted role when the bot joins a server
 client.on('guildCreate', createOnMuteRole);
