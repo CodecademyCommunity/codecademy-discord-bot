@@ -8,12 +8,12 @@
   },
   "scripts": {
     "start": "node app.js",
-    "deploy:commands": "node deployCommands.js",
+    "deploy-commands": "node deployCommands.js",
     "watch": "nodemon app.js",
     "db-recreate": "node utils/data/recreate.js",
-    "addtable": "node utils/data/addTable.js",
-    "addcolumn": "node utils/data/addColumn.js",
-    "droptable": "node utils/data/dropTable.js"
+    "add-table": "node utils/data/addTable.js",
+    "add-column": "node utils/data/addColumn.js",
+    "drop-table": "node utils/data/dropTable.js"
   },
   "author": "StevenC",
   "license": "MIT",

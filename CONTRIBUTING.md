@@ -65,7 +65,7 @@ Visit our [wiki page](https://github.com/CodecademyCommunity/codecademy-discord-
 1. Navigate to your local repo and enter the following command which deploys the Discord application commands. This script will also need to be run after any modifications are made to the code for the commands:
 
 ```
-npm run deploy:commands
+npm run deploy-commands
 ```
 
 2. Enter the following command into your terminal:
