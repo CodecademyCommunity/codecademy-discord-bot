@@ -15,7 +15,6 @@ const unbanRequest =
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('ban')
-    .setDefaultPermission(false)
     .setDescription('Bans a user')
     .addUserOption((option) =>
       option.setName('target').setDescription('The user').setRequired(true)
