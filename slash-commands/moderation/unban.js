@@ -10,7 +10,6 @@ const {verifyReasonLength} = require('../../helpers/stringHelpers');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('unban')
-    .setDefaultPermission(false)
     .setDescription('Unbans a user')
     .addUserOption((option) =>
       option.setName('target').setDescription('The user').setRequired(true)
