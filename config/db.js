@@ -5,7 +5,6 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
-  multipleStatements: true,
 });
 
 // Promise wrapped instance of the pool
