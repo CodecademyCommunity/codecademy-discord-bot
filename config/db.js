@@ -12,5 +12,4 @@ const promisePool = pool.promise();
 
 module.exports = {
   promisePool,
-  getConnection: () => pool,
 };
