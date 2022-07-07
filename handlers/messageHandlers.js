@@ -1,45 +1,14 @@
 const Discord = require('discord.js');
 const {setTimeout} = require('timers/promises');
 const {getClient} = require('../config/client');
-const {getConnection} = require('../config/db');
-const {hasPermission} = require('../handlers/permissionHandlers');
 
-const con = getConnection();
 const client = getClient();
 
 const messageHandler = async (msg) => {
-  if (msg.webhookId) return;
-
-  if (msg.content.substring(0, 3) === 'cc!') {
-    await commandParser(client, con, msg);
+  if (msg.webhookId) {
+    return;
   } else if (msg.member && msg.guild && msg.author.id != client.user.id) {
     await client.commands.get('filter').execute(msg);
-  }
-};
-
-const commandParser = async (client, con, msg) => {
-  const args = msg.content.slice('cc!'.length).trim().split(/ +/);
-  const commandName = args.shift().toLowerCase();
-
-  if (!client.commands.has(commandName)) return;
-
-  const command = client.commands.get(commandName);
-
-  if (command.guildOnly && msg.channel.type === 'dm') {
-    return msg.reply(`I can't execute that command inside DMs!`);
-  }
-
-  if (command.staffOnly && !hasPermission(msg, command)) {
-    return msg.reply(`Sorry, you don't have permission to use that command!`);
-  }
-
-  try {
-    await command.execute(msg, args, con);
-  } catch (error) {
-    console.error(error);
-    msg.reply(
-      'There was an error trying to execute that command! Try cc!help for information.'
-    );
   }
 };
 
@@ -104,6 +73,5 @@ const buildEmbed = (message, executor) => {
 
 module.exports = {
   messageHandler: messageHandler,
-  commandParser: commandParser,
   logDeletedMessages: logDeletedMessages,
 };
