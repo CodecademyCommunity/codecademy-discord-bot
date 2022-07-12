@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const {promisePool} = require('../../config/db');
 const {sendToAuditLogsChannel} = require('../../helpers/sendToAuditLogs');
@@ -20,7 +21,7 @@ module.exports = {
     }
 
     try {
-      await clearMessages(interaction, msgCount);
+      await interaction.channel.bulkDelete(msgCount);
       await clearMessagesSQL(interaction.user.id, msgCount);
       await sendToAuditLogsChannel(interaction, {
         color: '#0099ff',
@@ -28,6 +29,13 @@ module.exports = {
       });
       await interaction.reply({content: `${msgCount} messages were deleted.`});
     } catch (err) {
+      if (
+        err.code === Discord.Constants.APIErrors.BULK_DELETE_MESSAGE_TOO_OLD
+      ) {
+        return await interaction.reply(
+          'You can only bulk delete messages that are under 14 days old.'
+        );
+      }
       console.error(err);
       return await interaction.reply(
         `There was a problem clearing the messages or recording in the db.`
@@ -56,14 +64,6 @@ async function clearMessagesSQL(userId, msgCount) {
 
   try {
     await promisePool.execute(sql, values);
-  } catch (err) {
-    throw new Error(err.message);
-  }
-}
-
-async function clearMessages(interaction, msgCount) {
-  try {
-    await interaction.channel.bulkDelete(msgCount);
   } catch (err) {
     throw new Error(err.message);
   }
