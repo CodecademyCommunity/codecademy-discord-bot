@@ -36,8 +36,7 @@ module.exports = {
           }
         )
         .setFooter({
-          text:
-            'All billing-related queries should be directed to the Submit A Request form linked above.',
+          text: 'All billing-related queries should be directed to the Submit A Request form linked above.',
         });
 
       interaction.reply({embeds: [HelpCenterMessage]});
