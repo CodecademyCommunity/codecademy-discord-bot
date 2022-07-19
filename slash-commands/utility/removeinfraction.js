@@ -10,13 +10,19 @@ module.exports = {
       option.setName('user').setDescription('The user').setRequired(true)
     )
     .addIntegerOption((option) =>
-      option.setName('infraction-id').setDescription('The infraction id').setRequired(true)
+      option
+        .setName('infraction-id')
+        .setDescription('The infraction id')
+        .setRequired(true)
     ),
   async execute(interaction) {
     const targetUser = await interaction.options.getUser('user');
     const infractionId = await interaction.options.getInteger('infraction-id');
     try {
-      const {isValid, msg} = await validateInfractionId(targetUser.id, infractionId);
+      const {isValid, msg} = await validateInfractionId(
+        targetUser.id,
+        infractionId
+      );
       if (!isValid) {
         return interaction.reply(msg);
       }
