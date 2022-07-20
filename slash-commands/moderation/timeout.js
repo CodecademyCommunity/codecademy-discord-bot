@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const ms = require('ms');
-const {verifyReasonLength} = require('../../helpers/stringHelpers');
 const {sendToAuditLogsChannel} = require('../../helpers/sendToAuditLogs');
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const {promisePool} = require('../../config/db');
@@ -43,6 +42,7 @@ module.exports = {
         .setName('reason')
         .setDescription('The reason for the timeout')
         .setRequired(true)
+        .setMaxLength(255)
     ),
 
   async execute(interaction) {
@@ -111,10 +111,6 @@ function canTimeout(interaction, toTimeout, duration, reason) {
     interaction.reply('Please enter a duration less than 28 days.');
     return false;
   }
-
-  // Check if reason is of a valid length.
-  if (!verifyReasonLength(reason, interaction)) return false;
-
   return true;
 }
 

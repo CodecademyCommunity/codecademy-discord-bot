@@ -1,6 +1,5 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
 const {sendToAuditLogsChannel} = require('../../helpers/sendToAuditLogs');
-const {verifyReasonLength} = require('../../helpers/stringHelpers');
 const {promisePool} = require('../../config/db');
 
 module.exports = {
@@ -17,6 +16,7 @@ module.exports = {
       option
         .setName('reason')
         .setDescription('The reason for removing the timeout')
+        .setMaxLength(255)
     ),
 
   async execute(interaction) {
@@ -25,7 +25,7 @@ module.exports = {
     );
     const reason = await interaction.options.getString('reason');
 
-    if (canRemoveTimeout(interaction, toRemoveTimeout, reason)) {
+    if (canRemoveTimeout(interaction, toRemoveTimeout)) {
       try {
         await removeTimeout(interaction, toRemoveTimeout, reason);
       } catch (e) {
@@ -40,15 +40,12 @@ module.exports = {
   },
 };
 
-function canRemoveTimeout(interaction, toRemoveTimeout, reason) {
+function canRemoveTimeout(interaction, toRemoveTimeout) {
   if (
     toRemoveTimeout.communicationDisabledUntilTimestamp === null ||
     toRemoveTimeout.communicationDisabledUntil < Date.now()
   ) {
     interaction.reply('This user is not timed out.');
-    return false;
-  }
-  if (reason && !verifyReasonLength(reason, interaction)) {
     return false;
   }
   return true;
