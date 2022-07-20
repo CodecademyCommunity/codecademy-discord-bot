@@ -31,15 +31,15 @@ module.exports = {
 };
 
 async function checkForInfractions(userId) {
-    const sql = `SELECT * FROM infractions WHERE user = ? AND valid = true`;
-    const values = [userId];
-    try {
-      const [infractions] = await promisePool.execute(sql, values);
-      return (infractions.length) ? true : false;
-    } catch (err) {
-      throw new Error(err.message);
-    }
+  const sql = `SELECT * FROM infractions WHERE user = ? AND valid = true`;
+  const values = [userId];
+  try {
+    const [infractions] = await promisePool.execute(sql, values);
+    return infractions.length ? true : false;
+  } catch (err) {
+    throw new Error(err.message);
   }
+}
 
 async function deactivateInfractionsDB(interaction, targetUser) {
   try {
