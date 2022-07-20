@@ -14,7 +14,10 @@ module.exports = {
       option.setName('target').setDescription('The user').setRequired(true)
     )
     .addStringOption((option) =>
-      option.setName('reason').setDescription('The reason for removing the ban').setMaxLength(255)
+      option
+        .setName('reason')
+        .setDescription('The reason for removing the ban')
+        .setMaxLength(255)
     ),
 
   async execute(interaction) {

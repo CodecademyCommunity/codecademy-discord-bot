@@ -16,7 +16,11 @@ module.exports = {
     )
     // Reason limited to 247 to stay within 255 with extra text added for user_notes
     .addStringOption((option) =>
-      option.setName('reason').setDescription('The reason').setRequired(true).setMaxLength(247)
+      option
+        .setName('reason')
+        .setDescription('The reason')
+        .setRequired(true)
+        .setMaxLength(247)
     ),
   async execute(interaction) {
     const targetUser = await interaction.options.getUser('target');

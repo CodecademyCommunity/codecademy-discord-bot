@@ -15,7 +15,11 @@ module.exports = {
       option.setName('target').setDescription('The user').setRequired(true)
     )
     .addStringOption((option) =>
-      option.setName('reason').setDescription('The reason').setRequired(true).setMaxLength(255)
+      option
+        .setName('reason')
+        .setDescription('The reason')
+        .setRequired(true)
+        .setMaxLength(255)
     ),
   async execute(interaction) {
     const targetUser = await interaction.options.getUser('target');
