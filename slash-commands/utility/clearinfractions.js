@@ -16,7 +16,7 @@ module.exports = {
       if (!hasInfractions) {
         return interaction.reply('This user does not have any infractions.');
       }
-      await deactivateInfractionsDB(interaction, targetUser.id);
+      await deactivateInfractionsDB(interaction, targetUser);
       await sendToAuditLogsChannel(interaction, {
         color: '#0099ff',
         titleMsg: `${interaction.user.tag} cleared all infractions for ${targetUser.username}#${targetUser.discriminator}`,
@@ -44,7 +44,7 @@ async function checkForInfractions(userId) {
 async function deactivateInfractionsDB(interaction, targetUser) {
   try {
     const invalidateSQL = `UPDATE infractions SET valid = ? WHERE user = ?`;
-    const invalidateValues = [false, targetUser];
+    const invalidateValues = [false, targetUser.id];
     await promisePool.execute(invalidateSQL, invalidateValues);
 
     const modlogSQL = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
