@@ -19,7 +19,7 @@ module.exports = {
       await deactivateInfractionsDB(interaction, targetUser);
       await sendToAuditLogsChannel(interaction, {
         color: '#0099ff',
-        titleMsg: `${interaction.user.tag} cleared all infractions for ${targetUser.username}#${targetUser.discriminator}`,
+        titleMsg: `${interaction.user.tag} cleared all infractions for ${targetUser.tag}`,
         targetUser,
       });
       await clearInfractionsResponse(interaction, targetUser);
@@ -31,11 +31,14 @@ module.exports = {
 };
 
 async function checkForInfractions(userId) {
-  const sql = `SELECT * FROM infractions WHERE user = ? AND valid = true`;
+  const sql = `SELECT COUNT(*) FROM infractions WHERE user = ? AND valid = true`;
   const values = [userId];
   try {
-    const [infractions] = await promisePool.execute(sql, values);
-    return infractions.length ? true : false;
+    const [[{'COUNT(*)': nrOfinfractions}]] = await promisePool.execute(
+      sql,
+      values
+    );
+    return nrOfinfractions > 0;
   } catch (err) {
     throw new Error(err.message);
   }
