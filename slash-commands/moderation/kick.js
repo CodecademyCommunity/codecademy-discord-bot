@@ -6,7 +6,6 @@ const {
   isServerStaff,
   sendNoTargetStaffReply,
 } = require('../../helpers/validation');
-const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 const kickIntro =
   "You've been kicked from the Codecademy Community server for the following reason: ```";
@@ -20,7 +19,11 @@ module.exports = {
       option.setName('target').setDescription('The user').setRequired(true)
     )
     .addStringOption((option) =>
-      option.setName('reason').setDescription('The reason').setRequired(true)
+      option
+        .setName('reason')
+        .setDescription('The reason')
+        .setRequired(true)
+        .setMaxLength(255)
     ),
   async execute(interaction) {
     const targetUser = await interaction.guild.members.cache.get(
@@ -35,7 +38,6 @@ module.exports = {
     }
 
     const reason = await interaction.options.getString('reason');
-    if (!verifyReasonLength(reason, interaction)) return;
 
     const kickText = kickIntro + reason + kickOutro;
 

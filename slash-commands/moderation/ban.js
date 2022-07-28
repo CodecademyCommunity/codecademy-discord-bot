@@ -6,7 +6,6 @@ const {
   isServerStaff,
   sendNoTargetStaffReply,
 } = require('../../helpers/validation');
-const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 const banIntro = "You've been banned for the following reason: ```";
 const unbanRequest =
@@ -20,7 +19,11 @@ module.exports = {
       option.setName('target').setDescription('The user').setRequired(true)
     )
     .addStringOption((option) =>
-      option.setName('reason').setDescription('The reason').setRequired(true)
+      option
+        .setName('reason')
+        .setDescription('The reason')
+        .setRequired(true)
+        .setMaxLength(255)
     )
     .addIntegerOption((option) =>
       option
@@ -52,7 +55,6 @@ module.exports = {
     }
 
     const reason = interaction.options.getString('reason');
-    if (!verifyReasonLength(reason, interaction)) return;
 
     const days = interaction.options.getInteger('delete_msg_days');
 

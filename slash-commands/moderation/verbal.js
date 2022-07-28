@@ -6,7 +6,6 @@ const {
   isServerStaff,
   sendNoTargetStaffReply,
 } = require('../../helpers/validation');
-const {verifyReasonLength} = require('../../helpers/stringHelpers');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,8 +14,13 @@ module.exports = {
     .addUserOption((option) =>
       option.setName('target').setDescription('The user').setRequired(true)
     )
+    // Reason limited to 247 to stay within 255 with extra text added for user_notes
     .addStringOption((option) =>
-      option.setName('reason').setDescription('The reason').setRequired(true)
+      option
+        .setName('reason')
+        .setDescription('The reason')
+        .setRequired(true)
+        .setMaxLength(247)
     ),
   async execute(interaction) {
     const targetUser = await interaction.options.getUser('target');
@@ -25,9 +29,6 @@ module.exports = {
     if (await isServerStaff(interaction, targetUser)) {
       return await sendNoTargetStaffReply(interaction);
     }
-
-    // Reason limited to 247 to stay within 255 with extra text added for user_notes
-    if (!verifyReasonLength(reason, interaction, 247)) return;
 
     try {
       await dmTheUser(interaction, targetUser, reason);
