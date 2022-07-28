@@ -61,7 +61,5 @@ async function deactivateInfractionsDB(interaction, targetUser) {
 }
 
 async function clearInfractionsResponse(interaction, targetUser) {
-  await interaction.reply(
-    `All infractions were removed from ${targetUser.username}.`
-  );
+  await interaction.reply(`All infractions were removed from ${targetUser}.`);
 }
