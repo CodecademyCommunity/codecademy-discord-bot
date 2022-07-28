@@ -71,7 +71,7 @@ async function deactivateInfractionDB(interaction, infractionId, targetUser) {
 
     const modlogSQL = `INSERT INTO mod_log (timestamp, moderator, action, length_of_time, reason) VALUES
     (now(), ?, ?, NULL, NULL);`;
-    const action = `removeinfraction ${infractionId} ${targetUser.id}`;
+    const action = `removeinfraction ${targetUser.id} ${infractionId}`;
     const modlogValues = [interaction.user.id, action];
     await promisePool.execute(modlogSQL, modlogValues);
   } catch (err) {
@@ -81,6 +81,6 @@ async function deactivateInfractionDB(interaction, infractionId, targetUser) {
 
 async function removeInfractionResponse(interaction, infractionId, targetUser) {
   await interaction.reply(
-    `Infraction #${infractionId} was removed from ${targetUser.username}.`
+    `Infraction #${infractionId} was removed from ${targetUser}.`
   );
 }
