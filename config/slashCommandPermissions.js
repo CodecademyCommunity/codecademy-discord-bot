@@ -7,6 +7,7 @@ const allStaffRoles = [
   ID_SUPER_ADMIN,
 ];
 const moderatorRoles = [ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN];
+const adminRoles = [ID_ADMIN, ID_SUPER_ADMIN];
 
 const everyoneRoles = ['@everyone'];
 
@@ -27,6 +28,7 @@ const commandRoles = new Map([
   ['unban', moderatorRoles],
   ['verbal', moderatorRoles],
   ['warn', moderatorRoles],
+  ['clearinfractions', adminRoles],
 ]);
 
 module.exports = {
