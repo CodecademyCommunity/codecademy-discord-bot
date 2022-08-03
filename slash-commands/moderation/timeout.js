@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 const ms = require('ms');
 const {sendToAuditLogsChannel} = require('../../helpers/sendToAuditLogs');
 const {SlashCommandBuilder} = require('@discordjs/builders');
@@ -127,7 +127,7 @@ async function timeoutUser(interaction, toTimeout, duration, reason) {
 // Sends message to #audit-logs.
 async function auditLogTimeout(interaction, toTimeout, duration, reason) {
   await sendToAuditLogsChannel(interaction, {
-    color: '#0099ff',
+    color: 0x0099ff,
     titleMsg: `${toTimeout.user.username}#${
       toTimeout.user.discriminator
     } was timed out by ${interaction.member.user.tag} for ${ms(ms(duration), {
@@ -172,8 +172,8 @@ async function recordTimeoutInDB(interaction, toTimeout, duration, reason) {
 
 // Attempts to DM the user with the reason for the timeout.
 async function dmTheUser(interaction, toTimeout, duration, reason) {
-  const verbalEmbed = new Discord.MessageEmbed()
-    .setColor('#0099ff')
+  const verbalEmbed = new EmbedBuilder()
+    .setColor(0x0099ff)
     .setTitle(`You have been timed out for ${ms(ms(duration), {long: true})}.`)
     .addFields({name: 'Reason', value: reason})
     .setTimestamp()

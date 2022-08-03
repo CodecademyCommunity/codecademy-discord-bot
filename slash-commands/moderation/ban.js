@@ -68,7 +68,7 @@ module.exports = {
       );
       await recordBanInDB(interaction, targetUser, reason);
       await sendToAuditLogsChannel(interaction, {
-        color: '#0099ff',
+        color: 0x0099ff,
         titleMsg: `${targetUser.tag} was banned by ${interaction.user.tag}:`,
         description: reason,
         targetUser: targetUser,

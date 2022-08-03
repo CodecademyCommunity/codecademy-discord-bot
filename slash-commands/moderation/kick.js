@@ -47,7 +47,7 @@ module.exports = {
       await interaction.channel.send(`${targetUser} was kicked`);
       await recordKickInDB(interaction, targetUser, reason);
       await sendToAuditLogsChannel(interaction, {
-        color: '#0099ff',
+        color: 0x0099ff,
         titleMsg: `${targetUser.user.tag} was kicked by ${interaction.user.tag}:`,
         description: reason,
         targetUser: targetUser.user,

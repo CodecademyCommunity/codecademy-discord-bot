@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 const {setTimeout} = require('timers/promises');
 const {getClient} = require('../config/client');
 
@@ -56,7 +56,7 @@ const fetchAndAudit = async (message) => {
 
 const buildEmbed = (message, executor) => {
   return (
-    new Discord.MessageEmbed()
+    new EmbedBuilder()
       .setColor('#0099ff')
       .setTitle(
         `${message.author.tag} message was deleted by ${executor} from #${message.channel.name}:`
