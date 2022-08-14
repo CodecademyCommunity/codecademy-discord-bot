@@ -7,26 +7,29 @@ const allStaffRoles = [
   ID_SUPER_ADMIN,
 ];
 const moderatorRoles = [ID_MODERATOR, ID_ADMIN, ID_SUPER_ADMIN];
+const adminRoles = [ID_ADMIN, ID_SUPER_ADMIN];
 
 const everyoneRoles = ['@everyone'];
 
 const commandRoles = new Map([
   ['helpcenter', everyoneRoles],
   ['stats', everyoneRoles],
-  ['ping', allStaffRoles],
-  ['notes', allStaffRoles],
   ['addnote', allStaffRoles],
+  ['notes', allStaffRoles],
+  ['ping', allStaffRoles],
+  ['timeout', allStaffRoles],
   ['ban', moderatorRoles],
   ['clearmessages', moderatorRoles],
   ['infractions', moderatorRoles],
   ['kick', moderatorRoles],
   ['records', moderatorRoles],
+  ['removeinfraction', moderatorRoles],
   ['removenote', moderatorRoles],
   ['removetimeout', moderatorRoles],
-  ['timeout', moderatorRoles],
   ['unban', moderatorRoles],
   ['verbal', moderatorRoles],
   ['warn', moderatorRoles],
+  ['clearinfractions', adminRoles],
 ]);
 
 module.exports = {

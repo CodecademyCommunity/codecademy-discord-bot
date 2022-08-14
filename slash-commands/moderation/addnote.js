@@ -15,7 +15,11 @@ module.exports = {
       option.setName('target').setDescription('The user').setRequired(true)
     )
     .addStringOption((option) =>
-      option.setName('note').setDescription('The note').setRequired(true)
+      option
+        .setName('note')
+        .setDescription('The note')
+        .setRequired(true)
+        .setMaxLength(255)
     ),
   async execute(interaction) {
     const targetUser = await interaction.options.getUser('target');
@@ -25,12 +29,6 @@ module.exports = {
     }
 
     const note = await interaction.options.getString('note');
-
-    if (note.length > 255) {
-      return await interaction.reply(
-        `Too long! Notes can only be 255 characters or less.`
-      );
-    }
 
     try {
       await addNoteToDB(interaction, targetUser, note);
