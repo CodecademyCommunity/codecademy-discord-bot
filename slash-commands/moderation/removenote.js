@@ -22,7 +22,7 @@ module.exports = {
       }
       await deactivateNoteDB(interaction, noteId, targetUser);
       await sendToAuditLogsChannel(interaction, {
-        color: '#0099ff',
+        color: 0x0099ff,
         titleMsg: `${interaction.user.tag} removed a note from ${targetUser.username}#${targetUser.discriminator}`,
         description: `Note #${noteId}`,
         targetUser,

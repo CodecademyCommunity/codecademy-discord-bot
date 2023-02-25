@@ -33,7 +33,7 @@ module.exports = {
       await dmTheUser(interaction, targetUser, reason);
       await recordWarnInDB(interaction, targetUser, reason);
       await sendToAuditLogsChannel(interaction, {
-        color: '#f1d302',
+        color: 0xf1d302,
         titleMsg: `${targetUser.tag} was warned by ${interaction.user.tag}:`,
         description: reason,
         targetUser,
@@ -54,8 +54,8 @@ module.exports = {
 };
 
 async function dmTheUser(interaction, targetUser, reason) {
-  const dmEmbed = new Discord.MessageEmbed()
-    .setColor('#f1d302')
+  const dmEmbed = new Discord.EmbedBuilder()
+    .setColor(0xf1d302)
     .setTitle(`Warning to ${targetUser.username}`)
     .setDescription(reason)
     .setTimestamp()

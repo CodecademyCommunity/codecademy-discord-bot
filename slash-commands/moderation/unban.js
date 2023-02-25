@@ -39,7 +39,7 @@ module.exports = {
       await interaction.channel.send(`${targetUser} was unbanned`);
       await recordUnbanInDB(interaction, targetUser, reason);
       await sendToAuditLogsChannel(interaction, {
-        color: '#0099ff',
+        color: 0x0099ff,
         titleMsg: `${targetUser.tag} was unbanned by ${interaction.user.tag}:`,
         description: `Reason: ${reason || 'No reason provided.'}`,
         targetUser: targetUser,

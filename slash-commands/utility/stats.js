@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
-const {MessageEmbed} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -17,12 +17,14 @@ module.exports = {
         member.presence == null || member.presence.status === 'offline'
     ).size;
 
-    const Embed = new MessageEmbed();
-    Embed.setTitle('Server Stats');
-    Embed.addField('Online Members', `${totalOnline}`);
-    Embed.addField('Offline Members', `${totalOffline}`);
-    Embed.addField('Total Members', `${interaction.guild.memberCount}`);
+    const serverStatsMessage = new EmbedBuilder()
+      .setTitle('Server Stats')
+      .addFields([
+        {name: 'Online Members', value: `${totalOnline}`},
+        {name: 'Offline Members', value: `${totalOffline}`},
+        {name: 'Total Members', value: `${interaction.guild.memberCount}`},
+      ]);
 
-    interaction.reply({embeds: [Embed]});
+    interaction.reply({embeds: [serverStatsMessage]});
   },
 };

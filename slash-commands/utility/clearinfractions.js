@@ -18,7 +18,7 @@ module.exports = {
       }
       await deactivateInfractionsDB(interaction, targetUser);
       await sendToAuditLogsChannel(interaction, {
-        color: '#0099ff',
+        color: 0x0099ff,
         titleMsg: `${interaction.user.tag} cleared all infractions for ${targetUser.tag}`,
         targetUser,
       });

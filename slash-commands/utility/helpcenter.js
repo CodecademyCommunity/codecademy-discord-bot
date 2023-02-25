@@ -1,5 +1,5 @@
 const {SlashCommandBuilder} = require('@discordjs/builders');
-const {MessageEmbed} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -21,7 +21,7 @@ module.exports = {
           'All billing-related queries should be directed to the Submit A Request form linked above.',
       });
     } else {
-      const HelpCenterMessage = new MessageEmbed()
+      const HelpCenterMessage = new EmbedBuilder()
         .setTitle('Codecademy Help Center Resources')
         .setColor('DARK_NAVY')
         .addFields(

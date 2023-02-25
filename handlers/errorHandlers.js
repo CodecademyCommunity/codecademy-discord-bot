@@ -1,13 +1,13 @@
 const {getClient} = require('../config/client.js');
 const client = getClient();
-const {MessageEmbed} = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 async function unhandledRejectionHandler(error) {
   try {
     console.error('Unhandled promise rejection:', error);
     const channel = client.channels.cache.get(process.env.BOT_ERROR_CHANNEL_ID);
     if (channel) {
-      const errorEmbed = new MessageEmbed()
+      const errorEmbed = new EmbedBuilder()
         .setTitle('UnhandledRejection error')
         .setColor('RED')
         .addFields(

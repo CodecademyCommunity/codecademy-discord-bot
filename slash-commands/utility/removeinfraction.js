@@ -28,7 +28,7 @@ module.exports = {
       }
       await deactivateInfractionDB(interaction, infractionId, targetUser);
       await sendToAuditLogsChannel(interaction, {
-        color: '#0099ff',
+        color: 0x0099ff,
         titleMsg: `${interaction.user.tag} removed an infraction from ${targetUser.username}#${targetUser.discriminator}`,
         description: `Infraction #${infractionId}`,
         targetUser,

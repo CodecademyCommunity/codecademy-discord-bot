@@ -1,5 +1,4 @@
-const Discord = require('discord.js');
-const {SlashCommandBuilder} = require('@discordjs/builders');
+const {SlashCommandBuilder, EmbedBuilder} = require('@discordjs/builders');
 const {promisePool} = require('../../config/db');
 const {getEmbedHexFlairColor} = require('../../helpers/design');
 const {
@@ -41,7 +40,7 @@ module.exports = {
 };
 
 async function displayNoteEmbed(interaction, targetUser, note) {
-  const embed = new Discord.MessageEmbed()
+  const embed = new EmbedBuilder()
     .setAuthor({
       name: `${targetUser.username}#${targetUser.discriminator}`,
       iconURL: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,

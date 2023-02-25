@@ -58,7 +58,7 @@ async function removeTimeout(interaction, toRemoveTimeout) {
 
 async function auditLogRemoveTimeout(interaction, toRemoveTimeout, reason) {
   await sendToAuditLogsChannel(interaction, {
-    color: '#0099ff',
+    color: 0x0099ff,
     titleMsg: `Removed timeout from ${toRemoveTimeout.user.tag}.`,
     description: `Reason: ${reason ? reason : 'No reason provided.'}`,
     targetUser: toRemoveTimeout.user,

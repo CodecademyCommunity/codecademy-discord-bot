@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 
 /**
  * Sends a message to the audit-logs channel.
@@ -13,12 +13,12 @@ const Discord = require('discord.js');
  */
 async function sendToAuditLogsChannel(
   interaction,
-  {color, titleMsg, description = '', targetUser = null}
+  {color, titleMsg, description = null, targetUser = null}
 ) {
   const channel = await interaction.guild.channels.cache.find(
     (channel) => channel.name === 'audit-logs'
   );
-  const clearMsgEmbed = new Discord.MessageEmbed()
+  const clearMsgEmbed = new EmbedBuilder()
     .setColor(color)
     .setTitle(titleMsg)
     .setThumbnail(

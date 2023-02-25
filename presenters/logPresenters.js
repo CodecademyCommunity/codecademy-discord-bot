@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const {EmbedBuilder} = require('discord.js');
 const {getEmbedHexFlairColor} = require('../helpers/design');
 
 async function displayRecordsLog({interaction, targetUser, recordCollections}) {
@@ -13,7 +13,7 @@ async function displayRecordsLog({interaction, targetUser, recordCollections}) {
     if (!totalRecords) {
       payload.content += `\n${targetUser.tag} doesn't have any ${collection.name}`;
     } else {
-      const recordsEmbed = new Discord.MessageEmbed()
+      const recordsEmbed = new EmbedBuilder()
         .setAuthor({
           name: `${targetUser.tag}'s ${collection.name}`,
           iconURL: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,
